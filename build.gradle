@@ -14,14 +14,47 @@ java {
 	}
 }
 
+configurations {
+	// 컴파일 시에만 필요한 의존성 (EX. Lombok)
+	compileOnly {
+		extendsFrom annotationProcessor // 어노테이션 처리도 함께 사용
+	}
+}
+
+
 repositories {
 	mavenCentral()
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2'
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+	compileOnly 'org.projectlombok:lombok'
+
+	annotationProcessor 'org.projectlombok:lombok'
+
+	runtimeOnly 'com.h2database:h2'
+
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
+
 }
 
 tasks.named('test') {
