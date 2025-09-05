@@ -1,0 +1,13 @@
+package org.example.o_lim.controller;
+
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+// "/api/v1/tasks"
+@RequestMapping()
+public class CommentController {
+}
