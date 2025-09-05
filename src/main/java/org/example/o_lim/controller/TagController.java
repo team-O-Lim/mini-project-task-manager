@@ -1,4 +1,4 @@
-package org.example.controller;
+package org.example.o_lim.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-// "api/v1"
+// "/api/v1/projects"
 @RequestMapping()
-public class UserController {
+public class TagController {
 }
