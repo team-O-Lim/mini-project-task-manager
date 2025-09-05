@@ -29,11 +29,11 @@ public class ApiMappingPattern {
 
         public static final String BY_ID = ROOT + "/{projectId}";
 
-        public static final String UPDATE = ROOT + "{projectId}";
-        public static final String DELETE = ROOT + "{projectId}";
-        public static final String SEARCH_ALL = ROOT + "projects";
-        public static final String SEARCH_SINGLE = ROOT + "{projectId}";
-        public static final String SEARCH_BY_TASK_DESC = ROOT + "task-desc";
+        public static final String UPDATE = ROOT + "/{projectId}";
+        public static final String DELETE = ROOT + "/{projectId}";
+        public static final String SEARCH_ALL = ROOT + "/projects";
+        public static final String SEARCH_SINGLE = ROOT + "/{projectId}";
+        public static final String SEARCH_BY_TASK_DESC = ROOT + "/task-desc";
     }
 
     public static final class Tasks {
@@ -43,7 +43,7 @@ public class ApiMappingPattern {
 
         public static final String BY_ID = BASE + "/tasks/{taskId}";
 
-        public static final String SEARCH_FILTER_ALL = ROOT + "/{담당자FK}";
+        public static final String SEARCH_FILTER_ALL = ROOT + "/assignee/{userId}";
         public static final String SEARCH_SINGLE = BASE + "/tasks/{taskId}";
 
         public static final String UPDATE = BASE + "/tasks/{taskId}";
