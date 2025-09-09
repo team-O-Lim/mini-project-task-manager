@@ -1,7 +1,5 @@
 package org.example.o_lim.common.constants;
 
-
-
 public class ApiMappingPattern {
     public static final String API = "/api";
     public static final String V1 = "/v1";
@@ -11,14 +9,20 @@ public class ApiMappingPattern {
         private Users() {}
 
         public static final String ROOT = BASE + "/users";
+        public static final String MY_INFO = ROOT + "/me";
+        
+        // public static final String SEARCH_PROFILE = ROOT + "/me";
+    }
+    public static final class Auth{
+        private Auth() {}
 
         public static final String SIGN_UP = BASE + "/signup";
         public static final String LOG_IN = BASE + "/login";
-        public static final String UPDATE_MY_INFO = ROOT + "/me";
-        public static final String SEARCH_PROFILE = ROOT + "/me";
-        public static final String FIND_ID = ROOT + "/find-id";
-        public static final String RESET_PASSWORD = ROOT + "/reset-pw";
-    }
+        public static final String FIND_ID = Users.ROOT + "/find-id";
+        public static final String RESET_PASSWORD = Users.ROOT + "/reset-pw";
+        }
+
+
 
     public static final class Projects {
         private Projects() {}
@@ -71,13 +75,12 @@ public class ApiMappingPattern {
         private Notification() {}
 
         public static final String ROOT = "/notices";
+        public static final String BY_ID = ROOT + "/{noticeId}";
 
         public static final String SEARCH_ALL = "/all";
 
-        // public static final String SEARCH_SINGLE = ROOT + "/{noticeId}";
         // public static final String UPDATE = ROOT + "/{noticeId}";
         // public static final String DELETE = ROOT + "/{noticeId}";
     }
-
 
 }
