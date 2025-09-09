@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
 
     // 생성
-     @PostMapping
+    @PostMapping
 
     // 전체 조회
     @GetMapping
