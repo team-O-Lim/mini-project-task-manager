@@ -1,7 +1,6 @@
 package org.example.o_lim.common.constants;
 
 
-import org.springframework.boot.web.reactive.context.StandardReactiveWebEnvironment;
 
 public class ApiMappingPattern {
     public static final String API = "/api";
@@ -24,16 +23,17 @@ public class ApiMappingPattern {
     public static final class Projects {
         private Projects() {}
 
-        public static final String ROOT = BASE + "/projects";
+        public static final String ROOT = "/projects";
         public static final String ID_ONLY = "/{projectId}";
 
-        public static final String BY_ID = ROOT + "/{projectId}";
+        public static final String BY_ID = ROOT + ID_ONLY;
 
-        public static final String UPDATE = ROOT + "/{projectId}";
-        public static final String DELETE = ROOT + "/{projectId}";
-        public static final String SEARCH_ALL = ROOT + "/projects";
-        public static final String SEARCH_SINGLE = ROOT + "/{projectId}";
-        public static final String SEARCH_BY_TASK_DESC = ROOT + "/task-desc";
+        public static final String SEARCH_ALL = ROOT + "/all";
+        public static final String SEARCH_BY_TASK_DESC = "/task-desc";
+
+        // public static final String UPDATE = ROOT + "/{projectId}";
+        // public static final String DELETE = ROOT + "/{projectId}";
+        // public static final String SEARCH_SINGLE = ROOT + "/{projectId}";
     }
 
     public static final class Tasks {
@@ -41,19 +41,20 @@ public class ApiMappingPattern {
 
         public static final String ROOT = Projects.BY_ID + "/tasks";
 
-        public static final String BY_ID = BASE + "/tasks/{taskId}";
+        public static final String BY_ID = "/tasks/{taskId}";
 
         public static final String SEARCH_FILTER_ALL = ROOT + "/assignee/{userId}";
-        public static final String SEARCH_SINGLE = BASE + "/tasks/{taskId}";
 
-        public static final String UPDATE = BASE + "/tasks/{taskId}";
+        // public static final String SEARCH_SINGLE = BASE + "/tasks/{taskId}";
+        // public static final String UPDATE = "/tasks/{taskId}";
     }
 
     public static final class Tags {
         private Tags() {}
 
         public static final String ROOT = Projects.BY_ID + "/tags";
-        public static final String DELETE = ROOT + "/{tagId}";
+
+        // public static final String DELETE = ROOT + "/{tagId}";
     }
 
     public static final class Comments {
@@ -61,21 +62,21 @@ public class ApiMappingPattern {
 
         public static final String ROOT = Tasks.BY_ID + "/comments";
 
-        public static final String DELETE = ROOT + "/{commentId}";
-
         public static final String SEARCH_COMMENT_IN_TASK_BY_NEW = ROOT;
+
+        // public static final String DELETE = ROOT + "/{commentId}";
     }
 
     public static final class Notification {
         private Notification() {}
 
-        public static final String ROOT = BASE + "/notices";
+        public static final String ROOT = "/notices";
 
-        public static final String SEARCH_ALL = ROOT;
-        public static final String SEARCH_SINGLE = ROOT + "/{noticeId}";
+        public static final String SEARCH_ALL = "/all";
 
-        public static final String UPDATE = ROOT + "/{noticeId}";
-        public static final String DELETE = ROOT + "/{noticeId}";
+        // public static final String SEARCH_SINGLE = ROOT + "/{noticeId}";
+        // public static final String UPDATE = ROOT + "/{noticeId}";
+        // public static final String DELETE = ROOT + "/{noticeId}";
     }
 
 
