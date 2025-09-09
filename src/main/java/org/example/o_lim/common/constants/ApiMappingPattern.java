@@ -8,6 +8,10 @@ public class ApiMappingPattern {
     public static final String V1 = "/v1";
     public static final String BASE = API + V1;
 
+    public static final class Auth {
+
+    }
+
     public static final class Users {
         private Users() {}
 
@@ -22,18 +26,21 @@ public class ApiMappingPattern {
     }
 
     public static final class Projects {
+        // CR(전체/단건/업무순)UD
         private Projects() {}
 
-        public static final String ROOT = BASE + "/projects";
+        public static final String ROOT = BASE + "/projects"; // controller 클래스 단위 (RequestMapping(ROOT))
         public static final String ID_ONLY = "/{projectId}";
 
+        // 메서드 단위 - 각 기능별
+        // : 컨트롤러 단위 경로 이후 값 지정
         public static final String BY_ID = ROOT + "/{projectId}";
 
-        public static final String UPDATE = ROOT + "/{projectId}";
-        public static final String DELETE = ROOT + "/{projectId}";
-        public static final String SEARCH_ALL = ROOT + "/projects";
-        public static final String SEARCH_SINGLE = ROOT + "/{projectId}";
-        public static final String SEARCH_BY_TASK_DESC = ROOT + "/task-desc";
+//        public static final String UPDATE = ROOT + "/{projectId}";
+//        public static final String DELETE = ROOT + "/{projectId}";
+        public static final String SEARCH_ALL = ROOT + "/all"; // 생략 가능
+//        public static final String SEARCH_SINGLE = ROOT + "/{projectId}";
+        public static final String SEARCH_BY_TASK_DESC = "/task-desc";
     }
 
     public static final class Tasks {
