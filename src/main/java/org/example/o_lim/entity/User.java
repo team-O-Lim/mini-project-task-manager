@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.o_lim.common.enums.Gender;
 import org.example.o_lim.common.enums.RoleType;
+import org.example.o_lim.entity.base.BaseTimeEntity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +22,7 @@ import java.util.Set;
 )
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User{
+public class User extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
