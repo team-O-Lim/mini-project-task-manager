@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.naming.factory.SendMailFactory;
-import org.example.o_lim.entity.base.BaseTimeEntity;
+import org.example.o_lim.common.enums.Gender;
+import org.example.o_lim.common.enums.RoleType;
 
 import java.util.HashSet;
 import java.util.Set;
