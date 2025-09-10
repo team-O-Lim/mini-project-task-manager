@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ApiMappingPattern.Notification.ROOT)
 public class NotificationController {
 
-    // 생성
-    @PostMapping
+    // 생성 "/api/v1/notices"
+//    @PostMapping
 
-    // 전체 조회
-    @GetMapping
+    // 전체 조회 "/api/v1/notices"
+//    @GetMapping
 
-    // 단건 조회
-    @GetMapping(ApiMappingPattern.Notification.BY_ID)
+    // 단건 조회 "/api/v1/notices/{noticeId}"
+//    @GetMapping(ApiMappingPattern.Notification.BY_ID)
 
-    // 수정
-    @PutMapping(ApiMappingPattern.Notification.BY_ID)
+    // 수정 "/api/v1/notices/{noticeId}"
+//    @PutMapping(ApiMappingPattern.Notification.BY_ID)
 
-    // 삭제
-    @DeleteMapping(ApiMappingPattern.Notification.BY_ID)
+    // 삭제 "/api/v1/notices/{noticeId}"
+//    @DeleteMapping(ApiMappingPattern.Notification.BY_ID)
 
 
 }
