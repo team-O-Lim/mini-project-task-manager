@@ -3,12 +3,16 @@ package org.example.o_lim.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tag")
+@Table(name = "tags")
 public class Tag {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_tag_project"))
+    private Project project;
 
     @Column(name = "name", nullable = false)
     private String name;

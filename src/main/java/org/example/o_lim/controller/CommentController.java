@@ -3,6 +3,12 @@ package org.example.o_lim.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
+import org.example.o_lim.dto.comment.request.CommentCreateRequest;
+import org.example.o_lim.dto.comment.response.CommentDetailResponse;
+import org.example.o_lim.service.CommentService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,8 +17,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ApiMappingPattern.Comments.ROOT)
 public class CommentController {
 
+//    private final CommentService commentService;
+
     // 생성 "/api/v1/tasks/{taskId}/comments"
 //    @PostMapping(ApiMappingPattern.Comments.ROOT)
+//    public ResponseEntity<ResponseDto<CommentDetailResponse>> createComment(
+//            @AuthenticationPrincipal UserPrincipal userPrincipal,
+//            @RequestBody CommentCreateRequest req
+//            ) {
+//        ResponseDto<CommentDetailResponse> responseDto = commentService.createComment(userPrincipal, req);
+//
+//        return ResponseEntity.ok().body(responseDto);
+//    }
 
     // 삭제 "/api/v1/tasks/{taskId}/comments/{commentId}"
 //    @DeleteMapping(ApiMappingPattern.Comments.DELETE)
