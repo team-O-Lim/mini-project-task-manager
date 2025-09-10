@@ -1,4 +1,6 @@
 package org.example.o_lim.entity;
+import org.example.o_lim.common.enums.PriorityStatus;
+import org.example.o_lim.common.enums.TaskStatus;
 import org.hibernate.annotations.Comment;
 import jakarta.persistence.*;
 import lombok.*;
@@ -52,12 +54,12 @@ public class Task {
     // 직무 현황
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
-    private Status status = Status.TODO;
+    private TaskStatus status = TaskStatus.TODO;
 
     // 직무 중요도
     @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false, length = 20)
-    private Priority priority = Priority.MEDIUM;
+    private PriorityStatus priority = PriorityStatus.MEDIUM;
 
     private LocalDateTime dueDate;
 
