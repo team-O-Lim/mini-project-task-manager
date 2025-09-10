@@ -10,7 +10,7 @@ public class ApiMappingPattern {
 
         public static final String ROOT = BASE + "/users";
         public static final String MY_INFO = ROOT + "/me";
-        
+
         // public static final String SEARCH_PROFILE = ROOT + "/me";
     }
     public static final class Auth{
