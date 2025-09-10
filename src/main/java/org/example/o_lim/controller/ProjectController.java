@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.*;
 public class ProjectController {
 
     // 생성 "/api/v1/projects"
-    @PostMapping
+//    @PostMapping
 
     // 전체 조회 (내림차순) "/api/v1/projects"
-    @GetMapping
+//    @GetMapping
 
     // task 순 조회 "/api/v1/projects/task-desc"
-    @GetMapping(ApiMappingPattern.Projects.SEARCH_BY_TASK_DESC)
+//    @GetMapping(ApiMappingPattern.Projects.SEARCH_BY_TASK_DESC)
 
     // 단건 조회 "/api/v1/projects/{projectId}"
-    @GetMapping(ApiMappingPattern.Projects.BY_ID)
+//    @GetMapping(ApiMappingPattern.Projects.BY_ID)
 
     // 수정 "/api/v1/projects/{projectId}"
-    @PutMapping(ApiMappingPattern.Projects.BY_ID)
+//    @PutMapping(ApiMappingPattern.Projects.BY_ID)
 
     // 삭제 "/api/v1/projects/{projectId}"
-    @DeleteMapping(ApiMappingPattern.Projects.BY_ID)
+//    @DeleteMapping(ApiMappingPattern.Projects.BY_ID)
 
 }
