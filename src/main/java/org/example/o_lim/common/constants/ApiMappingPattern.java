@@ -9,8 +9,8 @@ public class ApiMappingPattern {
         private Users() {}
 
         public static final String ROOT = BASE + "/users";
-        public static final String MY_INFO = ROOT + "/me";
-        
+        public static final String MY_INFO = "/users" + "/me";
+
         // public static final String SEARCH_PROFILE = ROOT + "/me";
     }
     public static final class Auth{
@@ -18,8 +18,8 @@ public class ApiMappingPattern {
 
         public static final String SIGN_UP = BASE + "/signup";
         public static final String LOG_IN = BASE + "/login";
-        public static final String FIND_ID = Users.ROOT + "/find-id";
-        public static final String RESET_PASSWORD = Users.ROOT + "/reset-pw";
+        public static final String FIND_ID = "/users" + "/find-id";
+        public static final String RESET_PASSWORD = "/users" + "/reset-pw";
         }
 
 
