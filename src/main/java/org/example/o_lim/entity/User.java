@@ -10,6 +10,7 @@ import org.example.o_lim.entity.base.BaseTimeEntity;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(
@@ -45,9 +46,34 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 //    권한
-    @ElementCollection(fetch = FetchType.LAZY)
-    @Column(name="role", length = 30, nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Set<RoleType> roles = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserRole> userRoles = new HashSet<>();
 
+//    비밀번호 재설정
+    public void changePassword(String password) {
+        this.password = password;
+    }
+//    프로필 수정을 위한 setter
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+//    권한 부여/회수
+    public void grantRole(Role role) {
+        boolean exists = userRoles.stream().anyMatch(ur -> ur.getRole().equals(role));
+        if(!exists) {
+            userRoles.add(new UserRole(this, role));
+        }
+    }
+    public void revokeRole(Role role) {
+        userRoles.removeIf(ur -> ur.getRole().equals(role));
+    }
+//    JWT 활용
+    public Set<RoleType> getRoleTypes() {
+        return userRoles.stream()
+                .map(ur -> ur.getRole().getName())
+                .collect(Collectors.toUnmodifiableSet());
+    }
 }
