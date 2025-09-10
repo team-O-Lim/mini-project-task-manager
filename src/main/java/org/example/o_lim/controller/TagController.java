@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class TagController {
 
     // 생성 "/api/v1/projects/{projectId}/tags"
-     @PostMapping
-
+//     @PostMapping
 
     // 삭제 "/api/v1/projects/{projectId}/tags/{tagId}"
-    @DeleteMapping(ApiMappingPattern.Tags.BY_ID)
+//    @DeleteMapping(ApiMappingPattern.Tags.BY_ID)
 
 }
