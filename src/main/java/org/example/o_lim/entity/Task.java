@@ -1,12 +1,14 @@
 package org.example.o_lim.entity;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
+import org.example.o_lim.entity.base.BaseTimeEntity;
 import org.hibernate.annotations.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +22,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString(exclude = "comments")
 @Builder
-public class Task {
+public class Task extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -62,7 +64,7 @@ public class Task {
     @Column(name = "priority", nullable = false, length = 20)
     private PriorityStatus priority = PriorityStatus.MEDIUM;
 
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
 
     // 직무 생성
     public void newTask(String title, String content, User createdUser) {
