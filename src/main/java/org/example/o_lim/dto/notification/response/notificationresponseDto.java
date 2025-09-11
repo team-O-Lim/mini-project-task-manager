@@ -1,4 +1,4 @@
 package org.example.o_lim.dto.notification.response;
 
-public class response {
+public class notificationresponseDto {
 }

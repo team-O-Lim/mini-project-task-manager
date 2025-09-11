@@ -28,6 +28,7 @@ public class Notification extends BaseTimeEntity {
     private String content;
 
     @Comment("프로젝트")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id",
     foreignKey = @ForeignKey(name = "fk_notice_project"))
     private Project project;
