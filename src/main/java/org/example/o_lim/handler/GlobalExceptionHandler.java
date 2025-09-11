@@ -3,6 +3,7 @@ package org.example.o_lim.handler;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.o_lim.common.enums.ErrorCode;
+import org.example.o_lim.dto.ResponseDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;

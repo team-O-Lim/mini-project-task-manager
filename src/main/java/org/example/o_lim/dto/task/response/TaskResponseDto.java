@@ -1,6 +1,9 @@
 package org.example.o_lim.dto.task.response;
 
+import org.example.o_lim.dto.comment.response.CommentDetailResponse;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record TaskResponseDto(
         Long id,
@@ -8,8 +11,8 @@ public record TaskResponseDto(
         String title,
         String content,
         Long createdUserId,
-        Long assignedUserId,
         String status,
         String priority,
-        LocalDateTime dueDate
+        LocalDateTime dueDate,
+        List<CommentDetailResponse> comments
 ) {}
