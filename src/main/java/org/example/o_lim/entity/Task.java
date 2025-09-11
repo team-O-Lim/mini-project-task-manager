@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tasks",
        indexes = {
-        @Index(name = "idx_task_project_status", columnList = {"project_id", "status"}),
-        @Index(name = "idx_task_assignee_due", columnList = {"assigned_user", "due_date"})
+        @Index(name = "idx_task_project_status", columnList = "project_id, status"),
+        @Index(name = "idx_task_assignee_due", columnList = "assigned_user, due_date")
        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,7 +24,7 @@ public class Task {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_task_project"))
     private Project project;
@@ -39,12 +39,13 @@ public class Task {
     @JdbcTypeCode(SqlTypes.LONGVARCHAR)
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @Comment("직무 작성자")
     @JoinColumn(name = "created_user", nullable = false,
             foreignKey = @ForeignKey(name = "fk_task_created_user"))
     private User createdUser;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @Comment("직무 담당자")
     @JoinColumn(name = "assigned_user", nullable = false,
             foreignKey = @ForeignKey(name = "fk_task_assignee"))
