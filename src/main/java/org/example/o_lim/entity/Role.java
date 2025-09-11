@@ -1,9 +1,6 @@
 package org.example.o_lim.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.o_lim.common.enums.RoleType;
@@ -15,6 +12,7 @@ import org.example.o_lim.common.enums.RoleType;
 public class Role {
 
     @Id @Column(name = "role_name", nullable = false)
+    @Enumerated(EnumType.STRING)
     private RoleType name;
 
     public Role(RoleType name) {
