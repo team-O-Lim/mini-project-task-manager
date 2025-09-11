@@ -46,14 +46,7 @@ public class Task extends BaseTimeEntity {
     @JoinColumn(name = "created_user", nullable = false,
             foreignKey = @ForeignKey(name = "fk_task_created_user"))
     private User createdUser;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @Comment("직무 담당자")
-    @JoinColumn(name = "assigned_user", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_task_assignee"))
-    private User assignedUser;
-
-
+    
     // 직무 현황
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
