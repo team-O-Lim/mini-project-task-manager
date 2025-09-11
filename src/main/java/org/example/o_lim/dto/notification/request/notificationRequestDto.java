@@ -1,4 +1,4 @@
 package org.example.o_lim.dto.notification.request;
 
-public class notificationrequestDto {
+public class notificationRequestDto {
 }
