@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `tasks` (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     task_id BIGINT NOT NULL,
 	assignee_id BIGINT,
-    UNIQUE (task_id, assignee_id),
+    CONSTRAINT `uk_task_assignees_task_id_assignee_id` UNIQUE (task_id, assignee_id),
 	CONSTRAINT fk_task_assignees_task FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
 	CONSTRAINT fk_task_assignees_assignee  FOREIGN KEY (assignee_id)  REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `task_tag` (
 	id BIGINT AUTO_INCREMENT PRIMARY KEY,
     task_id BIGINT NOT NULL,
     tag_id BIGINT,
-    UNIQUE (task_id, tag_id),
+    CONSTRAINT `uk_task_tag_task_id_tag_id` UNIQUE (task_id, tag_id),
     CONSTRAINT fk_task_tag_task FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
     CONSTRAINT fk_task_tag_tag FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
 ) ENGINE=InnoDB
@@ -76,10 +76,10 @@ CREATE TABLE IF NOT EXISTS `tags` (
   project_id BIGINT NOT NULL,
   name       VARCHAR(50) NOT NULL,
   color      VARCHAR(20) NOT NULL,
-  UNIQUE (project_id, name),
-  UNIQUE (project_id, color),
-	CONSTRAINT fk_tag_projeck FOREIGN KEY (project_id) REFERENCES projects(id),
-	INDEX idx_tag_projeck (project_id)
+  CONSTRAINT `uk_tags_project_id_name` UNIQUE (project_id, name),
+  CONSTRAINT `uk_tags_project_id_color` UNIQUE (project_id, color),
+  CONSTRAINT fk_tag_projeck FOREIGN KEY (project_id) REFERENCES projects(id),
+  INDEX idx_tag_projeck (project_id)
 ) ENGINE=InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
