@@ -12,12 +12,12 @@ use `mini-project-task-manager-db`;
 # 1. 프로젝트 생성
 CREATE TABLE IF NOT EXISTS `projects` (
   id BIGINT PRIMARY KEY AUTO_INCREMENT,
-  owner_id BIGINT NOT NULL,
+  admin_id BIGINT NOT NULL,
   title VARCHAR(150) NOT NULL,
   description VARCHAR(255) NOT NULL,
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  CONSTRAINT fk_project_owner FOREIGN KEY (owner_id) REFERENCES users(id)
+  updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+  CONSTRAINT fk_project_admin FOREIGN KEY (admin_id) REFERENCES users(id)
 ) ENGINE=InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
 # tasks: 실질적 할 일
 # - 생성자: created_user
 # - 담당자: assigned_user / 담당자가 여러 명일 경우 테이블 분리 필요! (task_assigned_users)
-CREATE TABLE `tasks` (
+CREATE TABLE IF NOT EXISTS `tasks` (
   id           BIGINT PRIMARY KEY AUTO_INCREMENT,
   project_id   BIGINT NOT NULL,
   created_user BIGINT NOT NULL,
@@ -47,23 +47,34 @@ CREATE TABLE `tasks` (
   COLLATE = utf8mb4_unicode_ci
   COMMENT = '직무'; -- 규격 통일
   
-  CREATE TABLE `task_assignees` (
-	task_id BIGINT NOT NULL,
-	user_id BIGINT NOT NULL,
-	PRIMARY KEY (task_id, user_id),
+  CREATE TABLE IF NOT EXISTS `task_assignees` (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    task_id BIGINT NOT NULL,
+	assignee_id BIGINT,
 	CONSTRAINT fk_task_assignees_task FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
-	CONSTRAINT fk_task_assignees_user  FOREIGN KEY (user_id)  REFERENCES users(id) ON DELETE CASCADE
+	CONSTRAINT fk_task_assignees_assignee  FOREIGN KEY (assignee_id)  REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
   COMMENT = '직무 담당자 지정';
+  
+CREATE TABLE IF NOT EXISTS `task_tag` (
+	id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    task_id BIGINT NOT NULL,
+    tag_id BIGINT,
+    CONSTRAINT fk_task_tag_task FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    CONSTRAINT fk_task_tag_tag FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+) ENGINE=InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci
+  COMMENT = '직무 태그 지정';
 
-CREATE TABLE `tags` (
+CREATE TABLE IF NOT EXISTS `tags` (
   id         BIGINT PRIMARY KEY AUTO_INCREMENT,
   project_id BIGINT NOT NULL,
   name       VARCHAR(50) NOT NULL,
-  color      VARCHAR(20) NULL,
-  UNIQUE (project_id, name),
+  color      VARCHAR(20) NOT NULL,
+  UNIQUE (name, color),
 	CONSTRAINT fk_tag_projeck FOREIGN KEY (project_id) REFERENCES projects(id),
 	INDEX idx_tag_projeck (project_id)
 ) ENGINE=InnoDB
@@ -71,7 +82,7 @@ CREATE TABLE `tags` (
   COLLATE = utf8mb4_unicode_ci
   COMMENT = '태그';
 
-CREATE TABLE `comments` (
+CREATE TABLE IF NOT EXISTS `comments` (
   id         BIGINT PRIMARY KEY AUTO_INCREMENT,
   task_id    BIGINT NOT NULL,
   author_id  BIGINT NOT NULL,
@@ -86,7 +97,7 @@ CREATE TABLE `comments` (
   COMMENT = '직무 코멘트';
 
 CREATE TABLE IF NOT EXISTS `users` (
-  id BIGINT NOT NULL AUTO_INCREMENT,
+  id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   login_id VARCHAR(50) NOT NULL,
   password VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
@@ -94,7 +105,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   gender VARCHAR(10),
   created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
   updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  PRIMARY KEY (id),
   CONSTRAINT `uk_users_login_id` UNIQUE (login_id),
   CONSTRAINT `uk_users_email` UNIQUE (email),
   CONSTRAINT `uk_users_nickname` UNIQUE (nickname),
@@ -109,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
 ) ENGINE=InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
-  COMMENT = '권한 코드(USER, ASSIGNEE, OWNER)';
+  COMMENT = '권한 코드(USER, MANAGER, ADMIN)';
   
 CREATE TABLE IF NOT EXISTS `user_roles` (
   user_id BIGINT NOT NULL,
@@ -120,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
 ) ENGINE=InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
-  COMMENT = '사용자';
+  COMMENT = '사용자 권한 매핑';
 
 
 
