@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tasks",
        indexes = {
-        @Index(name = "idx_task_project_status", columnList = "project_id, status"),
-        @Index(name = "idx_task_assignee_due", columnList = "assigned_user, due_date")
+        @Index(name = "idx_task_project_status", columnList = "project_id, status")
        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
