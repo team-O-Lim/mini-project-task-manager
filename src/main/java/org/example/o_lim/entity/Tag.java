@@ -9,7 +9,7 @@ public class Tag {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_tag_project"))
     private Project project;
@@ -17,7 +17,7 @@ public class Tag {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "color")
+    @Column(name = "color", nullable = false)
     private String color;
 
 }
