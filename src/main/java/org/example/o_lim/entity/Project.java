@@ -11,13 +11,7 @@ import lombok.Setter;
 
 
 @Entity
-@Table(
-  name = "projects",
-  indexes = {
-    @Index(name = "idx_project_admin", columnList = "admin_id")
-  }
-
-)
+@Table( name = "projects")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
@@ -26,7 +20,6 @@ public class Project extends BaseTimeEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false, updatable = false)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
