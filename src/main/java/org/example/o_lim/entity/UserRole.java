@@ -29,7 +29,7 @@ public class UserRole {
     @JoinColumn(
             name = "role_name",
             nullable = false,
-            foreignKey = @ForeignKey(name = "fk_user_roles_role")
+            foreignKey = @ForeignKey(name = "fk_user_roles_role_name")
     )
     private Role role;
 
