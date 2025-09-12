@@ -10,33 +10,20 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TaskAssignees {
-    @EmbeddedId
-    private TaskAssigneesId id;
 
-    @MapsId("taskId")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-            name = "task_id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk_task_assignees_task")
+    @JoinColumn(name = "task_id",
+        foreignKey = @ForeignKey(name = "fk_task_assignees_task"),
+        nullable = false
     )
     private Task task;
 
-    @MapsId("userId")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-            name = "user_id",
-            nullable = false,
-            foreignKey = @ForeignKey(name = "fk_task_assignees_user")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "assignee_id",
+        foreignKey = @ForeignKey(name = "fk_task_assignees_assignee")
     )
-    private User user;
-
-    public TaskAssignees(Task task, User user) {
-        this.task = task;
-        this.user = user;
-
-        Long taskId = task.getId();
-        Long userId = user.getId();
-        this.id = new TaskAssigneesId(taskId, userId);
-    }
+    private User assignees;
 }
