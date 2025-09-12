@@ -22,14 +22,14 @@ public class TaskAssignees {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "task_id",
-        foreignKey = @ForeignKey(name = "fk_task_assignees_task"),
+        foreignKey = @ForeignKey(name = "fk_task_assignees_task_id"),
         nullable = false
     )
     private Task task;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "assignee_id",
-        foreignKey = @ForeignKey(name = "fk_task_assignees_assignee")
+        foreignKey = @ForeignKey(name = "fk_task_assignees_assignee_id")
     )
     private User assignees;
 }

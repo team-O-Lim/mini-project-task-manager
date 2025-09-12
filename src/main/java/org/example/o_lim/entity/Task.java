@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tasks",
        indexes = {
-        @Index(name = "idx_task_project_status", columnList = "project_id, status")
+        @Index(name = "idx_tasks_project_status", columnList = "project_id, status")
        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,7 +27,7 @@ public class Task extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_task_project"))
+            foreignKey = @ForeignKey(name = "fk_tasks_project_id"))
     private Project project;
 
     @Comment("직무")
@@ -43,7 +43,7 @@ public class Task extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @Comment("직무 작성자")
     @JoinColumn(name = "created_user", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_task_created_user"))
+            foreignKey = @ForeignKey(name = "fk_tasks_created_user"))
     private User createdUser;
     
     // 직무 현황

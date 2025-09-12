@@ -26,7 +26,7 @@ public class Project extends BaseTimeEntity {
   @JoinColumn(
     name = "admin_id",
     nullable = false, 
-    foreignKey = @ForeignKey(name = "fk_project_admin")
+    foreignKey = @ForeignKey(name = "fk_projects_admin_id")
     )
   private User admin;
 

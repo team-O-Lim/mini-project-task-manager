@@ -17,12 +17,12 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "task_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_comment_task"))
+            foreignKey = @ForeignKey(name = "fk_comment_task_id"))
     private Task task;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_comment_author"))
+            foreignKey = @ForeignKey(name = "fk_comment_author_id"))
     private User author;
 
     @Column(name = "content", nullable = false)

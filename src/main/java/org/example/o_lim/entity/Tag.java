@@ -10,7 +10,7 @@ import jakarta.persistence.*;
                 @UniqueConstraint(name = "uk_tags_project_id_color", columnNames = {"project_id", "color"})
         },
         indexes = {
-                @Index(name = "idx_tag_project", columnList = "project_id")
+                @Index(name = "idx_tags_project_id", columnList = "project_id")
         }
 )
 public class Tag {
@@ -20,7 +20,7 @@ public class Tag {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false,
-            foreignKey = @ForeignKey(name = "fk_tag_project"))
+            foreignKey = @ForeignKey(name = "fk_tags_project_id"))
     private Project project;
 
     @Column(name = "name", nullable = false)
