@@ -3,7 +3,13 @@ package org.example.o_lim.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "tags")
+@Table(
+        name = "tags",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_tags_project_id_name", columnNames = {"project_id", "name"}),
+                @UniqueConstraint(name = "uk_tags_project_id_color", columnNames = {"project_id", "color"})
+        }
+)
 public class Tag {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
