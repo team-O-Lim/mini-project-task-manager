@@ -8,7 +8,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 @Entity
-@Table(name = "notification")
+@Table(name = "notifications")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -30,7 +30,7 @@ public class Notification extends BaseTimeEntity {
     @Comment("프로젝트")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id",
-    foreignKey = @ForeignKey(name = "fk_notification_project_id"))
+    foreignKey = @ForeignKey(name = "fk_notifications_project_id"))
     private Project project;
 
 

@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 @Table(
         name="users",
         uniqueConstraints = {
-                @UniqueConstraint(name="uk_user_login_id", columnNames = "email"),
-                @UniqueConstraint(name="uk_users_login_id", columnNames = "login_id"),
-                @UniqueConstraint(name="uk_user_nickname", columnNames = "nickname")
+                @UniqueConstraint(name="uk_users_login_id", columnNames = "email"),
+                @UniqueConstraint(name="uk_users_email", columnNames = "login_id"),
+                @UniqueConstraint(name="uk_users_nickname", columnNames = "nickname")
         }
 )
 @Getter
