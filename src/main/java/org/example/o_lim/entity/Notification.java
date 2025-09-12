@@ -30,12 +30,11 @@ public class Notification extends BaseTimeEntity {
     @Comment("프로젝트")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id",
-    foreignKey = @ForeignKey(name = "fk_notice_project"))
+    foreignKey = @ForeignKey(name = "fk_notification_project_id"))
     private Project project;
 
 
     private Notification(String title, String content, Project project) {
-
         this.title = title;
         this.content = content;
         this.project = project;
@@ -50,5 +49,4 @@ public class Notification extends BaseTimeEntity {
         this.content = content;
 
     }
-
 }

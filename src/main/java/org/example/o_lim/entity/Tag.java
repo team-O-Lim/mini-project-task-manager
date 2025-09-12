@@ -8,6 +8,9 @@ import jakarta.persistence.*;
         uniqueConstraints = {
                 @UniqueConstraint(name = "uk_tags_project_id_name", columnNames = {"project_id", "name"}),
                 @UniqueConstraint(name = "uk_tags_project_id_color", columnNames = {"project_id", "color"})
+        },
+        indexes = {
+                @Index(name = "idx_tag_project", columnList = "project_id")
         }
 )
 public class Tag {
