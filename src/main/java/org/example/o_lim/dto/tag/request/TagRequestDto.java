@@ -3,7 +3,7 @@ package org.example.o_lim.dto.tag.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record TagCreateRequest (
+public record TagRequestDto(
 
         Long projectId,
         @NotBlank(message = "태그명은 필수 입니다.")
