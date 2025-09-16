@@ -1,8 +1,13 @@
 package org.example.o_lim.controller;
 
 
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
+import org.example.o_lim.dto.ResponseDto;
+import org.example.o_lim.dto.comment.response.CommentResponseDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,8 +29,16 @@ public class CommentController {
 //        return ResponseEntity.ok().body(responseDto);
 //    }
 
-    // 삭제 "/api/v1/tasks/{taskId}/comments/{commentId}"
-//    @DeleteMapping(ApiMappingPattern.Comments.DELETE)
+//    // 삭제 "/api/v1/tasks/{taskId}/comments/{commentId}"
+//    @DeleteMapping(ApiMappingPattern.Comments.BY_ID)
+//    public ResponseEntity<ResponseDto<CommentResponseDto>> deleteCommnet(
+//            @AuthenticationPrincipal UserPrincipal userPrincipal,
+//            @PathVariable("name") String name
+//
+//    ) {
+//
+//    }
+
 
     // 특정 task 내 comment 최신순 조회 "/api/v1/tasks/{taskId}/comments"
 //    @GetMapping(ApiMappingPattern.Comments.SEARCH_COMMENT_IN_TASK_BY_NEW)
