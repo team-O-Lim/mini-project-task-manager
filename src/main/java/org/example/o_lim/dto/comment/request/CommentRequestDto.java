@@ -2,7 +2,7 @@ package org.example.o_lim.dto.comment.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record CommentCreateRequest(
+public record CommentRequestDto(
 
         Long taskId,
         Long authorId,

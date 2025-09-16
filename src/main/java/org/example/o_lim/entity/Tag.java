@@ -1,6 +1,9 @@
 package org.example.o_lim.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(
@@ -13,6 +16,8 @@ import jakarta.persistence.*;
                 @Index(name = "idx_tags_project_id", columnList = "project_id")
         }
 )
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
