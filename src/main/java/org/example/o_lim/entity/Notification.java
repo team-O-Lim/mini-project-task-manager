@@ -33,18 +33,10 @@ public class Notification extends BaseTimeEntity {
     foreignKey = @ForeignKey(name = "fk_notifications_project_id"))
     private Project project;
 
-    @Comment("작성자")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id",
-    foreignKey = @ForeignKey(name = "fk_notifications_user_id"))
-    private User user;
-
-
     private Notification(String title, String content, Project project, User user) {
         this.title = title;
         this.content = content;
         this.project = project;
-        this.user = user;
     }
 
     public static Notification create(String title, String content, Project project, User user) {
