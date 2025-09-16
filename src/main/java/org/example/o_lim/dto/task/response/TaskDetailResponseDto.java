@@ -2,8 +2,8 @@ package org.example.o_lim.dto.task.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.example.o_lim.dto.comment.response.CommentDetailResponse;
-import org.example.o_lim.dto.tag.response.TagResponse;
+import org.example.o_lim.dto.comment.response.CommentResponseDto;
+import org.example.o_lim.dto.tag.response.TagResponseDto;
 import org.example.o_lim.entity.Comment;
 import org.example.o_lim.entity.Task;
 
@@ -23,31 +23,31 @@ public record TaskDetailResponseDto(
         Long createUserId,
         String status,
         String priority,
-        List<TagResponse> tags,
+        List<TagResponseDto> tags,
         LocalDate dueDate,
-        List<CommentDetailResponse> comments
+        List<CommentResponseDto> comments
 ) {
-    public static  TaskDetailResponseDto from(Task task){
-        if(task == null) return null;
-
-        List<Comment> comments
-                = task.getComments() != null ? task.getComments() : Collections.emptyList();
-
-        List<CommentDetailResponse> commentDtos = comments.stream()
-                .filter(Objects::nonNull)
-                .map(Comment::from)
-                .toList();
-        return new TaskDetailResponseDto(
-                task.getId(),
-                task.getProject().getId(),
-                task.getTitle(),
-                task.getContent(),
-                task.getCreatedUser().getId(),
-                task.getStatus(),
-                task.getPriority(),
-                task.getTag(),
-                task.getDueDate(),
-                commentDtos
-        );
-    }
+//    public static  TaskDetailResponseDto from(Task task){
+//        if(task == null) return null;
+//
+//        List<Comment> comments
+//                = task.getComments() != null ? task.getComments() : Collections.emptyList();
+//
+//        List<CommentResponseDto> commentDtos = comments.stream()
+//                .filter(Objects::nonNull)
+//                .map(CommentResponseDto::from)
+//                .toList();
+//        return new TaskDetailResponseDto(
+//                task.getId(),
+//                task.getProject().getId(),
+//                task.getTitle(),
+//                task.getContent(),
+//                task.getCreatedUser().getId(),
+//                task.getStatus(),
+//                task.getPriority(),
+//                task.getTag(),
+//                task.getDueDate(),
+//                commentDtos
+//        );
+//    }
 }

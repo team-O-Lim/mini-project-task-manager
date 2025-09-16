@@ -29,6 +29,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "id", updatable = false)
     private Long id;
 
+    @Column(name = "name", nullable = false)
+    private String name;
+
 //    로그인 아이디
     @Column(name="login_id", nullable = false, length = 50)
     private String loginId;

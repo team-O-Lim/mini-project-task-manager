@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS users;
 # user 테이블 생성
 CREATE TABLE IF NOT EXISTS `users` (
   id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
   login_id VARCHAR(50) NOT NULL,
   password VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
@@ -54,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
   role_name VARCHAR(30) NOT NULL,
   PRIMARY KEY(user_id, role_name),
   CONSTRAINT `fk_user_roles_user_id` FOREIGN KEY (user_id) REFERENCES users(id),
-  CONSTRAINT `fk_user_roles_rolename` FOREIGN KEY (role_name) REFERENCES roles(role_name)
+  CONSTRAINT `fk_user_roles_role_name` FOREIGN KEY (role_name) REFERENCES roles(role_name)
 ) ENGINE=InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
@@ -167,9 +168,3 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
   COMMENT = '프로젝트 공지사항'; 
-
-    
-    
-    
-    
-    

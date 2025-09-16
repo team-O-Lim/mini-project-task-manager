@@ -8,6 +8,5 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public record TaskSearchResponseDto(
         Long projectId,
         String title
-){
-    public static  TaskSearchResponseDto from(TaskSearchResponseDto dto){}
-}
+){}
+
