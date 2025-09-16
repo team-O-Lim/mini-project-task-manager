@@ -10,6 +10,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tasks",
@@ -55,6 +56,14 @@ public class Task extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false, length = 20)
     private PriorityStatus priority = PriorityStatus.MEDIUM;
+
+    @OneToMany(
+            mappedBy = "task",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private List<org.example.o_lim.entity.Comment> comments;
 
     private LocalDate dueDate;
 
