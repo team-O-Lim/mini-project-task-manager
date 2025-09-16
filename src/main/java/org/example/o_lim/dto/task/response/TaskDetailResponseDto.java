@@ -46,6 +46,7 @@ public record TaskDetailResponseDto(
                 task.getStatus(),
                 task.getPriority(),
                 task.getTag(),
+                task.getDueDate(),
                 commentDtos
         );
     }
