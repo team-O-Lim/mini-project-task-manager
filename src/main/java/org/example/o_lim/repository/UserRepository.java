@@ -2,11 +2,13 @@ package org.example.o_lim.repository;
 
 import org.example.o_lim.common.enums.RoleType;
 import org.example.o_lim.entity.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -30,4 +32,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ON u.id = r.user_id            
     """, nativeQuery = true)
     List<UserWithRolesProjection> findAllUsersWithRole_Native();
+
+    @EntityGraph(attributePaths = "roles")
+    Optional<User> findByLoginId(String id);
+
+    @EntityGraph(attributePaths = "roles")
+    Optional<User> findWithRolesById(Long id);
+
+    boolean existsByLoginId(String loginId);
+    boolean existsByEmail(String email);
+    boolean existsByNickname(String nickname);
 }
