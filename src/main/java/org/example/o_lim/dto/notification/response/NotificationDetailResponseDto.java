@@ -1,4 +1,4 @@
-package org.example.o_lim.dto.Notification.response;
+package org.example.o_lim.dto.notification.response;
 
 import org.example.o_lim.entity.Notification;
 import org.example.o_lim.entity.User;

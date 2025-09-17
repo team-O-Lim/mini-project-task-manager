@@ -1,4 +1,4 @@
-package org.example.o_lim.dto.Notification.request;
+package org.example.o_lim.dto.notification.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
