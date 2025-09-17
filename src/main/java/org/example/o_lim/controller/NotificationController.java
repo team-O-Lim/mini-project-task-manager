@@ -1,7 +1,5 @@
 package org.example.o_lim.controller;
 
-
-import com.sun.security.auth.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
@@ -10,6 +8,7 @@ import org.example.o_lim.dto.notification.request.NotificationUpdatedRequestDto;
 import org.example.o_lim.dto.notification.response.NotificationDetailResponseDto;
 import org.example.o_lim.dto.notification.response.NotificationListResponseDto;
 import org.example.o_lim.dto.ResponseDto;
+import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.NotificationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,15 +17,14 @@ import java.util.List;
 
 
  @RestController
- @RequiredArgsConstructor
- //"/api/v1/notices"
+ //"/api/v1/notifications"
  @RequestMapping(ApiMappingPattern.Notification.ROOT)
-
+ @RequiredArgsConstructor
  public class NotificationController {
 
  private final NotificationService notificationService;
 
-  //   생성 "/api/v1/notices"
+  //   생성 "/api/v1/notifications"
     @PostMapping
     public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> createNotification(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -36,7 +34,7 @@ import java.util.List;
        return ResponseEntity.ok().body(responseDto);
     }
 
-    // 전체 조회 "/api/v1/notices"
+    // 전체 조회 "/api/v1/notifications"
     // @GetMapping
     @GetMapping
     public ResponseEntity<ResponseDto<List<NotificationListResponseDto>>> getAllNotifications() {
@@ -44,33 +42,33 @@ import java.util.List;
         return ResponseEntity.ok().body(responseDto);
     }
 
-   // 단건 조회 "/api/v1/notices/{noticeId}"
+   // 단건 조회 "/api/v1/notifications/{notificationId}"
     @GetMapping(ApiMappingPattern.Notification.BY_ID)
     public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> getNotificationById(
-           @PathVariable Long id
+           @PathVariable Long notificationId
     ) {
-        ResponseDto<NotificationDetailResponseDto> response = notificationService.getNotificationById(id);
+        ResponseDto<NotificationDetailResponseDto> response = notificationService.getNotificationById(notificationId);
         return ResponseEntity.ok().body(response);
     }
 
-    // 수정 "/api/v1/notices/{noticeId}"
+    // 수정 "/api/v1/notifications/{notificationId}"
     @PutMapping(ApiMappingPattern.Notification.BY_ID)
     public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> updateNotification(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable Long id,
+            @PathVariable Long notificationId,
             @Valid @RequestBody NotificationUpdatedRequestDto requestDto
             ) {
-           ResponseDto<NotificationDetailResponseDto> responseDto = notificationService.updateNotification(principal, id, requestDto);
+           ResponseDto<NotificationDetailResponseDto> responseDto = notificationService.updateNotification(principal, notificationId, requestDto);
            return ResponseEntity.ok().body(responseDto);
     }
 
-    // 삭제 "/api/v1/notices/{noticeId}"
+    // 삭제 "/api/v1/notifications/{notificationId}"
     @DeleteMapping(ApiMappingPattern.Notification.BY_ID)
     public ResponseEntity<ResponseDto<Void>> deleteNotification(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable Long id
+            @PathVariable Long notificationId
     ) {
-        ResponseDto<Void> response = notificationService.deleteArticle(principal, id);
+        ResponseDto<Void> response = notificationService.deleteArticle(principal, notificationId);
         return ResponseEntity.ok().body(response);
     }
 
