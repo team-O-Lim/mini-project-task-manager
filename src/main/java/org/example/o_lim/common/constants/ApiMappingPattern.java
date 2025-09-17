@@ -10,18 +10,30 @@ public class ApiMappingPattern {
 
         public static final String ROOT = BASE + "/users";
 
-        public static final String MY_INFO = "/users" + "/me";
+        public static final String MY_INFO = "/me";
 
         // public static final String SEARCH_PROFILE = ROOT + "/me";
     }
     public static final class Auth{
         private Auth() {}
 
-        public static final String SIGN_UP = BASE + "/signup";
-        public static final String LOG_IN = BASE + "/login";
-        public static final String FIND_ID = "/users" + "/find-id";
-        public static final String RESET_PASSWORD = "/users" + "/reset-pw";
-        }
+        public static final String ROOT = BASE + "/auth";
+
+        public static final String SIGN_UP = "/sign-up";
+        public static final String SIGN_IN = "/sign-in";
+        public static final String FIND_ID = "/find-id";
+        public static final String RESET_PASSWORD = "/reset-pw";
+    }
+    public static final class Admin {
+        private Admin() {}
+
+        public static final String ROOT = BASE + "/admin";
+
+        public static final String REPLACE = "/roles/replace";
+        public static final String ADD = "/roles/add";
+        public static final String REMOVE = "/roles/remove";
+
+    }
 
 
 
