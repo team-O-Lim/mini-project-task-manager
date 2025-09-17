@@ -1,6 +1,8 @@
 package org.example.o_lim.dto.comment.response;
 
 import org.example.o_lim.entity.Comment;
+import org.example.o_lim.entity.User;
+import org.example.o_lim.repository.CommentRepository;
 
 import java.time.LocalDateTime;
 
@@ -10,10 +12,11 @@ public record CommentResponseDto(
         String content,
         LocalDateTime createdAt
 ) {
-    public static CommentResponseDto from(Comment comment) {
+
+    public static CommentResponseDto from(CommentRepository.CommentWithCreatedAtProjection c) {
         return new CommentResponseDto(
-                comment.getAuthor().getNickname(),
-                comment.getContent(),
-                comment.getCreatedAt());
+                c.getAuthorName(),
+                c.getContent(),
+                c.getCreatedAt());
     }
 }
