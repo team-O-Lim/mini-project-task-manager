@@ -12,6 +12,12 @@ public record CommentResponseDto(
         String content,
         LocalDateTime createdAt
 ) {
+    public static CommentResponseDto from(Comment comment) {
+        return new CommentResponseDto(
+                comment.getAuthor().getNickname(),
+                comment.getContent(),
+                comment.getCreatedAt());
+    }
 
     public static CommentResponseDto from(CommentRepository.CommentWithCreatedAtProjection c) {
         return new CommentResponseDto(
