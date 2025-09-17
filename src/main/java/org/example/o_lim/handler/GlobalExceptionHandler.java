@@ -90,7 +90,5 @@ public class GlobalExceptionHandler {
         log.error("Internal Error: {}", e.getMessage());
         return failed(ErrorCode.INTERNAL_ERROR, null, null  );
     }
-
-
 }
 

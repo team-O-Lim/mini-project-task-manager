@@ -19,23 +19,22 @@ public class ApiMappingPattern {
 
         public static final String ROOT = BASE + "/auth";
 
-        public static final String SIGN_UP = "/signup";
-        public static final String LOG_IN = "/login";
+        public static final String SIGN_UP = "/sign-up";
+        public static final String SIGN_IN = "/sign-in";
         public static final String FIND_ID = "/find-id";
         public static final String RESET_PASSWORD = "/reset-pw";
+    }
+    public static final class Admin {
+        private Admin() {
         }
-
-
-        public static final class Admin {
-        private Admin() {}
 
         public static final String ROOT = BASE + "/admin";
 
-            public static final String REPLACE = "/roles/replace";
-            public static final String ADD = "/roles/add";
-            public static final String REMOVE = "/roles/remove";
-    }
+        public static final String REPLACE = "/roles/replace";
+        public static final String ADD = "/roles/add";
+        public static final String REMOVE = "/roles/remove";
 
+    }
 
     public static final class Projects {
         private Projects() {}
@@ -52,7 +51,6 @@ public class ApiMappingPattern {
         // public static final String DELETE = ROOT + "/{projectId}";
         // public static final String SEARCH_SINGLE = ROOT + "/{projectId}";
     }
-
 
     public static final class Tasks {
         private Tasks() {}
@@ -73,7 +71,6 @@ public class ApiMappingPattern {
         // public static final String UPDATE = "/tasks/{taskId}";
     }
 
-
     public static final class Tags {
         private Tags() {}
 
@@ -84,7 +81,6 @@ public class ApiMappingPattern {
         // public static final String DELETE = ROOT + "/{tagId}";
     }
 
-
     public static final class Comments {
         private Comments() {}
 
@@ -94,7 +90,6 @@ public class ApiMappingPattern {
 
         // public static final String DELETE = ROOT + "/{commentId}";
     }
-
 
     public static final class Notification {
         private Notification() {}
