@@ -11,7 +11,7 @@ public record ProjectTaskCountResponseDto(
         Long id,
         String title,
         String description,
-        Long taskCount // 해당 프로젝트에 속한 task 개수
+        Long taskCount
 ) {
     public static ProjectTaskCountResponseDto from(Project project, long taskCount) {
         if (project == null) return null;
