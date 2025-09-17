@@ -76,9 +76,9 @@ public class ApiMappingPattern {
     public static final class Notification {
         private Notification() {}
 
-        public static final String ROOT = BASE + "/notices";
+        public static final String ROOT = BASE + "/notifications";
 
-        public static final String BY_ID = "/{noticeId}";
+        public static final String BY_ID = "/{notificationId}";
 
         //public static final String SEARCH_ALL = "/all";
         // public static final String UPDATE = ROOT + "/{noticeId}";
