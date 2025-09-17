@@ -10,6 +10,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -56,6 +57,10 @@ public class Task extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false, length = 20)
     private PriorityStatus priority = PriorityStatus.MEDIUM;
+
+    // TaskTag 관계
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    private List<TaskTag> taskTags = new ArrayList<>();
 
     @OneToMany(
             mappedBy = "task",

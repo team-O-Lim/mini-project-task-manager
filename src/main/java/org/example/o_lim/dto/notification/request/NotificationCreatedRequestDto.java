@@ -1,11 +1,9 @@
-package org.example.o_lim.dto.Notification.request;
+package org.example.o_lim.dto.notification.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public record NotificationCreatedRequestDto(
     @NotBlank(message = "제목은 필수 입력 값입니다.")
     @Size(max = 50, message = "제목은 최대 50자까지 입력 가능합니다.")

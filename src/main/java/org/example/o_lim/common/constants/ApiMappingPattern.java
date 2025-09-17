@@ -14,7 +14,7 @@ public class ApiMappingPattern {
 
         // public static final String SEARCH_PROFILE = ROOT + "/me";
     }
-    public static final class Auth{
+    public static final class Auth {
         private Auth() {}
 
         public static final String ROOT = BASE + "/auth";
@@ -25,7 +25,8 @@ public class ApiMappingPattern {
         public static final String RESET_PASSWORD = "/reset-pw";
     }
     public static final class Admin {
-        private Admin() {}
+        private Admin() {
+        }
 
         public static final String ROOT = BASE + "/admin";
 
@@ -34,8 +35,6 @@ public class ApiMappingPattern {
         public static final String REMOVE = "/roles/remove";
 
     }
-
-
 
     public static final class Projects {
         private Projects() {}
@@ -56,12 +55,17 @@ public class ApiMappingPattern {
     public static final class Tasks {
         private Tasks() {}
 
+        // == Controller 단위 경로 == //
         public static final String ROOT = "/projects/{project}/tasks";
 
-        public static final String BY_ID = "/tasks/{taskId}";
-        public static final String ALL_BY_ID = ROOT + "/{taskId}";
+        // == 단건 조회(1개만 반환), 수정, 삭제 == //
+        public static final String BY_ID = "/{taskId}";
 
-        public static final String SEARCH_FILTER_ALL = ROOT + "/assignee/{userId}";
+        // == 검색 & 필터링 (다건 조회)== //
+        public static final String FILTER_CREATED_USER = "/created-user/{createdUser}";
+
+        // 검색 조회
+        public static final String SEARCH = "/search";
 
         // public static final String SEARCH_SINGLE = BASE + "/tasks/{taskId}";
         // public static final String UPDATE = "/tasks/{taskId}";
@@ -71,6 +75,8 @@ public class ApiMappingPattern {
         private Tags() {}
 
         public static final String ROOT = BASE + "/projects/{projectId}/tags";
+
+        public static final String BY_ID = "/{tagId}";
 
         // public static final String DELETE = ROOT + "/{tagId}";
     }
@@ -88,11 +94,11 @@ public class ApiMappingPattern {
     public static final class Notification {
         private Notification() {}
 
-        public static final String ROOT = BASE + "/notices";
+        public static final String ROOT = BASE + "/notifications";
 
-        public static final String BY_ID = "/{noticeId}";
+        public static final String BY_ID = "/{notificationId}";
 
-        //public static final String SEARCH_ALL = "/all";
+        // public static final String SEARCH_ALL = "/all";
         // public static final String UPDATE = ROOT + "/{noticeId}";
         // public static final String DELETE = ROOT + "/{noticeId}";
     }
