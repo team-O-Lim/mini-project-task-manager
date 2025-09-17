@@ -43,7 +43,7 @@ public class TagController {
      }
 
     // 삭제 "/api/v1/projects/{projectId}/tags/{tagId}"
-    @DeleteMapping // (ApiMappingPattern.Tags.BY_ID)
+    @DeleteMapping(ApiMappingPattern.Tags.BY_ID)
     public ResponseEntity<ResponseDto<TagResponseDto>> deleteTag(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable("projectId") @Positive(message = "양수값만 가능합니다.") Long projectId,
