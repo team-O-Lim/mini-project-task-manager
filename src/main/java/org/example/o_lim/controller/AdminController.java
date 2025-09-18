@@ -20,37 +20,39 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(ApiMappingPattern.Admin.ROOT)
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     private final AdminService adminService;
 
 //    권한 추가
     @PostMapping(ApiMappingPattern.Admin.ADD)
     public ResponseEntity<ResponseDto<AddRoleResponseDto>> addRoles(
-            @AuthenticationPrincipal UserPrincipal principal,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @Valid @RequestBody AddRoleRequestDto request
             ) {
-        ResponseDto<AddRoleResponseDto> response = adminService.addRoles(principal, request);
+        ResponseDto<AddRoleResponseDto> response = adminService.addRoles(userPrincipal, request);
+
         return ResponseEntity.ok().body(response);
     }
 
 //    권한 삭제
     @DeleteMapping(ApiMappingPattern.Admin.REMOVE)
     public ResponseEntity<ResponseDto<RemoveRoleResponseDto>> removeRole(
-            @AuthenticationPrincipal UserPrincipal principal,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @Valid @RequestBody RemoveRoleRequestDto request
             ) {
-        ResponseDto<RemoveRoleResponseDto> response = adminService.removeRole(principal, request);
+        ResponseDto<RemoveRoleResponseDto> response = adminService.removeRole(userPrincipal, request);
+
         return ResponseEntity.ok().body(response);
     }
 
 //    권한 수정
     @PutMapping(ApiMappingPattern.Admin.REPLACE)
     public ResponseEntity<ResponseDto<UpdateRoleResponseDto>> replaceRoles(
-            @AuthenticationPrincipal UserPrincipal principal,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @Valid @RequestBody UpdateRoleRequestDto request
             ) {
-        ResponseDto<UpdateRoleResponseDto> response = adminService.replaceRoles(principal, request);
+        ResponseDto<UpdateRoleResponseDto> response = adminService.replaceRoles(userPrincipal, request);
+
         return ResponseEntity.ok().body(response);
     }
 }

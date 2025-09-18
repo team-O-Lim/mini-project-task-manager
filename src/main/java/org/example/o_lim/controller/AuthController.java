@@ -30,6 +30,7 @@ public class AuthController {
     public ResponseEntity<ResponseDto<SignUpResponseDto>> signUp(
             @Valid @RequestBody SignUpRequestDto request) {
         ResponseDto<SignUpResponseDto> response = authService.signUp(request);
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -38,6 +39,7 @@ public class AuthController {
     public ResponseEntity<ResponseDto<SignInResponseDto>> signIn(
             @Valid @RequestBody SignInRequestDto request) {
         ResponseDto<SignInResponseDto> response = authService.signIn(request);
+
         return ResponseEntity.ok().body(response);
     }
 //    아이디 찾기
@@ -45,6 +47,7 @@ public class AuthController {
     public ResponseEntity<ResponseDto<FindIdResponseDto>> findId(
             @Valid FindIdRequestDto request) {
         ResponseDto<FindIdResponseDto> response = authService.findId(request);
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -53,6 +56,7 @@ public class AuthController {
     public ResponseEntity<ResponseDto<PasswordChangeResponseDto>> changePassword(
             @Valid PasswordChangeRequestDto request) {
         ResponseDto<PasswordChangeResponseDto> response = authService.changePassword(request);
+
         return ResponseEntity.ok().body(response);
     }
 }

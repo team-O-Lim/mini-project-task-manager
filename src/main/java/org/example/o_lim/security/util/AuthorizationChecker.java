@@ -5,6 +5,7 @@ import org.example.o_lim.entity.TaskAssignees;
 import org.example.o_lim.repository.TaskAssigneesRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component("authz")
@@ -16,10 +17,22 @@ public class AuthorizationChecker {
 
         String loginId = principal.getName();
 
-        TaskAssignees taskAssignee = taskAssigneesRepository.findByTaskId(taskId)
-                .orElse(null);
-        if(taskAssignee == null) return false;
-
-        return taskAssignee.getAssignees().getLoginId().equals(loginId);
+//        List<Boolean> results = taskAssigneesRepository.findByTaskId(taskId).stream()
+//                .map(assignee -> assignee.getAssignees().getLoginId().equals(loginId))
+//                .toList();
+//
+//        return results.contains(true);
+//
+//        =============================================================================================
+//
+//        return taskAssigneesRepository.findByTaskId(taskId).stream()
+//                .anyMatch(assignees -> assignees.getAssignees().getLoginId().equals(loginId));
+//
+//        =============================================================================================
+//
+//        List<String> assigneeId = taskAssigneesRepository.findByTaskId(taskId).stream()
+//                .map(assignee -> assignee.getAssignees().getLoginId())
+//                .toList();
+//        return assigneeId.contains(loginId);
     }
 }

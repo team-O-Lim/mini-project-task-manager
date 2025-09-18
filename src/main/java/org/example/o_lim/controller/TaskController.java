@@ -1,5 +1,6 @@
 package org.example.o_lim.controller;
 
+import jakarta.validation.Valid;
 import org.example.o_lim.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
