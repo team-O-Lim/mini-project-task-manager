@@ -1,4 +1,4 @@
-package org.example.o_lim.dto.notification.response;
+package org.example.o_lim.dto.aotification.response;
 
 import org.example.o_lim.entity.Notification;
 import java.time.LocalDateTime;

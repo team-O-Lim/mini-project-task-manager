@@ -51,7 +51,7 @@ public class AuthController {
         return ResponseEntity.ok().body(response);
     }
 
-//    비밀번호 찾기
+//    비밀번호 재설정
     @PostMapping(ApiMappingPattern.Auth.RESET_PASSWORD)
     public ResponseEntity<ResponseDto<PasswordChangeResponseDto>> changePassword(
             @Valid PasswordChangeRequestDto request) {

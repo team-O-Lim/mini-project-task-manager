@@ -1,4 +1,4 @@
-package org.example.o_lim.dto.notification.request;
+package org.example.o_lim.dto.aotification.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
