@@ -14,9 +14,7 @@ import java.util.*;
 
 @Component
 public class JwtProvider {
-
     public static final String BEARER_FIX = "Bearer ";
-
     public static final String CLAIM_ROLES = "roles";
 
     private final SecretKey key;
@@ -38,11 +36,11 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(secretBytes);
         this.jwtExpirationMs = jwtExpirationMs;
         this.clockSkewSeconds = clockSkewSeconds;
-
         this.parser = Jwts.parser()
                 .verifyWith(this.key)
                 .build();
     }
+
     public String generateJwtToken(String userId, Set<String> roles) {
         long now = System.currentTimeMillis();
         Date iat = new Date(now);
@@ -63,6 +61,7 @@ public class JwtProvider {
         if(bearerToken == null || !bearerToken.startsWith(BEARER_FIX)) {
             throw new IllegalArgumentException("Authorization 형식이 올바르지 않습니다.");
         }
+
         return bearerToken.substring(BEARER_FIX.length()).trim();
     }
 
@@ -83,9 +82,11 @@ public class JwtProvider {
             throw e;
         }
     }
+
     public boolean isValidToken(String tokenWithoutBearer) {
         try{
             parseClaimsInternal(tokenWithoutBearer, true);
+
             return true;
         } catch (Exception e) {
             return false;
@@ -107,12 +108,14 @@ public class JwtProvider {
         if(raw instanceof List<?> list) {
             Set<String> result = new HashSet<>();
             for(Object o: list) if(o != null) result.add(o.toString());
+
             return result;
         }
 
         if(raw instanceof Set<?> set) {
             Set<String> result = new HashSet<>();
             for(Object o: set) if(o != null) result.add(o.toString());
+
             return result;
         }
         return Set.of(raw.toString());
@@ -120,6 +123,7 @@ public class JwtProvider {
 
     public long getRemainingMillis(String tokenWithoutBearer) {
         Claims c = parseClaimsInternal(tokenWithoutBearer, true);
+
         return c.getExpiration().getTime() - System.currentTimeMillis();
     }
 }
