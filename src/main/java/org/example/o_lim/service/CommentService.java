@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface CommentService {
 
-    ResponseDto<CommentResponseDto> createComment(UserPrincipal userPrincipal, @Valid CommentRequestDto request,Long taskId);
+    ResponseDto<CommentResponseDto> createComment(UserPrincipal principal, @Valid CommentRequestDto request,Long taskId);
     ResponseDto<List<CommentResponseDto>> getAllCommentByCreatedAtDesc(Long taskId);
-    ResponseDto<CommentResponseDto> deleteComment(UserPrincipal userPrincipal, Long taskId, Long commentId);
+    ResponseDto<CommentResponseDto> deleteComment(UserPrincipal principal, Long taskId, Long commentId);
 }

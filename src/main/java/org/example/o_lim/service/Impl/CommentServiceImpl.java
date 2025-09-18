@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<CommentResponseDto> createComment(UserPrincipal userPrincipal, CommentRequestDto request,Long taskId) {
+    public ResponseDto<CommentResponseDto> createComment(UserPrincipal principal, CommentRequestDto request,Long taskId) {
 
         Comment comment = commentRepository.findByTaskId(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다." + taskId));
@@ -59,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<CommentResponseDto> deleteComment(UserPrincipal userPrincipal, Long taskId, Long commentId) {
+    public ResponseDto<CommentResponseDto> deleteComment(UserPrincipal principal, Long taskId, Long commentId) {
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다." + commentId));

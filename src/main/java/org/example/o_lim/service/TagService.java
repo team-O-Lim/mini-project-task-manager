@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TagService {
 
-    ResponseDto<TagResponseDto> createTag(UserPrincipal userPrincipal, @Valid TagRequestDto request, Long projectId);
+    ResponseDto<TagResponseDto> createTag(UserPrincipal principal, @Valid TagRequestDto request, Long projectId);
     ResponseDto<List<TagResponseDto>> getAllTag(Long projectId);
-    ResponseDto<TagResponseDto> deleteTag(UserPrincipal userPrincipal, Long projectId, Long tagId);
+    ResponseDto<TagResponseDto> deleteTag(UserPrincipal principal, Long projectId, Long tagId);
 }
