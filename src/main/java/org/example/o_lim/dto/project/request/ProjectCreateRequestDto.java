@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record ProjectCreateRequestDto(
-
         @NotNull(message = "프로젝트 작성자는 필수 입력값입니다.")
         Long admin_id,
 
