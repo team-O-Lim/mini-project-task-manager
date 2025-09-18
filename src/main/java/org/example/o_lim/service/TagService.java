@@ -1,7 +1,6 @@
 package org.example.o_lim.service;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.tag.request.TagRequestDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;

@@ -1,8 +1,6 @@
 package org.example.o_lim.dto.comment.response;
 
 import org.example.o_lim.entity.Comment;
-import org.example.o_lim.entity.User;
-import org.example.o_lim.repository.CommentRepository;
 
 import java.time.LocalDateTime;
 

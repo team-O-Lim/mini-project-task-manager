@@ -6,16 +6,12 @@ import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.comment.request.CommentRequestDto;
 import org.example.o_lim.dto.comment.response.CommentResponseDto;
 import org.example.o_lim.entity.Comment;
-import org.example.o_lim.entity.Task;
 import org.example.o_lim.repository.CommentRepository;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.CommentService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
