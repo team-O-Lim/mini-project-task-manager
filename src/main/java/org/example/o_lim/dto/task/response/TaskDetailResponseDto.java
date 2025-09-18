@@ -7,16 +7,13 @@ import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.dto.comment.response.CommentResponseDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
 import org.example.o_lim.entity.Comment;
-import org.example.o_lim.entity.Tag;
 import org.example.o_lim.entity.Task;
 import org.example.o_lim.entity.TaskTag;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -41,7 +38,6 @@ public record TaskDetailResponseDto(
                 .filter(Objects::nonNull)
                 .map(TagResponseDto::from)
                 .toList();
-
 
         List<Comment> comments
                 = task.getComments() != null ? task.getComments() : Collections.emptyList();

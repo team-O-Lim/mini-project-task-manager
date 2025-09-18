@@ -3,10 +3,8 @@ package org.example.o_lim.service.Impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.dto.ResponseDto;
-import org.example.o_lim.dto.comment.response.CommentResponseDto;
 import org.example.o_lim.dto.tag.request.TagRequestDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
-import org.example.o_lim.entity.Comment;
 import org.example.o_lim.entity.Tag;
 import org.example.o_lim.repository.TagRepository;
 import org.example.o_lim.security.UserPrincipal;
@@ -19,6 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
@@ -26,7 +25,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<TagResponseDto> createTag(UserPrincipal userPrincipal, TagRequestDto request,Long projectId) {
+    public ResponseDto<TagResponseDto> createTag(UserPrincipal principal, TagRequestDto request,Long projectId) {
 
         Tag tag = tagRepository.findByProjectId(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
@@ -58,7 +57,7 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<TagResponseDto> deleteTag(UserPrincipal userPrincipal, Long projectId, Long tagId) {
+    public ResponseDto<TagResponseDto> deleteTag(UserPrincipal principal, Long projectId, Long tagId) {
 
         Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다." + tagId));
