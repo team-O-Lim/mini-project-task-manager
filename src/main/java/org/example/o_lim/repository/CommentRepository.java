@@ -14,26 +14,4 @@ import java.util.Optional;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<Comment> findByTaskId(Long taskId);
-
-    public interface CommentWithCreatedAtProjection {
-
-        String getAuthorName();
-        String getContent();
-        LocalDateTime getCreatedAt();
-    }
-
-    @Query(value = """
-    SELECT 
-        
-        U.nickname as authorName,
-        C.content as content,
-        C.created_at as createdAt
-    FROM comments C
-        LEFT JOIN users U
-        ON C.author_id = U.id
-    WHERE task_id = :taskId
-    ORDER BY 
-        creatad_at DESC
-""", nativeQuery = true)
-    List<CommentWithCreatedAtProjection> getCommentsByCreatedAtDesc(@Param("taskId") Long taskId);
 }

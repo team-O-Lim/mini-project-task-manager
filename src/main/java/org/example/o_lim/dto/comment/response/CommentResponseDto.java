@@ -18,11 +18,4 @@ public record CommentResponseDto(
                 comment.getContent(),
                 comment.getCreatedAt());
     }
-
-    public static CommentResponseDto from(CommentRepository.CommentWithCreatedAtProjection c) {
-        return new CommentResponseDto(
-                c.getAuthorName(),
-                c.getContent(),
-                c.getCreatedAt());
-    }
 }

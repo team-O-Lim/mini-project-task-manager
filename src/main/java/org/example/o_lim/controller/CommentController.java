@@ -37,16 +37,6 @@ public class CommentController {
         return ResponseEntity.ok().body(response);
     }
 
-    // 조회 "/api/v1/tasks/{taskId}/comments"
-    @GetMapping
-    public ResponseEntity<ResponseDto<List<CommentResponseDto>>> getAllCommentByCreatedAtDesc(
-            @PathVariable Long taskId
-            ) {
-        ResponseDto<List<CommentResponseDto>> response = commentService.getAllCommentByCreatedAtDesc(taskId);
-
-        return ResponseEntity.ok().body(response);
-    }
-
     // 삭제 "/api/v1/tasks/{taskId}/comments/{commentId}"
     @DeleteMapping(ApiMappingPattern.Comments.BY_ID)
     public ResponseEntity<ResponseDto<CommentResponseDto>> deleteComment(

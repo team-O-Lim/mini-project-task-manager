@@ -42,21 +42,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public ResponseDto<List<CommentResponseDto>> getAllCommentByCreatedAtDesc(Long taskId) {
-
-        Comment comment = commentRepository.findByTaskId(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다." + taskId));
-
-        List<CommentResponseDto> data = null;
-
-        data = commentRepository.findByTaskId(taskId).stream()
-                .map(CommentResponseDto::from)
-                .toList();
-
-        return ResponseDto.setSuccess("댓글이 조회되었습니다.", data);
-    }
-
-    @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<CommentResponseDto> deleteComment(UserPrincipal principal, Long taskId, Long commentId) {
