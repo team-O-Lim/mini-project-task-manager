@@ -27,13 +27,12 @@ import java.util.List;
     @Override
     @Transactional
     @PreAuthorize("isAuthenticated()")
-    public ResponseDto<NotificationDetailResponseDto> createNotification(UserPrincipal principal, NotificationCreatedRequestDto requestDto) {
-
+    public ResponseDto<NotificationDetailResponseDto> createNotification(UserPrincipal principal, NotificationCreatedRequestDto request) {
         return null;
     }
 
     @Override
-    public ResponseDto<NotificationDetailResponseDto> updateNotification(UserPrincipal principal, Long notificationId, NotificationUpdatedRequestDto requestDto) {
+    public ResponseDto<NotificationDetailResponseDto> updateNotification(UserPrincipal principal, Long notificationId, NotificationUpdatedRequestDto request) {
         return null;
     }
 

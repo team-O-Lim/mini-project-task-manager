@@ -3,11 +3,11 @@ package org.example.o_lim.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
+import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.notification.request.NotificationCreatedRequestDto;
 import org.example.o_lim.dto.notification.request.NotificationUpdatedRequestDto;
 import org.example.o_lim.dto.notification.response.NotificationDetailResponseDto;
 import org.example.o_lim.dto.notification.response.NotificationListResponseDto;
-import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.NotificationService;
 import org.springframework.http.ResponseEntity;
@@ -28,20 +28,20 @@ public class NotificationController {
   @PostMapping
   public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> createNotification(
             @AuthenticationPrincipal UserPrincipal principal,
-            @Valid @RequestBody NotificationCreatedRequestDto requestDto
+            @Valid @RequestBody NotificationCreatedRequestDto request
             ) {
-      ResponseDto<NotificationDetailResponseDto> responseDto = notificationService.createNotification(principal, requestDto);
+      ResponseDto<NotificationDetailResponseDto> response = notificationService.createNotification(principal, request);
 
-       return ResponseEntity.ok().body(responseDto);
+       return ResponseEntity.ok().body(response);
     }
 
     // 전체 조회 "/api/v1/notifications"
     // @GetMapping
     @GetMapping
     public ResponseEntity<ResponseDto<List<NotificationListResponseDto>>> getAllNotifications() {
-        ResponseDto<List<NotificationListResponseDto>> responseDto = notificationService.getAllNotifications();
+        ResponseDto<List<NotificationListResponseDto>> response = notificationService.getAllNotifications();
 
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseEntity.ok().body(response);
     }
 
    // 단건 조회 "/api/v1/notifications/{notificationId}"
@@ -59,11 +59,11 @@ public class NotificationController {
     public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> updateNotification(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long notificationId,
-            @Valid @RequestBody NotificationUpdatedRequestDto requestDto
+            @Valid @RequestBody NotificationUpdatedRequestDto request
             ) {
-           ResponseDto<NotificationDetailResponseDto> responseDto = notificationService.updateNotification(principal, notificationId, requestDto);
+        ResponseDto<NotificationDetailResponseDto> response = notificationService.updateNotification(principal, notificationId, request);
 
-           return ResponseEntity.ok().body(responseDto);
+           return ResponseEntity.ok().body(response);
     }
 
     // 삭제 "/api/v1/notifications/{notificationId}"
