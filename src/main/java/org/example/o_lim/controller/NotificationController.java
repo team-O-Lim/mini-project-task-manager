@@ -32,7 +32,7 @@ public class NotificationController {
             ) {
       ResponseDto<NotificationDetailResponseDto> responseDto = notificationService.createNotification(principal, requestDto);
 
-       return ResponseEntity.ok().body(responseDto);
+      return ResponseEntity.ok().body(responseDto);
     }
 
     // 전체 조회 "/api/v1/notifications"
