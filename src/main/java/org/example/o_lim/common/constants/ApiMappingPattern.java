@@ -46,7 +46,7 @@ public class ApiMappingPattern {
     public static final class Tasks {
         private Tasks() {}
 
-        public static final String ROOT = "/projects/{projectId}/tasks";
+        public static final String ROOT = BASE + "/projects/{projectId}/tasks";
 
         public static final String BY_ID = "/{taskId}";
         public static final String FILTER_CREATED_USER = "/created-user/{createdUser}";
