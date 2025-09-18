@@ -26,10 +26,10 @@ public class AdminController {
 //    권한 추가
     @PostMapping(ApiMappingPattern.Admin.ADD)
     public ResponseEntity<ResponseDto<AddRoleResponseDto>> addRoles(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody AddRoleRequestDto request
             ) {
-        ResponseDto<AddRoleResponseDto> response = adminService.addRoles(userPrincipal, request);
+        ResponseDto<AddRoleResponseDto> response = adminService.addRoles(principal, request);
 
         return ResponseEntity.ok().body(response);
     }
@@ -37,10 +37,10 @@ public class AdminController {
 //    권한 삭제
     @DeleteMapping(ApiMappingPattern.Admin.REMOVE)
     public ResponseEntity<ResponseDto<RemoveRoleResponseDto>> removeRole(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody RemoveRoleRequestDto request
             ) {
-        ResponseDto<RemoveRoleResponseDto> response = adminService.removeRole(userPrincipal, request);
+        ResponseDto<RemoveRoleResponseDto> response = adminService.removeRole(principal, request);
 
         return ResponseEntity.ok().body(response);
     }
@@ -48,10 +48,10 @@ public class AdminController {
 //    권한 수정
     @PutMapping(ApiMappingPattern.Admin.REPLACE)
     public ResponseEntity<ResponseDto<UpdateRoleResponseDto>> replaceRoles(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody UpdateRoleRequestDto request
             ) {
-        ResponseDto<UpdateRoleResponseDto> response = adminService.replaceRoles(userPrincipal, request);
+        ResponseDto<UpdateRoleResponseDto> response = adminService.replaceRoles(principal, request);
 
         return ResponseEntity.ok().body(response);
     }
