@@ -9,49 +9,58 @@ import org.example.o_lim.dto.task.request.TaskUpdateRequestDto;
 import org.example.o_lim.dto.task.response.TaskCreateResponseDto;
 import org.example.o_lim.dto.task.response.TaskDetailResponseDto;
 import org.example.o_lim.dto.task.response.TaskSearchResponseDto;
-import org.example.o_lim.dto.task.response.TaskUpdateResponseDto;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.TaskService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TaskServiceImpl implements TaskService {
+
     @Override
-    public ResponseDto<TaskCreateResponseDto> createTask(TaskCreateRequestDto req, UserPrincipal userPrincipal) {
+    public ResponseDto<TaskCreateResponseDto> createTask(UserPrincipal principal, TaskCreateRequestDto request) {
         return null;
     }
 
     @Override
+    @Transactional
     public ResponseDto<List<TaskSearchResponseDto>> getAllTasks() {
         return null;
     }
 
     @Override
-    public ResponseDto<TaskDetailResponseDto> getTaskById(UserPrincipal userPrincipal, Long taskId) {
+    public ResponseDto<TaskDetailResponseDto> getTaskById(Long taskId) {
         return null;
     }
 
     @Override
-    public ResponseDto<List<TaskDetailResponseDto>> getCreatedUser(UserPrincipal userPrincipal, Long createdUser) {
+    public ResponseDto<List<TaskDetailResponseDto>> getCreatedUser(Long createdUser) {
         return null;
     }
 
     @Override
-    public ResponseDto<List<TaskDetailResponseDto>> searchTasks(UserPrincipal userPrincipal, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDate from, LocalDate to) {
+    public ResponseDto<List<TaskDetailResponseDto>> searchTasks(Long createUserId, TaskStatus status, PriorityStatus priority, LocalDate from, LocalDate to) {
         return null;
     }
 
     @Override
-    public ResponseDto<TaskUpdateResponseDto> updateTask(UserPrincipal userPrincipal, Long taskId, TaskUpdateRequestDto req) {
+    @Transactional
+    public ResponseDto<TaskDetailResponseDto> updateTask(UserPrincipal principal, Long taskId, TaskUpdateRequestDto request) {
         return null;
     }
 
     @Override
-    public void deleteTask(Long taskId, UserPrincipal userPrincipal) {
+    @Transactional
+    public ResponseDto<Void> deleteTask(Long taskId, UserPrincipal principal) {
 
+        return null;
     }
+
 }
+
+
