@@ -13,13 +13,9 @@ import lombok.Setter;
 @Entity
 @Table( name = "projects")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
-@Setter
 public class Project extends BaseTimeEntity {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -35,5 +31,4 @@ public class Project extends BaseTimeEntity {
 
   @Column(nullable = false, length = 255)
   private String description;
-
 }
