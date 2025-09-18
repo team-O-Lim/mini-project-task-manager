@@ -2,14 +2,12 @@ package org.example.o_lim.entity;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.entity.base.BaseTimeEntity;
-import org.hibernate.annotations.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +18,6 @@ import java.util.List;
        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@ToString(exclude = "comments")
-@Builder
 public class Task extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,22 +27,22 @@ public class Task extends BaseTimeEntity {
             foreignKey = @ForeignKey(name = "fk_tasks_project_id"))
     private Project project;
 
-    @Comment("직무")
+    // 직무명
     @Column(nullable = false, length = 200)
     private String title;
 
-    @Comment("직무 내용")
+    // 직무내용
     @Lob
     @Column(nullable = false)
     @JdbcTypeCode(SqlTypes.LONGVARCHAR)
     private String content;
 
+    // 직무 작성자
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @Comment("직무 작성자")
     @JoinColumn(name = "created_user", nullable = false,
             foreignKey = @ForeignKey(name = "fk_tasks_created_user"))
     private User createdUser;
-    
+
     // 직무 현황
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
@@ -62,14 +57,16 @@ public class Task extends BaseTimeEntity {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskTag> taskTags = new ArrayList<>();
 
+    // task 내 comment 출력
     @OneToMany(
             mappedBy = "task",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
-    private List<org.example.o_lim.entity.Comment> comments;
+    private List<Comment> comments;
 
+    // 마감일
     private LocalDate dueDate;
 
     // 직무 생성
