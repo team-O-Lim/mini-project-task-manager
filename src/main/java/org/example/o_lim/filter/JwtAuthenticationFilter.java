@@ -46,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             if(SecurityContextHolder.getContext().getAuthentication() != null) {
                 filterChain.doFilter(request,response);
+
                 return;
             }
 
@@ -53,22 +54,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if(authorization == null || authorization.isBlank()) {
                 filterChain.doFilter(request, response);
+
                 return;
             }
 
             if(!authorization.startsWith(BEARER_PREFIX)) {
                 unauthorized(response, "Authrization 헤더는 'Bearer <Token> 형식이어야 합니다.");
+
                 return;
             }
 
             String token = jwtProvider.removeBearer(authorization);
             if(token.isBlank()) {
                 unauthorized(response, "토큰이 비어있습니다.");
+
                 return ;
             }
 
             if(!jwtProvider.isValidToken(token)) {
                 unauthorized(response, "토큰이 유효하지 않거나 만료되었습니다.");
+
                 return ;
             }
 
@@ -83,6 +88,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             logger.warn("JWT Filter Error", e);
             unauthorized(response, "인증 처리 중 오류가 발생하였습니다.");
+
             return ;
         }
         filterChain.doFilter(request,response);
@@ -106,6 +112,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private List<GrantedAuthority> toAuthorities(Set<String> roles) {
         if(roles == null || roles.isEmpty()) return List.of();
+
         return roles.stream()
                 .map(role -> role.startsWith("ROLE_") ? role : "ROLE" + role)
                 .map(SimpleGrantedAuthority::new)

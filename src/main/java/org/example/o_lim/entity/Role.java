@@ -1,6 +1,7 @@
 package org.example.o_lim.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.o_lim.common.enums.RoleType;
@@ -8,7 +9,7 @@ import org.example.o_lim.common.enums.RoleType;
 @Entity
 @Table(name = "roles")
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Role {
 
     @Id @Column(name = "role_name", nullable = false)

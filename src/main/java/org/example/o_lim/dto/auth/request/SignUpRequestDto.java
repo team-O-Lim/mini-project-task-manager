@@ -6,15 +6,15 @@ import jakarta.validation.constraints.Size;
 import org.example.o_lim.common.enums.Gender;
 
 public record SignUpRequestDto(
-        @NotBlank @Size(max = 50)
+        @NotBlank(message = "이름을 입력해주세요") @Size(max = 50)
         String name,
-        @NotBlank @Size(min = 6, max = 14)
+        @NotBlank(message = "로그인 ID를 입력해주세요") @Size(min = 6, max = 14)
         String longinId,
-        @NotBlank @Size(min = 8, max = 16)
+        @NotBlank(message = "비밀번호를 입력해주세요.") @Size(min = 8, max = 16)
         String password,
-        @NotBlank @Email @Size(max = 255)
+        @NotBlank(message = "이메일을 입력해주세요.") @Email @Size(max = 255)
         String email,
-        @NotBlank @Size(max = 50)
+        @NotBlank(message = "닉네임을 입력해주세요.") @Size(max = 50)
         String nickname,
 
         Gender gender

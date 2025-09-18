@@ -15,28 +15,27 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-// "api/v1"
 @RequestMapping(ApiMappingPattern.Users.ROOT)
 public class UserController {
     private final UserService userService;
 
 //    마이페이지
-    @PreAuthorize("isAuthenticated()")
     @GetMapping(ApiMappingPattern.Users.MY_INFO)
     public ResponseEntity<ResponseDto<UserProfileResponseDto>> getMyInfo(
-            @AuthenticationPrincipal UserPrincipal principal
+            @AuthenticationPrincipal UserPrincipal userPrincipal
             ) {
-        ResponseDto<UserProfileResponseDto> response = userService.getMyInfo(principal);
+        ResponseDto<UserProfileResponseDto> response = userService.getMyInfo(userPrincipal);
+
         return ResponseEntity.ok().body(response);
     }
 //    회원정보수정
-    @PreAuthorize("isAuthenticated()")
     @PutMapping(ApiMappingPattern.Users.MY_INFO)
     public ResponseEntity<ResponseDto<UserProfileResponseDto>> updateMyInfo(
-            @AuthenticationPrincipal UserPrincipal principal,
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
             @Valid @RequestBody UserProfileUpdateRequest request
     ) {
-        ResponseDto<UserProfileResponseDto> response = userService.updateMyInfo(principal, request);
+        ResponseDto<UserProfileResponseDto> response = userService.updateMyInfo(userPrincipal, request);
+
         return ResponseEntity.ok().body(response);
     }
 
