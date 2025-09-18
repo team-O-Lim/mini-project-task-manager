@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(ApiMappingPattern.Admin.ROOT)
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
     private final AdminService adminService;
 
@@ -31,6 +30,7 @@ public class AdminController {
             @Valid @RequestBody AddRoleRequestDto request
             ) {
         ResponseDto<AddRoleResponseDto> response = adminService.addRoles(principal, request);
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -41,6 +41,7 @@ public class AdminController {
             @Valid @RequestBody RemoveRoleRequestDto request
             ) {
         ResponseDto<RemoveRoleResponseDto> response = adminService.removeRole(principal, request);
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -51,6 +52,7 @@ public class AdminController {
             @Valid @RequestBody UpdateRoleRequestDto request
             ) {
         ResponseDto<UpdateRoleResponseDto> response = adminService.replaceRoles(principal, request);
+
         return ResponseEntity.ok().body(response);
     }
 }

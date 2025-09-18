@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Entity
 @Table(
@@ -20,18 +21,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
 
+    @Comment("태그 고유키")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Comment("프로젝트 외래키")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_tags_project_id"))
     private Project project;
 
+    @Comment("태그명")
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Comment("태그색")
     @Column(name = "color", nullable = false)
     private String color;
 
+    public void delete(Tag tag) {
+        if (tag == null) return;
+    }
 }
