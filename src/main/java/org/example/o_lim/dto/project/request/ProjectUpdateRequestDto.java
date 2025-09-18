@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record ProjectUpdateRequestDto(
-
         @NotBlank(message = "프로젝트 제목은 비워둘 수 없습니다.")
         @Size(max = 150, message = "제목은 최대 150자까지 입력 가능합니다.")
         String title,

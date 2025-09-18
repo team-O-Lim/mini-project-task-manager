@@ -9,9 +9,11 @@ import org.example.o_lim.dto.project.response.ProjectDetailResponseDto;
 import org.example.o_lim.dto.project.response.ProjectListResponseDto;
 import org.example.o_lim.dto.project.response.ProjectTaskCountResponseDto;
 import org.example.o_lim.dto.project.response.ProjectUpdateRequestDto;
+import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,9 +28,11 @@ public class ProjectController {
     // 생성 "/api/v1/projects"
     @PostMapping
     public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> createProject(
-            @Valid @RequestBody ProjectCreateRequestDto dto
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody ProjectCreateRequestDto request
             ) {
-        ResponseDto<ProjectDetailResponseDto> response = projectService.createProject(dto);
+        ResponseDto<ProjectDetailResponseDto> response = projectService.createProject(request);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -38,6 +42,7 @@ public class ProjectController {
             @PathVariable Long projectId
     ) {
         ResponseDto<ProjectDetailResponseDto> response = projectService.getProjectById(projectId);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -45,6 +50,7 @@ public class ProjectController {
     @GetMapping
     public ResponseEntity<ResponseDto<List<ProjectListResponseDto>>> getAllProjects() {
         ResponseDto<List<ProjectListResponseDto>> response = projectService.getAllProjects();
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -52,27 +58,30 @@ public class ProjectController {
     @GetMapping(ApiMappingPattern.Projects.SEARCH_BY_TASK_DESC)
     public ResponseEntity<ResponseDto<List<ProjectTaskCountResponseDto>>> getTaskCountDesc() {
         ResponseDto<List<ProjectTaskCountResponseDto>> response = projectService.getTaskCountDesc();
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
 
     // 수정 "/api/v1/projects/{projectId}"
     @PutMapping(ApiMappingPattern.Projects.BY_ID)
     public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> updateProject(
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId,
-            @Valid @RequestBody ProjectUpdateRequestDto dto
+            @Valid @RequestBody ProjectUpdateRequestDto request
             ) {
-        ResponseDto<ProjectDetailResponseDto> response = projectService.updateProject(projectId, dto);
+        ResponseDto<ProjectDetailResponseDto> response = projectService.updateProject(projectId, request);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     // 삭제 "/api/v1/projects/{projectId}"
     @DeleteMapping(ApiMappingPattern.Projects.BY_ID)
     public ResponseEntity<ResponseDto<Void>> deleteProject(
+            @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId
     ) {
         ResponseDto<Void> response = projectService.deleteProject(projectId);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-
 }

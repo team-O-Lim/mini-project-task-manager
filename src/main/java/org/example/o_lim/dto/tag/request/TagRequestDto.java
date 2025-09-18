@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Size;
 
 public record TagRequestDto(
 
-        Long projectId,
         @NotBlank(message = "태그명은 필수 입니다.")
         @Size(max = 50, message = "태그명은 50자까지 가능합니다.")
         String name,
