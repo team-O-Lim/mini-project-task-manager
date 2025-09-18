@@ -7,6 +7,7 @@ import org.example.o_lim.dto.project.response.ProjectDetailResponseDto;
 import org.example.o_lim.dto.project.response.ProjectListResponseDto;
 import org.example.o_lim.dto.project.response.ProjectTaskCountResponseDto;
 import org.example.o_lim.dto.project.response.ProjectUpdateRequestDto;
+import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.ProjectService;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
+
+
     @Override
-    public ResponseDto<ProjectDetailResponseDto> createProject(ProjectCreateRequestDto dto) {
+    public ResponseDto<ProjectDetailResponseDto> createProject(UserPrincipal principal, ProjectCreateRequestDto dto) {
         return null;
     }
 
@@ -31,12 +34,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseDto<ProjectDetailResponseDto> updateProject(Long projectId, ProjectUpdateRequestDto dto) {
+    public ResponseDto<ProjectDetailResponseDto> updateProject(UserPrincipal principal, Long projectId, ProjectUpdateRequestDto dto) {
         return null;
     }
 
     @Override
-    public ResponseDto<Void> deleteProject(Long projectId) {
+    public ResponseDto<Void> deleteProject(UserPrincipal principal, Long projectId) {
         return null;
     }
 
