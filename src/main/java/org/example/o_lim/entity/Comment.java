@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.o_lim.entity.base.BaseTimeEntity;
-import org.hibernate.annotations.Comments;
 
 @Entity
 @Table(name = "comments")

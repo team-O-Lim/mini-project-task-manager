@@ -7,8 +7,6 @@ import org.example.o_lim.dto.notification.request.NotificationUpdatedRequestDto;
 import org.example.o_lim.dto.notification.response.NotificationDetailResponseDto;
 import org.example.o_lim.dto.notification.response.NotificationListResponseDto;
 import org.example.o_lim.dto.ResponseDto;
-import org.example.o_lim.entity.Notification;
-import org.example.o_lim.entity.User;
 import org.example.o_lim.repository.NotificationRepository;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.NotificationService;

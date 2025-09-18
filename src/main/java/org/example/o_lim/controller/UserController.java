@@ -22,21 +22,20 @@ public class UserController {
 //    마이페이지
     @GetMapping(ApiMappingPattern.Users.MY_INFO)
     public ResponseEntity<ResponseDto<UserProfileResponseDto>> getMyInfo(
-            @AuthenticationPrincipal UserPrincipal userPrincipal
+            @AuthenticationPrincipal UserPrincipal principal
             ) {
-        ResponseDto<UserProfileResponseDto> response = userService.getMyInfo(userPrincipal);
+        ResponseDto<UserProfileResponseDto> response = userService.getMyInfo(principal);
 
         return ResponseEntity.ok().body(response);
     }
 //    회원정보수정
     @PutMapping(ApiMappingPattern.Users.MY_INFO)
     public ResponseEntity<ResponseDto<UserProfileResponseDto>> updateMyInfo(
-            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody UserProfileUpdateRequest request
     ) {
-        ResponseDto<UserProfileResponseDto> response = userService.updateMyInfo(userPrincipal, request);
+        ResponseDto<UserProfileResponseDto> response = userService.updateMyInfo(principal, request);
 
         return ResponseEntity.ok().body(response);
     }
-
 }
