@@ -16,21 +16,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
- @RestController
+@RestController
  //"/api/v1/notifications"
- @RequestMapping(ApiMappingPattern.Notification.ROOT)
- @RequiredArgsConstructor
- public class NotificationController {
+@RequestMapping(ApiMappingPattern.Notification.ROOT)
+@RequiredArgsConstructor
+public class NotificationController {
 
- private final NotificationService notificationService;
+    private final NotificationService notificationService;
 
   //   생성 "/api/v1/notifications"
-    @PostMapping
-    public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> createNotification(
+  @PostMapping
+  public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> createNotification(
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody NotificationCreatedRequestDto requestDto
             ) {
-        ResponseDto<NotificationDetailResponseDto> responseDto = notificationService.createNotification(principal, requestDto);
+      ResponseDto<NotificationDetailResponseDto> responseDto = notificationService.createNotification(principal, requestDto);
+
        return ResponseEntity.ok().body(responseDto);
     }
 
@@ -39,6 +40,7 @@ import java.util.List;
     @GetMapping
     public ResponseEntity<ResponseDto<List<NotificationListResponseDto>>> getAllNotifications() {
         ResponseDto<List<NotificationListResponseDto>> responseDto = notificationService.getAllNotifications();
+
         return ResponseEntity.ok().body(responseDto);
     }
 
@@ -48,6 +50,7 @@ import java.util.List;
            @PathVariable Long notificationId
     ) {
         ResponseDto<NotificationDetailResponseDto> response = notificationService.getNotificationById(notificationId);
+
         return ResponseEntity.ok().body(response);
     }
 
@@ -59,6 +62,7 @@ import java.util.List;
             @Valid @RequestBody NotificationUpdatedRequestDto requestDto
             ) {
            ResponseDto<NotificationDetailResponseDto> responseDto = notificationService.updateNotification(principal, notificationId, requestDto);
+
            return ResponseEntity.ok().body(responseDto);
     }
 
@@ -69,6 +73,7 @@ import java.util.List;
             @PathVariable Long notificationId
     ) {
         ResponseDto<Void> response = notificationService.deleteArticle(principal, notificationId);
+
         return ResponseEntity.ok().body(response);
     }
 
