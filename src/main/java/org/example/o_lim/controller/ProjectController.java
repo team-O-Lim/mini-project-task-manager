@@ -31,7 +31,7 @@ public class ProjectController {
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody ProjectCreateRequestDto request
             ) {
-        ResponseDto<ProjectDetailResponseDto> response = projectService.createProject(request);
+        ResponseDto<ProjectDetailResponseDto> response = projectService.createProject(principal, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -69,7 +69,7 @@ public class ProjectController {
             @PathVariable Long projectId,
             @Valid @RequestBody ProjectUpdateRequestDto request
             ) {
-        ResponseDto<ProjectDetailResponseDto> response = projectService.updateProject(projectId, request);
+        ResponseDto<ProjectDetailResponseDto> response = projectService.updateProject(principal, projectId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
@@ -80,7 +80,7 @@ public class ProjectController {
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId
     ) {
-        ResponseDto<Void> response = projectService.deleteProject(projectId);
+        ResponseDto<Void> response = projectService.deleteProject(principal, projectId);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
