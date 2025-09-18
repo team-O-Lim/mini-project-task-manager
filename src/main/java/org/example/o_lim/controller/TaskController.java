@@ -32,7 +32,6 @@ public class TaskController {
     public ResponseEntity<ResponseDto<TaskCreateResponseDto>> createTask(
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody TaskCreateRequestDto request
-
             ) {
         ResponseDto<TaskCreateResponseDto> response = taskService.createTask(principal, request);
 

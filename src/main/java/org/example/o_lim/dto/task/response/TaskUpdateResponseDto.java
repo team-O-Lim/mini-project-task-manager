@@ -14,20 +14,10 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TaskUpdateResponseDto(
-        @NotBlank(message = "직무명은 필수입니다.")
-        @Size(max = 200, message = "직무명은 최대 200자 까지입니다.")
         String title,
-
-        @NotBlank(message = "직무내용은 필수입니다.")
         String content,
-
-        @NotBlank(message = "직무상황의 기본은 TODO 입니다.")
         TaskStatus status,
-
-        @NotBlank(message = "직무 우선사항의 기본은 MEDIUM 입니다.")
         PriorityStatus priority,
-
-        @Comment("마감일은 필수는 아니지만 권장합니다.")
         LocalDate dueDate
 ){
 
