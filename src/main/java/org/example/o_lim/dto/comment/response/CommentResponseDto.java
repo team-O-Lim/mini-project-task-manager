@@ -6,13 +6,13 @@ import java.time.LocalDateTime;
 
 public record CommentResponseDto(
 
-        String authorName,
+        Long authorId,
         String content,
         LocalDateTime createdAt
 ) {
     public static CommentResponseDto from(Comment comment) {
         return new CommentResponseDto(
-                comment.getAuthor().getNickname(),
+                comment.getAuthor().getId(),
                 comment.getContent(),
                 comment.getCreatedAt());
     }

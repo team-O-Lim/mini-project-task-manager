@@ -7,8 +7,10 @@ import org.example.o_lim.dto.comment.request.CommentRequestDto;
 import org.example.o_lim.dto.comment.response.CommentResponseDto;
 import org.example.o_lim.entity.Comment;
 import org.example.o_lim.entity.Task;
+import org.example.o_lim.entity.User;
 import org.example.o_lim.repository.CommentRepository;
 import org.example.o_lim.repository.TaskRepository;
+import org.example.o_lim.repository.UserRepository;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.CommentService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +24,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional
@@ -33,7 +36,10 @@ public class CommentServiceImpl implements CommentService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다." + taskId));
 
-        Comment comment =Comment.create(request.content());
+        User user = userRepository.findById(principal.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+
+        Comment comment =Comment.create(task, user, request.content());
         Comment saved = commentRepository.save(comment);
 
         data = CommentResponseDto.from(saved);
