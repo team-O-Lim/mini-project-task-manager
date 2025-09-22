@@ -10,7 +10,7 @@ import java.util.List;
 public interface TaskRepository  extends JpaRepository<Task, Long> {
     boolean existsByProjectIdAndTitle(Long projectId, String title);
 
-    opt<Task> findAllTaskByIdDesc();
-
     Long id(Long id);
+
+    List<Task> findAllTaskByIdDesc();
 }
