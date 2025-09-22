@@ -64,7 +64,7 @@ public class JwtProvider {
                 .claim("email", email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtEmailExpirationMs))
-                .signWith(key, SignatureAlgorithm.ES256)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -130,6 +130,11 @@ public class JwtProvider {
             return result;
         }
         return Set.of(raw.toString());
+    }
+
+    public String getEmailFromJwt(String token) {
+        Claims claims = getClaims(token);
+        return claims.get("email", String.class);
     }
 
     public long getRemainingMillis(String tokenWithoutBearer) {

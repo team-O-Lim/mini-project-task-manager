@@ -18,6 +18,8 @@ import java.util.List;
        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Task extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,8 +56,13 @@ public class Task extends BaseTimeEntity {
     private PriorityStatus priority = PriorityStatus.MEDIUM;
 
     // TaskTag 관계
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskTag> taskTags = new ArrayList<>();
+
+    public void addTaskTag(TaskTag taskTag) {
+        taskTags.add(taskTag);
+        taskTag.setTask(this);
+    }
 
     // task 내 comment 출력
     @OneToMany(
@@ -70,12 +77,24 @@ public class Task extends BaseTimeEntity {
     private LocalDate dueDate;
 
     // 직무 생성
-    public void newTask(String title, String content, User createdUser) {
-        this.title = title;
-        this.content = content;
-        this.createdUser = createdUser;
+    public static Task create(Project project, String title, String content, User createdUser,
+                        TaskStatus status, PriorityStatus priority, LocalDate dueDate) {
+        return Task.builder()
+                .project(project)
+                .title(title)
+                .content(content)
+                .createdUser(createdUser)
+                .status(status)
+                .priority(priority)
+                .dueDate(dueDate)
+                .build();
     }
 
-
-
+    public void update(String title, String content, TaskStatus status, PriorityStatus priority, LocalDate dueDate) {
+        this.title = title;
+        this.content = content;
+        this.status = status;
+        this.priority = priority;
+        this.dueDate = dueDate;
+    }
 }

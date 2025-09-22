@@ -99,6 +99,7 @@ public class AuthServiceImpl implements AuthService {
         return ResponseDto.setSuccess("로그인을 성공했습니다.", response);
     }
 
+
     @Override
     public ResponseDto<FindIdResponseDto> findId(FindIdRequestDto request) {
         return null;
@@ -108,6 +109,7 @@ public class AuthServiceImpl implements AuthService {
     public ResponseDto<PasswordChangeResponseDto> changePassword(PasswordResetRequestDto request) {
         return null;
     }
+
 
 //    User 생성 메서드
     private static User getUser(SignUpRequestDto request, String encoded) {
