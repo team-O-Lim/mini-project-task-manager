@@ -1,12 +1,12 @@
 package org.example.o_lim.service.Impl;
 
-
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.dto.notification.request.NotificationCreatedRequestDto;
 import org.example.o_lim.dto.notification.request.NotificationUpdatedRequestDto;
 import org.example.o_lim.dto.notification.response.NotificationDetailResponseDto;
 import org.example.o_lim.dto.notification.response.NotificationListResponseDto;
 import org.example.o_lim.dto.ResponseDto;
+import org.example.o_lim.entity.Notification;
 import org.example.o_lim.repository.NotificationRepository;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.NotificationService;
@@ -26,21 +26,54 @@ import java.util.List;
     @Transactional
     @PreAuthorize("isAuthenticated()")
     public ResponseDto<NotificationDetailResponseDto> createNotification(UserPrincipal principal, NotificationCreatedRequestDto request) {
-        return null;
+        validateTitleAndContent(request.title(), request.content());
+
+        final String loginId = principal.getUsername();
+        Notification Nickname = NotificationRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalAccessException("NICKNAME_NOT_FOUND"));
+
+        Notification saved = NotificationRepository.save(Notification.create(request.title(), request.content(), nickname));
+
+        NotificationDetailResponseDto data = NotificationDetailResponseDto.from(saved);
+        return ResponseDto.setSuccess("SUCCESS", data);
     }
 
     @Override
+    @Transactional
+    @PreAuthorize("hasAnyRole('ADMIN') or @authz.isNotificatonNickname(#notificationId, authentication)")
     public ResponseDto<NotificationDetailResponseDto> updateNotification(UserPrincipal principal, Long notificationId, NotificationUpdatedRequestDto request) {
-        return null;
+       validateTitleAndContent(request.title(), request.content());
+
+       if (notificationId == null) throw new IllegalAccessException("NOTIFICATION_ID_REQUIRED");
+
+       Notification notification = NotificationRepository.findById(notificationId)
+               .orElseThrow(() -> new IllegalArgumentException("NOTIFICATION_NOT_FOUND"));
+
+       notification.update(request.title(), request.content());
+
+       notificationRepository.flush();
+
+       NotificationDetailResponseDto data = NotificationDetailResponseDto.from(notification);
+        return ResponseDto.setSuccess("SUCCESS", data);
     }
 
     @Override
     public ResponseDto<List<NotificationListResponseDto>> getAllNotifications() {
-        return null;
+     List<NotificationListResponseDto> data = null;
+
+     if (id == null) throw new IllegalAccessException("NOTIFICATION_ID_REQUIRED");
+
+     Notification notification = notificationRepository.findById(id)
+             .orElseThrow(() -> new IllegalArgumentException("NOTIFICATION_NOT_FOUND"));
+
+     data = NotificationDetailResponseDto.from(notification)
+
+    return ResponseDto.setSuccess("SUCCESS", data);
     }
 
     @Override
     public ResponseDto<NotificationDetailResponseDto> getNotificationById(Long notificationId) {
+        NotificationDetailResponseDto 
         return null;
     }
 
