@@ -17,7 +17,7 @@ public class UserPrincipalMapper {
                 ? List.of(new SimpleGrantedAuthority("ROLE_USER"))
                 : user.getUserRoles().stream()
                         .map(r -> {
-                            String name = r.getRole().toString();
+                            String name = r.getRole().getName().name();
                             String role = name.startsWith("ROLE") ? name : "ROLE_" + name;
                             return new SimpleGrantedAuthority(role);
                         })
@@ -27,6 +27,7 @@ public class UserPrincipalMapper {
                 .id(user.getId())
                 .username(user.getLoginId())
                 .password(user.getPassword())
+                .authorities(authorities)
                 .accountNonExpired(true)
                 .accountNonLocked(true)
                 .credentialsNonExpired(true)
