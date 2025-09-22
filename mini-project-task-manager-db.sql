@@ -167,8 +167,13 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   )ENGINE=InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
-  COMMENT = '프로젝트 공지사항'; 
-
-insert into roles (role_name) values('USER');
-insert into roles (role_name) values('MANAGER');
-insert into roles (role_name) values('ADMIN');
+  COMMENT = '프로젝트 공지사항';
+  
+  
+# ===================================================================================================#
+select * from users;
+select * from user_roles;
+select *from projects;
+insert into user_roles (user_id, role_name) values (2, 'ADMIN');
+insert into projects (admin_id, title, description)
+	values ('2', '테스트용 프로젝트1', '테스트 프로젝트1 내용입니다.');
