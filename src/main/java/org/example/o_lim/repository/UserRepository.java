@@ -33,10 +33,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     """, nativeQuery = true)
     List<UserWithRolesProjection> findAllUsersWithRole_Native();
 
-    @EntityGraph(attributePaths = "roles")
+    @EntityGraph(attributePaths = "userRoles")
     Optional<User> findByLoginId(String id);
 
-    @EntityGraph(attributePaths = "roles")
+    @EntityGraph(attributePaths = "userRoles")
     Optional<User> findWithRolesById(Long id);
 
     boolean existsByLoginId(String loginId);

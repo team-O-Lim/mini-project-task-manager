@@ -168,3 +168,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_unicode_ci
   COMMENT = '프로젝트 공지사항'; 
+
+insert into roles (role_name) values('USER');
+insert into roles (role_name) values('MANAGER');
+insert into roles (role_name) values('ADMIN');
