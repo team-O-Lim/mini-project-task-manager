@@ -29,7 +29,15 @@ public class TaskTag {
     private Tag tag;
 
     public static TaskTag create(Task task, Tag tag) {
-        return null;
+        TaskTag taskTag = new TaskTag();
+        taskTag.task = task;
+        taskTag.tag = tag;
+
+        return taskTag;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 }
 

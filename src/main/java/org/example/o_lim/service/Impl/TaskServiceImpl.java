@@ -1,7 +1,7 @@
 package org.example.o_lim.service.Impl;
 
+import io.jsonwebtoken.security.SecurityException;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
@@ -87,6 +87,7 @@ public class TaskServiceImpl implements TaskService {
                     .orElseThrow(() -> new EntityNotFoundException("해당 태그가 존재하지 않습니다."));
 
             TaskTag taskTag = TaskTag.create(task, tag);
+            task.addTaskTag(taskTag);
             taskTagRepository.save(taskTag);
         }
 
@@ -96,7 +97,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public ResponseDto<List<TaskSearchResponseDto>> getAllTasks(Long projectId) {
-        List<Task> tasks = taskRepository.findAllTaskByIdDesc();
+        List<Task> tasks = taskRepository.findAllTaskById(projectId);
         List<TaskSearchResponseDto> result = tasks.stream()
                 .map(TaskSearchResponseDto::from)
                 .toList();
@@ -121,6 +122,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseDto<List<TaskDetailResponseDto>> getCreatedUser(Long projectId, Long createdUser
     ) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+
+        User user = userRepository.findById(createdUser)
+                .orElseThrow(() -> new IllegalArgumentException("해당 작성자가 존재하지 않습니다."));
         return null;
     }
 
@@ -128,22 +134,56 @@ public class TaskServiceImpl implements TaskService {
     public ResponseDto<List<TaskDetailResponseDto>> searchTasks(
             Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDate from, LocalDate to
     ) {
-        return null;
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+
+        LocalDate fromDate = (from != null) ? from : null;
+        LocalDate toDate = (to != null) ? to : null;
+
+        List<Task> tasks = taskRepository.searchTasks(projectId, createUserId, status, priority, from, to);
+
+        List<TaskDetailResponseDto> dto = tasks.stream()
+                .map(TaskDetailResponseDto::from)
+                .toList();
+        return ResponseDto.setSuccess("SUCCESS", dto);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#request.createdUserId, authentication)")
     public ResponseDto<TaskDetailResponseDto> updateTask(Long projectId, Long taskId, UserPrincipal principal, TaskUpdateRequestDto request
     ) {
-        return null;
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
+
+        if (!task.getCreatedUser().getId().equals(request.createdUserId())) {
+            throw new SecurityException("작성자만 수정할 수 있습니다.");
+        }
+
+        task.update(
+                request.title(),
+                request.content(),
+                parseTaskStatus(request.status()),
+                parsePriorityStatus(request.priority()),
+                request.dueDate()
+        );
+        return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));
     }
 
     @Override
     @Transactional
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#request.createdUserId, authentication)")
     public ResponseDto<Void> deleteTask(Long projectId, Long taskId, UserPrincipal principal
     ) {
-        return null;
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
+        taskRepository.delete(task);
+
+        return ResponseDto.setSuccess("SUCCESS",null);
     }
 }
 

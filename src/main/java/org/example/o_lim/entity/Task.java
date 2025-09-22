@@ -56,8 +56,13 @@ public class Task extends BaseTimeEntity {
     private PriorityStatus priority = PriorityStatus.MEDIUM;
 
     // TaskTag 관계
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskTag> taskTags = new ArrayList<>();
+
+    public void addTaskTag(TaskTag taskTag) {
+        taskTags.add(taskTag);
+        taskTag.setTask(this);
+    }
 
     // task 내 comment 출력
     @OneToMany(
@@ -83,5 +88,13 @@ public class Task extends BaseTimeEntity {
                 .priority(priority)
                 .dueDate(dueDate)
                 .build();
+    }
+
+    public void update(String title, String content, TaskStatus status, PriorityStatus priority, LocalDate dueDate) {
+        this.title = title;
+        this.content = content;
+        this.status = status;
+        this.priority = priority;
+        this.dueDate = dueDate;
     }
 }

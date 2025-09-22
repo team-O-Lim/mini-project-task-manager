@@ -98,7 +98,9 @@ public class WebSecurityConfig {
                     auth
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                             .requestMatchers("api/v1/auth/**").permitAll()
-                            .requestMatchers("api/v1/users/me").authenticated();
+                            .requestMatchers("api/v1/users/me").authenticated()
+
+                            .requestMatchers(HttpMethod.POST, "api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER");
                 });
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

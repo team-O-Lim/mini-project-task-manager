@@ -19,5 +19,7 @@ public record TaskUpdateRequestDto(
         @NotBlank(message = "직무 우선사항의 기본은 MEDIUM 입니다.")
         String priority,
 
-        LocalDate dueDate
+        LocalDate dueDate,
+
+        Long createdUserId
 ){}
