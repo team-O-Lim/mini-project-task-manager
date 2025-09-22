@@ -15,20 +15,21 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface TaskService {
-    ResponseDto<TaskCreateResponseDto> createTask(UserPrincipal principal, TaskCreateRequestDto request);
+    ResponseDto<TaskCreateResponseDto> createTask(Long id, UserPrincipal principal, @Valid TaskCreateRequestDto request);
 
-    ResponseDto<List<TaskSearchResponseDto>> getAllTasks();
+    ResponseDto<List<TaskSearchResponseDto>> getAllTasks(Long projectId);
 
-    ResponseDto<TaskDetailResponseDto> getTaskById(Long taskId);
+    ResponseDto<TaskDetailResponseDto> getTaskById(Long projectId, Long taskId);
 
-    ResponseDto<List<TaskDetailResponseDto>> getCreatedUser(Long createdUser);
+    ResponseDto<List<TaskDetailResponseDto>> getCreatedUser(Long projectId, Long createdUser);
 
-    ResponseDto<List<TaskDetailResponseDto>> searchTasks(Long createUserId, TaskStatus status, PriorityStatus priority, LocalDate from, LocalDate to);
+    ResponseDto<List<TaskDetailResponseDto>> searchTasks(
+            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDate from, LocalDate to);
 
-    ResponseDto<TaskDetailResponseDto> updateTask(UserPrincipal principal, Long taskId, @Valid TaskUpdateRequestDto request);
+    ResponseDto<TaskDetailResponseDto> updateTask(
+            Long projectId, Long taskId, UserPrincipal principal, @Valid TaskUpdateRequestDto request);
 
-    ResponseDto<Void> deleteTask(Long taskId, UserPrincipal principal);
-
+    ResponseDto<Void> deleteTask(Long projectId, Long taskId, UserPrincipal principal);
 
 
 }

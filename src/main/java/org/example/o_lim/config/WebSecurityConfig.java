@@ -130,7 +130,6 @@ public class WebSecurityConfig {
                             .requestMatchers(HttpMethod.DELETE, "api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER");
                 });
 
-
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
