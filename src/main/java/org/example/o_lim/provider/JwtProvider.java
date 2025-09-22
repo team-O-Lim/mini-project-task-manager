@@ -1,11 +1,9 @@
 package org.example.o_lim.provider;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.annotation.WebServlet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +17,7 @@ public class JwtProvider {
 
     private final SecretKey key;
     private final long jwtExpirationMs;
+    private final long jwtEmailExpirationMs;
     private final int clockSkewSeconds;
 
     private final JwtParser parser;
@@ -26,6 +25,7 @@ public class JwtProvider {
     public JwtProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.expiration}") long jwtExpirationMs,
+            @Value("${jwt.email-expiration}") long jwtEmailExpirationMs,
             @Value("${jwt.clock-skew-seconds}") int clockSkewSeconds
     ) {
         byte[] secretBytes = Decoders.BASE64.decode(secret);
@@ -35,6 +35,7 @@ public class JwtProvider {
 
         this.key = Keys.hmacShaKeyFor(secretBytes);
         this.jwtExpirationMs = jwtExpirationMs;
+        this.jwtEmailExpirationMs = jwtEmailExpirationMs;
         this.clockSkewSeconds = clockSkewSeconds;
         this.parser = Jwts.parser()
                 .verifyWith(this.key)
@@ -54,6 +55,16 @@ public class JwtProvider {
                 .setIssuedAt(iat)
                 .setExpiration(exp)
                 .signWith(key)
+                .compact();
+    }
+
+//    이메일용 토큰
+    public String generateEmailJwtToken(String email) {
+        return Jwts.builder()
+                .claim("email", email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtEmailExpirationMs))
+                .signWith(key, SignatureAlgorithm.ES256)
                 .compact();
     }
 

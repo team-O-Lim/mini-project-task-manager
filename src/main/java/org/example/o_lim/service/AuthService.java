@@ -3,7 +3,7 @@ package org.example.o_lim.service;
 import jakarta.validation.Valid;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.auth.request.FindIdRequestDto;
-import org.example.o_lim.dto.auth.request.PasswordChangeRequestDto;
+import org.example.o_lim.dto.auth.request.PasswordResetRequestDto;
 import org.example.o_lim.dto.auth.request.SignInRequestDto;
 import org.example.o_lim.dto.auth.request.SignUpRequestDto;
 import org.example.o_lim.dto.auth.response.FindIdResponseDto;
@@ -18,5 +18,5 @@ public interface AuthService {
 
     ResponseDto<FindIdResponseDto> findId(@Valid FindIdRequestDto request);
 
-    ResponseDto<PasswordChangeResponseDto> changePassword(@Valid PasswordChangeRequestDto request);
+    ResponseDto<PasswordChangeResponseDto> changePassword(@Valid PasswordResetRequestDto request);
 }
