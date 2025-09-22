@@ -20,6 +20,8 @@ public class ApiMappingPattern {
 
         public static final String SIGN_UP = "/sign-up";
         public static final String SIGN_IN = "/sign-in";
+        public static final String SEND_EMAIL = "/send-email";
+        public static final String VERIFY = "/verify";
         public static final String FIND_ID = "/find-id";
         public static final String RESET_PASSWORD = "/reset-pw";
     }
