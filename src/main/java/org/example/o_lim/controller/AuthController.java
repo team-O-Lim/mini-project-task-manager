@@ -44,7 +44,7 @@ public class AuthController {
     }
 
 //  이메일 전송
-    @PostMapping("/send-email")
+    @PostMapping(ApiMappingPattern.Auth.SEND_EMAIL)
     public ResponseEntity<ResponseDto<Void>> sendEmail(
             @Valid @RequestBody SendMailRequestDto request) {
         mailService.sendEmail(request);
@@ -53,7 +53,7 @@ public class AuthController {
     }
 
 //    이메일 인증
-    @GetMapping
+    @GetMapping(ApiMappingPattern.Auth.VERIFY)
     public ResponseEntity<ResponseDto<Void>> verifyEmail(
             @RequestParam String token) {
         mailService.verifyEmail(token);
