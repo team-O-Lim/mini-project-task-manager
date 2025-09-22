@@ -59,9 +59,8 @@ public class Task extends BaseTimeEntity {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskTag> taskTags = new ArrayList<>();
 
-    public void addTaskTag(TaskTag taskTag) {
-        taskTags.add(taskTag);
-        taskTag.setTask(this);
+    public List<TaskTag> getTaskTags() {
+        return taskTags == null ? new ArrayList<>() : taskTags;
     }
 
     // task 내 comment 출력

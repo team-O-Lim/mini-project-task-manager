@@ -35,9 +35,5 @@ public class TaskTag {
 
         return taskTag;
     }
-
-    public void setTask(Task task) {
-        this.task = task;
-    }
 }
 

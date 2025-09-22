@@ -87,7 +87,6 @@ public class TaskServiceImpl implements TaskService {
                     .orElseThrow(() -> new EntityNotFoundException("해당 태그가 존재하지 않습니다."));
 
             TaskTag taskTag = TaskTag.create(task, tag);
-            task.addTaskTag(taskTag);
             taskTagRepository.save(taskTag);
         }
 
