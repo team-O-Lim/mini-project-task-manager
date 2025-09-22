@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.tag.request.TagRequestDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
+import org.example.o_lim.entity.Project;
 import org.example.o_lim.entity.Tag;
+import org.example.o_lim.repository.ProjectRepository;
 import org.example.o_lim.repository.TagRepository;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.TagService;
@@ -21,18 +23,20 @@ import java.util.List;
 public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
+    private final ProjectRepository projectRepository;
 
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<TagResponseDto> createTag(UserPrincipal principal, TagRequestDto request,Long projectId) {
 
-        Tag tag = tagRepository.findByProjectId(projectId)
+        TagResponseDto data = null;
+
+        Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
 
-        Tag saved = tagRepository.save(tag);
-
-        TagResponseDto data = null;
+        Tag tags = Tag.create(request.name(), request.color());
+        Tag saved = tagRepository.save(tags);
 
         data = TagResponseDto.from(saved);
 
@@ -42,10 +46,10 @@ public class TagServiceImpl implements TagService {
     @Override
     public ResponseDto<List<TagResponseDto>> getAllTag(Long projectId) {
 
-        Tag tag = tagRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
-
         List<TagResponseDto> data = null;
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
 
         data = tagRepository.findByProjectId(projectId).stream()
                 .map(TagResponseDto::from)
@@ -59,10 +63,13 @@ public class TagServiceImpl implements TagService {
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<TagResponseDto> deleteTag(UserPrincipal principal, Long projectId, Long tagId) {
 
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다." + projectId));
+
         Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다." + tagId));
 
-        tag.delete(tag);
+        tagRepository.delete(tag);
 
         return ResponseDto.setSuccess("태그가 삭제되었습니다.", null);
     }

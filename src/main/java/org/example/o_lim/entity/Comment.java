@@ -32,7 +32,12 @@ public class Comment extends BaseTimeEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    public void delete(Comment comment) {
-        if (comment == null) return;
+    public Comment(String content) {
+        this.content = content;
     }
+
+    public static Comment create(String content) {
+        return new Comment(content);
+    }
+
 }
