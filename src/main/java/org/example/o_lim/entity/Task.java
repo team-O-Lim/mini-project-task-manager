@@ -18,6 +18,8 @@ import java.util.List;
        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Task extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -70,12 +72,16 @@ public class Task extends BaseTimeEntity {
     private LocalDate dueDate;
 
     // 직무 생성
-    public void newTask(String title, String content, User createdUser) {
-        this.title = title;
-        this.content = content;
-        this.createdUser = createdUser;
+    public static Task create(Project project, String title, String content, User createdUser,
+                        TaskStatus status, PriorityStatus priority, LocalDate dueDate) {
+        return Task.builder()
+                .project(project)
+                .title(title)
+                .content(content)
+                .createdUser(createdUser)
+                .status(status)
+                .priority(priority)
+                .dueDate(dueDate)
+                .build();
     }
-
-
-
 }

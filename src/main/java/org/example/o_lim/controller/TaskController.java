@@ -1,6 +1,7 @@
 package org.example.o_lim.controller;
 
 import jakarta.validation.Valid;
+import org.example.o_lim.entity.Project;
 import org.example.o_lim.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
@@ -30,18 +31,21 @@ public class TaskController {
     // 생성
     @PostMapping
     public ResponseEntity<ResponseDto<TaskCreateResponseDto>> createTask(
+            @PathVariable Project projectId,
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody TaskCreateRequestDto request
             ) {
-        ResponseDto<TaskCreateResponseDto> response = taskService.createTask(principal, request);
+        ResponseDto<TaskCreateResponseDto> response = taskService.createTask(projectId.getId(), principal, request);
 
         return ResponseEntity.ok().body(response);
     }
 
     // 전체 조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<TaskSearchResponseDto>>> getAllTasks() {
-        ResponseDto<List<TaskSearchResponseDto>> response = taskService.getAllTasks();
+    public ResponseEntity<ResponseDto<List<TaskSearchResponseDto>>> getAllTasks(
+            @PathVariable Long projectId
+            ) {
+        ResponseDto<List<TaskSearchResponseDto>> response = taskService.getAllTasks(projectId);
 
         return ResponseEntity.ok().body(response);
     }
@@ -49,9 +53,10 @@ public class TaskController {
     // 단건 조회
     @GetMapping(ApiMappingPattern.Tasks.BY_ID)
     public ResponseEntity<ResponseDto<TaskDetailResponseDto>> getTaskById(
+            @PathVariable Long projectId,
             @PathVariable Long taskId
             ) {
-        ResponseDto<TaskDetailResponseDto> response = taskService.getTaskById(taskId);
+        ResponseDto<TaskDetailResponseDto> response = taskService.getTaskById(projectId, taskId);
 
         return ResponseEntity.ok().body(response);
     }
@@ -59,9 +64,10 @@ public class TaskController {
     // 특정 task 작성자 기준 필터링 조회
     @GetMapping(ApiMappingPattern.Tasks.FILTER_CREATED_USER)
     public ResponseEntity<ResponseDto<List<TaskDetailResponseDto>>> getCreatedUser(
+            @PathVariable Long projectId,
             @PathVariable Long createdUser
             ) {
-        ResponseDto<List<TaskDetailResponseDto>> response = taskService.getCreatedUser(createdUser);
+        ResponseDto<List<TaskDetailResponseDto>> response = taskService.getCreatedUser(projectId, createdUser);
 
         return ResponseEntity.ok().body(response);
     }
@@ -69,6 +75,7 @@ public class TaskController {
     // 검색 조회
     @GetMapping(ApiMappingPattern.Tasks.SEARCH)
     public ResponseEntity<ResponseDto<List<TaskDetailResponseDto>>> searchTasks(
+            @PathVariable Long projectId,
             @RequestParam(required = false) Long createUserId,
             @RequestParam(required = false) TaskStatus status,
             @RequestParam(required = false) PriorityStatus priority,
@@ -78,7 +85,7 @@ public class TaskController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate to
             ) {
         ResponseDto<List<TaskDetailResponseDto>> response
-                = taskService.searchTasks(createUserId, status, priority, from, to);
+                = taskService.searchTasks(projectId, createUserId, status, priority, from, to);
 
         return ResponseEntity.ok().body(response);
     }
@@ -86,11 +93,12 @@ public class TaskController {
     // 수정
     @PutMapping(ApiMappingPattern.Tasks.BY_ID)
     public ResponseEntity<ResponseDto<TaskDetailResponseDto>> updateTask(
+            @PathVariable Long projectId,
             @PathVariable Long taskId,
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody TaskUpdateRequestDto request
             ) {
-        ResponseDto<TaskDetailResponseDto> response = taskService.updateTask(principal, taskId, request);
+        ResponseDto<TaskDetailResponseDto> response = taskService.updateTask(projectId, taskId, principal, request);
 
         return ResponseEntity.ok().body(response);
     }
@@ -98,10 +106,11 @@ public class TaskController {
     // 삭제
     @DeleteMapping(ApiMappingPattern.Tasks.BY_ID)
     public ResponseEntity<ResponseDto<Void>> deleteTask(
+            @PathVariable Long projectId,
             @PathVariable Long taskId,
             @AuthenticationPrincipal UserPrincipal principal
             ) {
-        ResponseDto<Void> response = taskService.deleteTask(taskId, principal);
+        ResponseDto<Void> response = taskService.deleteTask(projectId, taskId, principal);
 
         return ResponseEntity.ok().body(response);
     }

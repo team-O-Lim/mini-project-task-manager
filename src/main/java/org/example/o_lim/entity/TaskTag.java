@@ -28,5 +28,8 @@ public class TaskTag {
     )
     private Tag tag;
 
+    public static TaskTag create(Task task, Tag tag) {
+        return null;
+    }
 }
 
