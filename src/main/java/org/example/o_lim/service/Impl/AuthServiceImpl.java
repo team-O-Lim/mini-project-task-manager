@@ -26,8 +26,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.net.URI;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -96,20 +94,45 @@ public class AuthServiceImpl implements AuthService {
                 roles
         );
 
-        return ResponseDto.setSuccess("로그인을 성공했습니다.", response);
+        return ResponseDto.setSuccess("로그인을 성공하였습니다.", response);
     }
-
 
     @Override
     public ResponseDto<FindIdResponseDto> findId(FindIdRequestDto request) {
-        return null;
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new IllegalArgumentException("가입된 이메일이 아닙니다."));
+
+        FindIdResponseDto response = new FindIdResponseDto(
+                user.getName(),
+                user.getLoginId()
+        );
+
+        return ResponseDto.setSuccess("ID를 성공적으로 찾았습니다.", response);
     }
 
     @Override
-    public ResponseDto<PasswordChangeResponseDto> changePassword(PasswordResetRequestDto request) {
-        return null;
-    }
+    @Transactional
+    public ResponseDto<PasswordChangeResponseDto> resetPassword(PasswordResetRequestDto request) {
+        if(!request.newPassword().equals(request.confirmPassword()))
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new IllegalArgumentException("가입된 이메일이 아닙니다."));
+
+        if(!user.getLoginId().equals(request.loginId()))
+            throw new IllegalArgumentException("로그인 ID가 일치하지 않습니다.");
+
+        String encoded = passwordEncoder.encode(request.newPassword());
+        user.changePassword(encoded);
+
+        userRepository.flush();
+
+        PasswordChangeResponseDto response = new PasswordChangeResponseDto(
+                user.getLoginId()
+        );
+
+        return ResponseDto.setSuccess("비밀번호 재설정을 성공적으로 완료하였습니다.", response);
+    }
 
 //    User 생성 메서드
     private static User getUser(SignUpRequestDto request, String encoded) {

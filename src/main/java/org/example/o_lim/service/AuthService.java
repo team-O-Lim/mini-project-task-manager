@@ -18,5 +18,5 @@ public interface AuthService {
 
     ResponseDto<FindIdResponseDto> findId(@Valid FindIdRequestDto request);
 
-    ResponseDto<PasswordChangeResponseDto> changePassword(@Valid PasswordResetRequestDto request);
+    ResponseDto<PasswordChangeResponseDto> resetPassword(@Valid PasswordResetRequestDto request);
 }

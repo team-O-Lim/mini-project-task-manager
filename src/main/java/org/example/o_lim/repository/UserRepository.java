@@ -1,5 +1,7 @@
 package org.example.o_lim.repository;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.example.o_lim.common.enums.RoleType;
 import org.example.o_lim.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -42,4 +44,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByLoginId(String loginId);
     boolean existsByEmail(String email);
     boolean existsByNickname(String nickname);
+
+    Optional<User> findByEmail(@Email @NotBlank(message = "이메일을 입력해주세요") String email);
 }
