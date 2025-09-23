@@ -3,6 +3,7 @@ package org.example.o_lim.service.Impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.enums.RoleType;
+import org.example.o_lim.common.utils.DateUtils;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.admin.request.AddRoleRequestDto;
 import org.example.o_lim.dto.admin.request.RemoveRoleRequestDto;
@@ -49,7 +50,7 @@ public class AdminServiceImpl implements AdminService {
                 user.getLoginId(),
                 request.role(),
                 Set.copyOf(user.getRoleTypes()),
-                user.getUpdatedAt()
+                DateUtils.toKstString(user.getUpdatedAt())
         );
 
         return ResponseDto.setSuccess("권한이 추가되었습니다.", response);
@@ -78,7 +79,7 @@ public class AdminServiceImpl implements AdminService {
                 user.getLoginId(),
                 request.role(),
                 Set.copyOf(user.getRoleTypes()),
-                user.getUpdatedAt()
+                DateUtils.toKstString(user.getUpdatedAt())
         );
 
         return ResponseDto.setSuccess("권한이 제거되었습니다.", response);
@@ -93,6 +94,7 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
 
         user.getUserRoles().clear();
+        userRepository.flush();
 
         request.roles().forEach(roleType -> {
             Role role = roleRepository.findById(roleType)
@@ -100,13 +102,11 @@ public class AdminServiceImpl implements AdminService {
             user.grantRole(role);
         });
 
-        userRepository.flush();
-
         UpdateRoleResponseDto response = new UpdateRoleResponseDto(
                 user.getId(),
                 user.getLoginId(),
                 Set.copyOf(user.getRoleTypes()),
-                user.getUpdatedAt()
+                DateUtils.toKstString(user.getUpdatedAt())
         );
 
         return ResponseDto.setSuccess("권한이 수정되었습니다.", response);

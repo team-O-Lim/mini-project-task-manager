@@ -10,6 +10,6 @@ public record AddRoleResponseDto(
         String loginId,
         RoleType added,
         Set<RoleType> roles,
-        LocalDateTime updatedAt
+        String updatedAt
 ) {
 }

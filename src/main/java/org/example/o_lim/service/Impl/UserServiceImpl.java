@@ -1,6 +1,7 @@
 package org.example.o_lim.service.Impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.o_lim.common.enums.Gender;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.user.request.UserProfileUpdateRequest;
 import org.example.o_lim.dto.user.response.UserProfileResponseDto;
@@ -52,19 +53,27 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLoginId(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
 
-        if(request.nickname() == null && request.email() == null) {
+        if(request.nickname() == null && request.email() == null && request.gender() == null) {
             throw new IllegalArgumentException("수정할 정보를 입력해주세요");
         }
 
-        boolean changedNickname = !request.nickname().isBlank() && request.nickname() != null && !Objects.equals(user.getNickname(), request.nickname());
-        boolean changedEmail = !request.email().isBlank() && request.email() != null && !Objects.equals(user.getEmail(), request.email());
-        
-        if(!changedNickname && !changedEmail) {
+        String newNickname = (request.nickname() != null && !request.nickname().isBlank()) ? request.nickname() : null;
+        String newEmail = (request.email() != null && !request.email().isBlank()) ? request.email() : null;
+        Gender newGender = request.gender();
+
+        boolean changedNickname = newNickname != null && !Objects.equals(user.getNickname(), request.nickname());
+        boolean changedEmail = newEmail != null && !Objects.equals(user.getEmail(), request.email());
+        boolean changedGender = newGender != null  || user.getGender() != null;
+
+        changedGender = changedGender && !Objects.equals(user.getGender(), request.gender());
+
+        if(!changedNickname && !changedEmail && !changedGender) {
             throw new IllegalArgumentException("변경된 개인정보가 없습니다.");
         }
 
-        if(changedNickname) user.setNickname(request.nickname());
-        if(changedEmail) user.setEmail(request.email());
+        if(changedNickname) user.setNickname(newNickname);
+        if(changedEmail) user.setEmail(newEmail);
+        if(changedGender) user.setGender(newGender);
 
         UserProfileResponseDto response =
                 new UserProfileResponseDto(

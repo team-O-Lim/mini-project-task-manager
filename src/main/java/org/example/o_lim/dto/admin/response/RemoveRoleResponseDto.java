@@ -10,6 +10,6 @@ public record RemoveRoleResponseDto(
         String loginId,
         RoleType removed,
         Set<RoleType> roles,
-        LocalDateTime updatedAt
+        String updatedAt
 ) {
 }

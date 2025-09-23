@@ -172,8 +172,10 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   
 # ===================================================================================================#
 select * from users;
+select * from roles;
 select * from user_roles;
-select *from projects;
-insert into user_roles (user_id, role_name) values (2, 'ADMIN');
+select * from projects;
+insert into user_roles (user_id, role_name) values (1, 'ADMIN');
 insert into projects (admin_id, title, description)
 	values ('2', '테스트용 프로젝트1', '테스트 프로젝트1 내용입니다.');
+alter table users add column is_email_verify boolean default false not null;
