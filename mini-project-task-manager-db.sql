@@ -171,11 +171,18 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   
   
 # ===================================================================================================#
+use `mini-project-task-manager-db`;
+
 select * from users;
-select * from roles;
 select * from user_roles;
 select * from projects;
-insert into user_roles (user_id, role_name) values (1, 'ADMIN');
+select * from tasks;
+select * from user_roles;
+select * from comments;
+select * from tags;
+insert into user_roles (user_id, role_name) values (4, 'MANAGER');
 insert into projects (admin_id, title, description)
 	values ('2', '테스트용 프로젝트1', '테스트 프로젝트1 내용입니다.');
-alter table users add column is_email_verify boolean default false not null;
+insert into tasks (project_id, created_user, title,
+ content, status, priority, due_date)
+  values (3, 1, '하이', '팔굽혀펴기 10회', 'TODO', 'MEDIUM', '2025-09-19');
