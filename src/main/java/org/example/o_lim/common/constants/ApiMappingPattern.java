@@ -42,6 +42,7 @@ public class ApiMappingPattern {
         public static final String ROOT = BASE + "/projects";
 
         public static final String BY_ID = "/{projectId}";
+        public static final String SEARCH = "/title";
         public static final String SEARCH_BY_TASK_DESC = "/task-desc";
     }
 

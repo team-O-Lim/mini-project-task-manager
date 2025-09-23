@@ -62,6 +62,16 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    // 검색 조회 "/api/v1/projects/title"
+    @GetMapping(ApiMappingPattern.Projects.SEARCH)
+    public ResponseEntity<ResponseDto<List<ProjectListResponseDto>>> getProjectByKeyword(
+            @RequestParam("keyword") String keyword
+    ) {
+        ResponseDto<List<ProjectListResponseDto>> response = projectService.getProjectByKeyword(keyword);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     // 수정 "/api/v1/projects/{projectId}"
     @PutMapping(ApiMappingPattern.Projects.BY_ID)
     public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> updateProject(

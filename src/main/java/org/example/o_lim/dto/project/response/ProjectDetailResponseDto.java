@@ -14,7 +14,7 @@ public record ProjectDetailResponseDto (
         LocalDateTime updatedAt
 ) {
     // 단건 조회
-    public static ProjectDetailResponseDto fromEntity(Project project) {
+    public static ProjectDetailResponseDto from(Project project) {
         return new ProjectDetailResponseDto(
                 project.getId(),
                 project.getAdmin().getId(),

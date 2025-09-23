@@ -13,7 +13,7 @@ public record ProjectUpdateRequestDto (
         String adminManagerNickname,
         LocalDateTime updatedAt
 ) {
-    public static ProjectUpdateRequestDto  fromEntity(Project project) {
+    public static ProjectUpdateRequestDto from(Project project) {
         return new ProjectUpdateRequestDto(
                 project.getId(),
                 project.getAdmin().getId(),

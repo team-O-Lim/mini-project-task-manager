@@ -12,7 +12,7 @@ public record ProjectCreateResponseDto(
         String adminManagerNickname,
         LocalDateTime createdAt
 ) {
-    public static ProjectCreateResponseDto fromEntity(Project project) {
+    public static ProjectCreateResponseDto from(Project project) {
         return new ProjectCreateResponseDto(
                 project.getId(),
                 project.getAdmin().getId(),
