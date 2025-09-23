@@ -59,6 +59,10 @@ public class TagServiceImpl implements TagService {
 
         List<Tag> tags = tagRepository.findByProjectId(projectId);
 
+        if (tags == null || tags.isEmpty()) {
+            throw new IllegalArgumentException("현재 없는 project 입니다.");
+        }
+
         data = tags.stream()
                 .map(TagResponseDto::from)
                 .toList();
@@ -72,12 +76,11 @@ public class TagServiceImpl implements TagService {
     public ResponseDto<TagResponseDto> deleteTag(UserPrincipal principal, Long projectId, Long tagId) {
 
         Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다: 0" + tagId));
+                .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다: " + tagId));
 
         if (!tag.getProject().getId().equals(projectId)) {
             throw new IllegalArgumentException("해당 projectId가 없습니다: " + projectId);
         }
-
 
         tagRepository.delete(tag);
 
