@@ -6,6 +6,7 @@ import org.example.o_lim.common.constants.ApiMappingPattern;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.comment.request.CommentRequestDto;
 import org.example.o_lim.dto.comment.response.CommentResponseDto;
+import org.example.o_lim.entity.Task;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.CommentService;
 import org.springframework.http.ResponseEntity;

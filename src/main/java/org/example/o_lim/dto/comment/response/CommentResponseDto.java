@@ -12,7 +12,7 @@ public record CommentResponseDto(
 ) {
     public static CommentResponseDto from(Comment comment) {
         return new CommentResponseDto(
-                comment.getAuthor().getNickname(),
+                comment.getAuthor().getName(),
                 comment.getContent(),
                 comment.getCreatedAt());
     }

@@ -114,7 +114,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(roles == null || roles.isEmpty()) return List.of();
 
         return roles.stream()
-                .map(role -> role.startsWith("ROLE_") ? role : "ROLE" + role)
+                .map(role -> role.startsWith("ROLE_") ? role : "ROLE_" + role)
+
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
