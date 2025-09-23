@@ -7,8 +7,6 @@ import org.example.o_lim.entity.base.BaseTimeEntity;
 @Entity
 @Table(name = "comments")
 @Getter
-//@Builder
-//@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
 
@@ -42,22 +40,4 @@ public class Comment extends BaseTimeEntity {
     public static Comment create(Task task, User author, String content) {
         return new Comment(task,author, content);
     }
-
-//    public static Comment create(Task task, User author, String content) {
-//        return Comment.builder()
-//                .task(task)
-//                .author(author)
-//                .content(content)
-//                .build();
-//    }
-
-
-    public Comment(String content) {
-        this.content = content;
-    }
-
-    public static Comment create(String content) {
-        return new Comment(content);
-    }
-
 }

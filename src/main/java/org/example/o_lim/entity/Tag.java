@@ -39,13 +39,14 @@ public class Tag {
     @Column(name = "color", nullable = false)
     private String color;
 
-    public Tag(String name, String color) {
+    public Tag(Project project, String name, String color) {
+        this.project = project;
         this.name = name;
         this.color = color;
     }
 
-    public static Tag create(String name, String color) {
-        return new Tag(name, color);
+    public static Tag create(Project project, String name, String color) {
+        return new Tag(project, name, color);
     }
 
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.tag.request.TagRequestDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
+import org.example.o_lim.entity.Comment;
 import org.example.o_lim.entity.Project;
 import org.example.o_lim.entity.Tag;
 import org.example.o_lim.repository.ProjectRepository;
@@ -35,7 +36,15 @@ public class TagServiceImpl implements TagService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
 
-        Tag tags = Tag.create(request.name(), request.color());
+        if (tagRepository.existsByName(request.name())) {
+            throw new IllegalArgumentException("이미 존재하는 태그명입니다: " + request.name());
+        }
+
+        if (tagRepository.existsByColor(request.color())) {
+            throw new IllegalArgumentException("이미 존재하는 색상입니다: " + request.color());
+        }
+
+        Tag tags = Tag.create(project, request.name(), request.color());
         Tag saved = tagRepository.save(tags);
 
         data = TagResponseDto.from(saved);
@@ -48,10 +57,9 @@ public class TagServiceImpl implements TagService {
 
         List<TagResponseDto> data = null;
 
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
+        List<Tag> tags = tagRepository.findByProjectId(projectId);
 
-        data = tagRepository.findByProjectId(projectId).stream()
+        data = tags.stream()
                 .map(TagResponseDto::from)
                 .toList();
 
@@ -63,11 +71,13 @@ public class TagServiceImpl implements TagService {
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<TagResponseDto> deleteTag(UserPrincipal principal, Long projectId, Long tagId) {
 
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다." + projectId));
-
         Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다." + tagId));
+                .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다: 0" + tagId));
+
+        if (!tag.getProject().getId().equals(projectId)) {
+            throw new IllegalArgumentException("해당 projectId가 없습니다: " + projectId);
+        }
+
 
         tagRepository.delete(tag);
 
