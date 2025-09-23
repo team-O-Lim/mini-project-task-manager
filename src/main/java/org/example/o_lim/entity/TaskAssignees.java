@@ -32,4 +32,7 @@ public class TaskAssignees {
         foreignKey = @ForeignKey(name = "fk_task_assignees_assignee_id")
     )
     private User assignees;
+
+    // Task 관계
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 }

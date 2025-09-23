@@ -2,12 +2,9 @@ package org.example.o_lim.dto.task.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.entity.Task;
-import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 

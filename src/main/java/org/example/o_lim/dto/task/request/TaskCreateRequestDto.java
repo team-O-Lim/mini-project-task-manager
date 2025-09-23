@@ -2,8 +2,10 @@ package org.example.o_lim.dto.task.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.example.o_lim.entity.User;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record TaskCreateRequestDto(
         @NotBlank(message = "직무명은 필수입니다.")
@@ -12,6 +14,8 @@ public record TaskCreateRequestDto(
 
         @NotBlank(message = "직무내용은 필수입니다.")
         String content,
+
+        List<Long> assigneesIds,
 
         Long tagId,
 

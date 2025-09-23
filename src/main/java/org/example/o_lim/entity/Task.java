@@ -1,4 +1,5 @@
 package org.example.o_lim.entity;
+import jakarta.validation.constraints.NotBlank;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.entity.base.BaseTimeEntity;
@@ -73,7 +74,13 @@ public class Task extends BaseTimeEntity {
     private List<Comment> comments;
 
     // 마감일
+    @Column(name = "due_date")
     private LocalDate dueDate;
+
+    // Task Assignee 연관관계 메서드
+
+
+
 
     // 직무 생성
     public static Task create(Project project, String title, String content, User createdUser,
@@ -95,5 +102,16 @@ public class Task extends BaseTimeEntity {
         this.status = status;
         this.priority = priority;
         this.dueDate = dueDate;
+    }
+
+    public void updateStatus(TaskStatus status) {
+        this.status = status;
+    }
+
+    public void addAssignee(User assignee) {
+        TaskAssignees taskAssignees = new TaskAssignees();
+        taskAssignees.setTask(this);
+        taskAssignees.setAssignees(assignee);
+        this.assignee.add(taskAssignees);
     }
 }

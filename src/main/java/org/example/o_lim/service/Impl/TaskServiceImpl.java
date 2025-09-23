@@ -8,6 +8,7 @@ import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.task.request.TaskCreateRequestDto;
 import org.example.o_lim.dto.task.request.TaskUpdateRequestDto;
+import org.example.o_lim.dto.task.request.TaskUpdateStatusRequestDto;
 import org.example.o_lim.dto.task.response.TaskCreateResponseDto;
 import org.example.o_lim.dto.task.response.TaskDetailResponseDto;
 import org.example.o_lim.dto.task.response.TaskSearchResponseDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,6 +33,7 @@ public class TaskServiceImpl implements TaskService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final TaskTagRepository taskTagRepository;
+    private final TaskAssigneesRepository taskAssigneesRepository;
 
     private TaskStatus parseTaskStatus(String status) {
         if (status == null || status.isBlank()) {
@@ -80,6 +83,12 @@ public class TaskServiceImpl implements TaskService {
                 parsePriorityStatus(request.priority()),
                 request.dueDate()
         );
+
+        List<User> assignees = userRepository.findAllById(request.assigneesIds());
+        for (User assignee : assignees) {
+            task.addAssignee(assignee);
+        }
+
         taskRepository.save(task);
 
         if (request.tagId() != null) {
@@ -118,28 +127,32 @@ public class TaskServiceImpl implements TaskService {
         return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));
     }
 
-    @Override
-    public ResponseDto<List<TaskDetailResponseDto>> getCreatedUser(Long projectId, Long createdUser
-    ) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
-
-        User user = userRepository.findById(createdUser)
-                .orElseThrow(() -> new IllegalArgumentException("해당 작성자가 존재하지 않습니다."));
-        return null;
-    }
+//    @Override
+//    public ResponseDto<List<TaskDetailResponseDto>> getCreatedUser(Long projectId, Long createdUserId
+//    ) {
+////        Project project = projectRepository.findById(projectId)
+////                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+//
+//        List<User> users = userRepository.findById(createdUserId);
+//
+//        List<TaskDetailResponseDto> dto = users.stream()
+//                .map(TaskDetailResponseDto::from)
+//                .toList();
+//
+//        return ResponseDto.setSuccess("SUCCESS", dto);
+//    }
 
     @Override
     public ResponseDto<List<TaskDetailResponseDto>> searchTasks(
-            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDate from, LocalDate to
+            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDateTime from, LocalDateTime to, LocalDate dueDate
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
-        LocalDate fromDate = (from != null) ? from : null;
-        LocalDate toDate = (to != null) ? to : null;
+        LocalDateTime fromDate = (from != null) ? from : null;
+        LocalDateTime toDate = (to != null) ? to : null;
 
-        List<Task> tasks = taskRepository.searchTasks(projectId, createUserId, status, priority, from, to);
+        List<Task> tasks = taskRepository.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
 
         List<TaskDetailResponseDto> dto = tasks.stream()
                 .map(TaskDetailResponseDto::from)
@@ -149,17 +162,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#request.createdUserId, authentication)")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseDto<TaskDetailResponseDto> updateTask(Long projectId, Long taskId, UserPrincipal principal, TaskUpdateRequestDto request
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
-
-        if (!task.getCreatedUser().getId().equals(request.createdUserId())) {
-            throw new SecurityException("작성자만 수정할 수 있습니다.");
-        }
 
         task.update(
                 request.title(),
@@ -171,9 +180,26 @@ public class TaskServiceImpl implements TaskService {
         return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));
     }
 
+//    @Override
+//    @Transactional
+//    @PreAuthorize("hasAnyRole('MANAGER') or @authz.isChange(#request.taskId, authentication)")
+//    public ResponseDto<TaskDetailResponseDto> updateTaskStatus(
+//            Long projectId, Long taskId, UserPrincipal principal, TaskUpdateStatusRequestDto request
+//    ) {
+//        Project project = projectRepository.findById(projectId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+//        Task task = taskRepository.findById(taskId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
+//
+//        task.updateStatus (
+//                request.status()
+//        );
+//        return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));
+//    }
+
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#request.createdUserId, authentication)")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseDto<Void> deleteTask(Long projectId, Long taskId, UserPrincipal principal
     ) {
         Project project = projectRepository.findById(projectId)

@@ -8,6 +8,7 @@ import org.example.o_lim.dto.tag.response.TagResponseDto;
 import org.example.o_lim.entity.Task;
 import org.example.o_lim.entity.TaskTag;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,7 +20,8 @@ public record TaskSearchResponseDto(
         Long createUserId,
         TaskStatus status,
         PriorityStatus priority,
-        List<TagResponseDto> tags
+        List<TagResponseDto> tags,
+        LocalDate dueDate
 ){
     public static  TaskSearchResponseDto from(Task task) {
         if(task == null) return null;
@@ -36,7 +38,8 @@ public record TaskSearchResponseDto(
                 task.getCreatedUser().getId(),
                 task.getStatus(),
                 task.getPriority(),
-                tagDtos
+                tagDtos,
+                task.getDueDate()
 
         );
     }
