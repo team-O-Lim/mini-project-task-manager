@@ -6,9 +6,12 @@ import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
 import org.example.o_lim.entity.Task;
+import org.example.o_lim.entity.TaskAssignees;
 import org.example.o_lim.entity.TaskTag;
+import org.example.o_lim.entity.User;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,6 +22,7 @@ public record TaskCreateResponseDto(
         String title,
         Long createUserId,
         String content,
+        List<User> assignees,
         List<TagResponseDto> tags,
         TaskStatus status,
         PriorityStatus priority,
@@ -26,6 +30,12 @@ public record TaskCreateResponseDto(
 ){
     public static  TaskCreateResponseDto from(Task task){
         if(task == null) return null;
+
+        List<User> assignees = task.getAssignees().stream()
+                .filter(Objects::nonNull)
+                .map(TaskAssignees::getAssignees)
+                .toList();
+
 
         List<TagResponseDto> tagDtos = task.getTaskTags().stream()
                 .filter(Objects::nonNull)
@@ -39,6 +49,7 @@ public record TaskCreateResponseDto(
                 task.getTitle(),
                 task.getCreatedUser().getId(),
                 task.getContent(),
+                assignees,
                 tagDtos,
                 task.getStatus(),
                 task.getPriority(),

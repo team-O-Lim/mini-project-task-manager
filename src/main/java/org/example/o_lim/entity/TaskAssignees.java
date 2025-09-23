@@ -34,5 +34,8 @@ public class TaskAssignees {
     private User assignees;
 
     // Task 관계
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    public TaskAssignees(Task task, User assignee) {
+        this.task = task;
+        this.assignees = assignee;
+    }
 }

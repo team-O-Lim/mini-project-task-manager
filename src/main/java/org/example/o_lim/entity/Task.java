@@ -64,6 +64,10 @@ public class Task extends BaseTimeEntity {
         return taskTags == null ? new ArrayList<>() : taskTags;
     }
 
+    //TaskAssignee 관계
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskAssignees> assignees = new ArrayList<>();
+
     // task 내 comment 출력
     @OneToMany(
             mappedBy = "task",
@@ -108,10 +112,9 @@ public class Task extends BaseTimeEntity {
         this.status = status;
     }
 
-    public void addAssignee(User assignee) {
-        TaskAssignees taskAssignees = new TaskAssignees();
-        taskAssignees.setTask(this);
-        taskAssignees.setAssignees(assignee);
-        this.assignee.add(taskAssignees);
+    public void addAssignee(User user) {
+        TaskAssignees taskAssignees = new TaskAssignees(this, user);
+        this.assignees.add(taskAssignees);
+
     }
 }
