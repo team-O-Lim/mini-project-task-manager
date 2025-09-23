@@ -106,8 +106,8 @@ public class WebSecurityConfig {
                             .requestMatchers("api/v1/admin/**").authenticated()
 
 //                            comments
-                            .requestMatchers(HttpMethod.POST, "api/v1/task/*/comments/**").authenticated()
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/task/*/comments/**").authenticated()
+                            .requestMatchers(HttpMethod.POST, "api/v1/tasks/*/comments/**").hasAnyRole("ADMIN", "MANAGER")
+                            .requestMatchers(HttpMethod.DELETE, "api/v1/tasks/*/comments/**").authenticated()
 
 //                            notifications
                             .requestMatchers("api/v1/notifications/**").hasRole("ADMIN")

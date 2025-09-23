@@ -39,7 +39,14 @@ public class Tag {
     @Column(name = "color", nullable = false)
     private String color;
 
-    public void delete(Tag tag) {
-        if (tag == null) return;
+    public Tag(Project project, String name, String color) {
+        this.project = project;
+        this.name = name;
+        this.color = color;
     }
+
+    public static Tag create(Project project, String name, String color) {
+        return new Tag(project, name, color);
+    }
+
 }

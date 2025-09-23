@@ -29,7 +29,7 @@ public class MailServiceImpl implements MailService {
         message.setSubject("=== [Task-Manager] 이메일 인증 링크 발송 ===");
         String body = """
                     <h3>이메일 인증 링크</h3>
-                    <a href="//localhost:8080/api/v1/auth/verify?token=%s">여기를 클릭하여 인증을 완료</a>
+                    <a href="http://localhost:8080/api/v1/auth/verify?token=%s">여기를 클릭하여 인증을 완료</a>
                 """.formatted(token);
 
         message.setText(body, "UTF-8", "html");

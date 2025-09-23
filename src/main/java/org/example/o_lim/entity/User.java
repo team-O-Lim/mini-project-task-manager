@@ -52,6 +52,10 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles = new HashSet<>();
 
+//    이메일 인증여부
+    @Column(name="is_email_verify", nullable = false)
+    private boolean isEmailVerify;
+
 //    생성자
     public User(String name, String loginId, String password, String email, String nickname) {
         this.name = name;
@@ -70,17 +74,29 @@ public class User extends BaseTimeEntity {
         this.gender = gender;
     }
 
+//    이메일 인증 상태 변경
+    public void setEmailVerified(boolean isEmailVerify) {
+        this.isEmailVerify = isEmailVerify;
+    }
+
 //    비밀번호 재설정
     public void changePassword(String password) {
         this.password = password;
     }
+
 //    프로필 수정을 위한 setter
     public void setEmail(String email) {
         this.email = email;
     }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
 //    권한 부여/회수
     public void grantRole(Role role) {
         boolean exists = userRoles.stream().anyMatch(ur -> ur.getRole().equals(role));

@@ -61,7 +61,6 @@ public class AuthController {
         return ResponseEntity.noContent().build();
     }
 
-
 //    아이디 찾기
     @GetMapping(ApiMappingPattern.Auth.FIND_ID)
     public ResponseEntity<ResponseDto<FindIdResponseDto>> findId(
@@ -75,8 +74,8 @@ public class AuthController {
     @PostMapping(ApiMappingPattern.Auth.RESET_PASSWORD)
     public ResponseEntity<ResponseDto<PasswordChangeResponseDto>> resetPassword(
             @Valid @RequestBody PasswordResetRequestDto request) {
-        authService.changePassword(request);
+        ResponseDto<PasswordChangeResponseDto> response = authService.resetPassword(request);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body(response);
     }
 }

@@ -97,7 +97,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto<Object>> handleException(Exception e) {
         log.error("Internal Error: {}", e.getMessage());
 
-        return failed(ErrorCode.INTERNAL_ERROR, null, null  );
+        return failed(ErrorCode.INTERNAL_ERROR, null, null);
     }
 }
 
