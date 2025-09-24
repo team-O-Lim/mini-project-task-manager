@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.user.request.UserProfileUpdateRequest;
+import org.example.o_lim.dto.user.response.AllUserInfoResponseDto;
+import org.example.o_lim.dto.user.response.UserMiniProfileResponseDto;
 import org.example.o_lim.dto.user.response.UserProfileResponseDto;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.UserService;
@@ -12,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +39,24 @@ public class UserController {
             @Valid @RequestBody UserProfileUpdateRequest request
     ) {
         ResponseDto<UserProfileResponseDto> response = userService.updateMyInfo(principal, request);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+//  모든 유저 정보 조회
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<AllUserInfoResponseDto>>> getAllUsers() {
+        ResponseDto<List<AllUserInfoResponseDto>> response = userService.getAllUsers();
+
+        return ResponseEntity.ok().body(response);
+    }
+
+//    유저 미니 프로필
+    @GetMapping("me_mini")
+    public ResponseEntity<ResponseDto<UserMiniProfileResponseDto>> getUserMiniProfile(
+            @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        ResponseDto<UserMiniProfileResponseDto> response = userService.getUserMiniProfile(principal);
 
         return ResponseEntity.ok().body(response);
     }

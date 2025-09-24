@@ -69,7 +69,7 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
         this.gender = gender;
     }
-    
+
 //    비밀번호 재설정
     public void changePassword(String password) {
         this.password = password;

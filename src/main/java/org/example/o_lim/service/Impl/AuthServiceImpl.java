@@ -97,6 +97,7 @@ public class AuthServiceImpl implements AuthService {
         return ResponseDto.setSuccess("로그인을 성공하였습니다.", response);
     }
 
+//    아이디 찾기
     @Override
     public ResponseDto<FindIdResponseDto> findId(FindIdRequestDto request) {
         User user = userRepository.findByEmail(request.email())
@@ -110,6 +111,7 @@ public class AuthServiceImpl implements AuthService {
         return ResponseDto.setSuccess("ID를 성공적으로 찾았습니다.", response);
     }
 
+//    비밀번호 재설정
     @Override
     @Transactional
     public ResponseDto<PasswordChangeResponseDto> resetPassword(PasswordResetRequestDto request) {
