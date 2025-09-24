@@ -62,7 +62,7 @@ public class CommentController {
     }
 
     // 조회 "/api/v1/tasks/{taskId}/comments"
-    @GetMapping("/page")
+    @GetMapping(ApiMappingPattern.Comments.PAGE)
     public ResponseEntity<ResponseDto<CommentPageResponseDto>> getPageCommentByCreatedAtDesc(
             @PathVariable Long taskId,
             @PageableDefault(

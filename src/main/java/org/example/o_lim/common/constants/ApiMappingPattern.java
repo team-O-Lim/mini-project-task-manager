@@ -69,6 +69,7 @@ public class ApiMappingPattern {
         public static final String ROOT = BASE + "/tasks/{taskId}/comments";
 
         public static final String BY_ID = "/{commentId}";
+        public static final String PAGE = "/page";
     }
 
     public static final class Notification {

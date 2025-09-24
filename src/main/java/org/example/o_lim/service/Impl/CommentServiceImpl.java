@@ -40,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
         CommentDetailResponseDto data = null;
 
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다." + taskId));
+                .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다: " + taskId));
 
         User user = userRepository.findById(principal.getId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
