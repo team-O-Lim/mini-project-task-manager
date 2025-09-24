@@ -35,6 +35,14 @@ public class TagServiceImpl implements TagService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
 
+        if (tagRepository.existsByNameAndProjectId(request.name(), projectId)) {
+            throw new IllegalArgumentException("이미 존재하는 태그명입니다: " + request.name());
+        }
+
+        if (tagRepository.existsByColorAndProjectId(request.color(), projectId)) {
+            throw new IllegalArgumentException("이미 존재하는 색상입니다: " + request.color());
+        }
+
         Tag tags = Tag.create(project, request.name(), request.color());
         Tag saved = tagRepository.save(tags);
 
