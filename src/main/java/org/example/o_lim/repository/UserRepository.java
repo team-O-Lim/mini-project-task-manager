@@ -2,7 +2,6 @@ package org.example.o_lim.repository;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import org.example.o_lim.common.enums.RoleType;
 import org.example.o_lim.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -19,19 +17,34 @@ public interface UserRepository extends JpaRepository<User, Long> {
         String getUsername();
         String getUserNickname();
         String getUserLoginId();
-        Set<RoleType> getRoleTypeRoleName();
+        String getRoleName();
     }
 
     @Query(value = """
         SELECT
-            u.name as Username,
-            u.nickname as UserNickname,
-            u.login_id as UserLoginId,
-            r.role_name as RoleTypeRoleName
-        FROM
-            users u
-            LEFT JOIN user_roles r
-            ON u.id = r.user_id            
+            name as Username,
+            nickname as UserNickname,
+            login_id as UserLoginId,
+            role_name as RoleName
+        FROM (
+            SELECT 
+                u.name,
+                u.nickname,
+                u.login_id,
+                r.role_name, 
+                ROW_NUMBER() OVER(
+                    PARTITION BY u.id
+                    ORDER BY CASE r.role_name
+                        WHEN 'ADMIN' THEN 1
+                        WHEN 'MANAGER' THEN 2
+                        ELSE 3
+                    END
+                ) as rn
+            FROM users u
+            LEFT JOIN  user_roles r
+            ON u.id = r.user_id
+            ) t
+        WHERE rn = 1            
     """, nativeQuery = true)
     List<UserWithRolesProjection> findAllUsersWithRole_Native();
 
