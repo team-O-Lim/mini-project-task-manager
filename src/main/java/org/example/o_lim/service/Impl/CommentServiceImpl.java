@@ -4,7 +4,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.comment.request.CommentRequestDto;
-import org.example.o_lim.dto.comment.response.CommentResponseDto;
+import org.example.o_lim.dto.comment.response.CommentDetailResponseDto;
+import org.example.o_lim.dto.comment.response.CommentPageResponseDto;
+import org.example.o_lim.dto.comment.response.PageMeta;
 import org.example.o_lim.entity.Comment;
 import org.example.o_lim.entity.Task;
 import org.example.o_lim.entity.User;
@@ -13,9 +15,13 @@ import org.example.o_lim.repository.TaskRepository;
 import org.example.o_lim.repository.UserRepository;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.CommentService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +34,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<CommentResponseDto> createComment(UserPrincipal principal, CommentRequestDto request,Long taskId) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    public ResponseDto<CommentDetailResponseDto> createComment(UserPrincipal principal, CommentRequestDto request, Long taskId) {
 
-        CommentResponseDto data = null;
+        CommentDetailResponseDto data = null;
 
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다." + taskId));
@@ -42,15 +48,30 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = Comment.create(task, user, request.content());
         Comment saved = commentRepository.save(comment);
 
-        data = CommentResponseDto.from(saved);
+        data = CommentDetailResponseDto.from(saved);
 
         return ResponseDto.setSuccess("댓글이 등록되었습니다.", data);
     }
 
     @Override
+    public ResponseDto<List<CommentDetailResponseDto>> getAllCommentByCreatedAtDesc(Long taskId) {
+
+        List<CommentDetailResponseDto> data = null;
+
+        List<CommentRepository.CommentWithCreatedAtProjection> comments = commentRepository.getCommentsByCreatedAtDesc(taskId);
+
+        data = comments.stream()
+                .map(CommentDetailResponseDto::from)
+                .toList();
+
+        return ResponseDto.setSuccess("댓글이 조회되었습니다.", data);
+
+    }
+
+    @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<CommentResponseDto> deleteComment(UserPrincipal principal, Long taskId, Long commentId) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER') or @commentz.isCommentAuthor(#commentId, authentication)")
+    public ResponseDto<CommentDetailResponseDto> deleteComment(UserPrincipal principal, Long taskId, Long commentId) {
 
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다." + commentId));
@@ -59,5 +80,28 @@ public class CommentServiceImpl implements CommentService {
 
         return ResponseDto.setSuccess("댓글이 삭제되었습니다.", null);
     }
+
+    @Override
+    public ResponseDto<CommentPageResponseDto> getPageCommentByCreatedAtDesc(Long taskId, Pageable pageable) {
+        CommentPageResponseDto data = null;
+
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new EntityNotFoundException("조회할 댓글이 없습니다"));
+
+        Page<Comment> pageResult = commentRepository.findAll(pageable);
+        List<CommentDetailResponseDto> content = pageResult.getContent().stream()
+                .map(CommentDetailResponseDto::from)
+                .toList();
+
+        PageMeta meta = PageMeta.from(pageResult);
+
+        data = CommentPageResponseDto.builder()
+                .content(content)
+                .meta(meta)
+                .build();
+
+        return ResponseDto.setSuccess("댓글이 조회되었습니다.", data);
+    }
 }
+
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
-import org.example.o_lim.dto.comment.response.CommentResponseDto;
+import org.example.o_lim.dto.comment.response.CommentDetailResponseDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
 import org.example.o_lim.entity.Comment;
 import org.example.o_lim.entity.Task;
@@ -27,7 +27,7 @@ public record TaskDetailResponseDto(
         PriorityStatus priority,
         List<TagResponseDto> tags,
         LocalDate dueDate,
-        List<CommentResponseDto> comments
+        List<CommentDetailResponseDto> comments
 ) {
     public static  TaskDetailResponseDto from(Task task){
         if(task == null) return null;
@@ -42,9 +42,9 @@ public record TaskDetailResponseDto(
         List<Comment> comments
                 = task.getComments() != null ? task.getComments() : Collections.emptyList();
 
-        List<CommentResponseDto> commentDtos = comments.stream()
+        List<CommentDetailResponseDto> commentDtos = comments.stream()
                 .filter(Objects::nonNull)
-                .map(CommentResponseDto::from)
+                .map(CommentDetailResponseDto::from)
                 .toList();
 
         return new TaskDetailResponseDto(

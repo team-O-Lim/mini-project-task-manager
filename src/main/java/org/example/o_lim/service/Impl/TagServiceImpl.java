@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.tag.request.TagRequestDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
-import org.example.o_lim.entity.Comment;
 import org.example.o_lim.entity.Project;
 import org.example.o_lim.entity.Tag;
 import org.example.o_lim.repository.ProjectRepository;
@@ -35,14 +34,6 @@ public class TagServiceImpl implements TagService {
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
-
-        if (tagRepository.existsByName(request.name())) {
-            throw new IllegalArgumentException("이미 존재하는 태그명입니다: " + request.name());
-        }
-
-        if (tagRepository.existsByColor(request.color())) {
-            throw new IllegalArgumentException("이미 존재하는 색상입니다: " + request.color());
-        }
 
         Tag tags = Tag.create(project, request.name(), request.color());
         Tag saved = tagRepository.save(tags);

@@ -5,13 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.comment.request.CommentRequestDto;
-import org.example.o_lim.dto.comment.response.CommentResponseDto;
-import org.example.o_lim.entity.Task;
+import org.example.o_lim.dto.comment.response.CommentDetailResponseDto;
+import org.example.o_lim.dto.comment.response.CommentPageResponseDto;
+import org.example.o_lim.dto.comment.response.PageMeta;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.CommentService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,25 +29,51 @@ public class CommentController {
 
     // 생성 "/api/v1/tasks/{taskId}/comments"
     @PostMapping
-    public ResponseEntity<ResponseDto<CommentResponseDto>> createComment(
+    public ResponseEntity<ResponseDto<CommentDetailResponseDto>> createComment(
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody CommentRequestDto request,
             @PathVariable Long taskId
             ) {
-        ResponseDto<CommentResponseDto> response = commentService.createComment(principal, request, taskId);
+        ResponseDto<CommentDetailResponseDto> response = commentService.createComment(principal, request, taskId);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+    // 조회 "/api/v1/tasks/{taskId}/comments"
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<CommentDetailResponseDto>>> getAllCommentByCreatedAtDesc(
+            @PathVariable Long taskId
+    ) {
+        ResponseDto<List<CommentDetailResponseDto>> response = commentService.getAllCommentByCreatedAtDesc(taskId);
 
         return ResponseEntity.ok().body(response);
     }
 
     // 삭제 "/api/v1/tasks/{taskId}/comments/{commentId}"
     @DeleteMapping(ApiMappingPattern.Comments.BY_ID)
-    public ResponseEntity<ResponseDto<CommentResponseDto>> deleteComment(
+    public ResponseEntity<ResponseDto<CommentDetailResponseDto>> deleteComment(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long taskId,
             @PathVariable Long commentId
             ) {
-        ResponseDto<CommentResponseDto> response = commentService.deleteComment(principal, taskId, commentId);
+        ResponseDto<CommentDetailResponseDto> response = commentService.deleteComment(principal, taskId, commentId);
 
         return  ResponseEntity.ok().body(response);
+    }
+
+    // 조회 "/api/v1/tasks/{taskId}/comments"
+    @GetMapping("/page")
+    public ResponseEntity<ResponseDto<CommentPageResponseDto>> getPageCommentByCreatedAtDesc(
+            @PathVariable Long taskId,
+            @PageableDefault(
+                    page = 0,
+                    size = 5,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable
+    ) {
+        ResponseDto<CommentPageResponseDto> response = commentService.getPageCommentByCreatedAtDesc(taskId, pageable);
+
+        return ResponseEntity.ok().body(response);
     }
 }
