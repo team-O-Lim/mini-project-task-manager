@@ -181,8 +181,18 @@ select * from user_roles;
 select * from comments;
 select * from tags;
 insert into user_roles (user_id, role_name) values (4, 'MANAGER');
+delete from user_roles where role_name = 'MANAGER';
 insert into projects (admin_id, title, description)
-	values ('2', '테스트용 프로젝트1', '테스트 프로젝트1 내용입니다.');
+	values ('3', '테스트용 프로젝트2', '테스트 프로젝트2 내용입니다.');
 insert into tasks (project_id, created_user, title,
  content, status, priority, due_date)
-  values (3, 1, '하이', '팔굽혀펴기 10회', 'TODO', 'MEDIUM', '2025-09-19');
+  values (1, 3, '하이', '팔굽혀펴기 10회', 'TODO', 'MEDIUM', '2025-09-19');
+  
+insert into roles 
+value ('ADMIN');
+
+insert into roles 
+value ('MANAGER');
+
+insert into roles 
+value ('USER');
