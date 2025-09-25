@@ -3,6 +3,7 @@ package org.example.o_lim.service.Impl;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.dto.ResponseDto;
@@ -20,6 +21,7 @@ import org.example.o_lim.repository.*;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.TaskService;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -339,17 +341,6 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
         Task task = taskRepository.findByIdWithAssignees(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
-
-//        String currentLoginId = principal.getUsername();
-//
-//        boolean isAssignee = task.getAssignee().stream()
-//                        .map(TaskAssignees::getAssignees)
-//                        .map(User::getLoginId)
-//                        .anyMatch(id -> id.equals(currentLoginId));
-//
-//        if (!isAssignee) {
-//            throw new AccessDeniedException("해당 직무의 담당자가 아닙니다.");
-//        }
 
         task.updateStatus(request.status());
 

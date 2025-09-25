@@ -52,7 +52,7 @@ public class UserController {
     }
 
 //    유저 미니 프로필
-    @GetMapping("me_mini")
+    @GetMapping(ApiMappingPattern.Users.MINI_MY_INFO)
     public ResponseEntity<ResponseDto<UserMiniProfileResponseDto>> getUserMiniProfile(
             @AuthenticationPrincipal UserPrincipal principal
     ) {
