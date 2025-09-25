@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -60,7 +61,9 @@ public class TaskServiceImpl implements TaskService {
                 request.dueDate()
         );
 
-        List<User> assignees = userRepository.findAllById(request.assigneeIds());
+        List<Long> assigneeIds = request.assigneeIds() != null ? request.assigneeIds() : Collections.emptyList();
+        List<User> assignees = userRepository.findAllById(assigneeIds);
+
         for (User assignee : assignees) {
             task.addAssignee(assignee);
         }
