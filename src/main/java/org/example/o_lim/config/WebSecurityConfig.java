@@ -101,12 +101,14 @@ public class WebSecurityConfig {
 //                            users/auth
                             .requestMatchers("api/v1/auth/**").permitAll()
                             .requestMatchers("api/v1/users/me/**").authenticated()
+                            .requestMatchers(HttpMethod.GET, "api/v1/users/**").permitAll()
 
 //                            admin
                             .requestMatchers("api/v1/admin/**").authenticated()
 
 //                            comments
-                            .requestMatchers(HttpMethod.POST, "api/v1/tasks/*/comments/**").hasAnyRole("ADMIN", "MANAGER")
+                            .requestMatchers(HttpMethod.POST, "api/v1/tasks/*/comments/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                            .requestMatchers(HttpMethod.GET, "api/v1/tasks/*/comments/**").permitAll()
                             .requestMatchers(HttpMethod.DELETE, "api/v1/tasks/*/comments/**").authenticated()
 
 //                            notifications

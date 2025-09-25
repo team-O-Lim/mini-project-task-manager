@@ -13,14 +13,14 @@ public record AllUserInfoResponseDto(
     String name,
     String nickname,
     String loginId,
-    Set<RoleType> role
+    String role
 ) {
     public static AllUserInfoResponseDto from(UserRepository.UserWithRolesProjection u) {
         return new AllUserInfoResponseDto(
             u.getUsername(),
             u.getUserNickname(),
             u.getUserLoginId(),
-            u.getRoleTypeRoleName()
+            u.getRoleName()
         );
     }
 }
