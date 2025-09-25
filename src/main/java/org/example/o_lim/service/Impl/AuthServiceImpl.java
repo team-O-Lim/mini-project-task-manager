@@ -103,6 +103,10 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new IllegalArgumentException("가입된 이메일이 아닙니다."));
 
+        if(!user.getName().equals(request.name())) {
+            throw new IllegalArgumentException("사용자 이름이 일치하지 않습니다.");
+        }
+
         FindIdResponseDto response = new FindIdResponseDto(
                 user.getName(),
                 user.getLoginId()

@@ -5,8 +5,6 @@ import org.example.o_lim.entity.TaskAssignees;
 import org.example.o_lim.repository.TaskAssigneesRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,9 +21,6 @@ public class AuthorizationChecker {
                 .filter(assignee -> assignee.getAssignees().getLoginId().equals(loginId))
                 .toList();
 
-
         return !results.isEmpty();
-//        return taskAssigneesRepository.existsByTaskIdAndAssigneesLoginId(taskId, loginId);
-
     }
 }

@@ -99,37 +99,37 @@ public class WebSecurityConfig {
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
 //                            users/auth
-                            .requestMatchers("api/v1/auth/**").permitAll()
-                            .requestMatchers("api/v1/users/me/**").authenticated()
-                            .requestMatchers(HttpMethod.GET, "api/v1/users/**").permitAll()
+                            .requestMatchers("/api/v1/auth/**").permitAll()
+                            .requestMatchers("/api/v1/users/me/**").authenticated()
+                            .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
 
 //                            admin
-                            .requestMatchers("api/v1/admin/**").authenticated()
+                            .requestMatchers("/api/v1/admin/**").authenticated()
 
 //                            comments
-                            .requestMatchers(HttpMethod.POST, "api/v1/tasks/*/comments/**").hasAnyRole("ADMIN", "MANAGER", "USER")
-                            .requestMatchers(HttpMethod.GET, "api/v1/tasks/*/comments/**").permitAll()
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/tasks/*/comments/**").authenticated()
+                            .requestMatchers(HttpMethod.POST, "/api/v1/tasks/*/comments/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/tasks/*/comments/**").permitAll()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/tasks/*/comments/**").authenticated()
 
 //                            notifications
-                            .requestMatchers("api/v1/notifications/**").hasRole("ADMIN")
+                            .requestMatchers("/api/v1/notifications/**").hasRole("ADMIN")
 
 //                            project
-                            .requestMatchers(HttpMethod.POST, "api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
-                            .requestMatchers(HttpMethod.GET, "api/v1/projects/**").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
+                            .requestMatchers(HttpMethod.POST, "/api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/projects/**").permitAll()
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/projects/**").authenticated()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
 
 //                            tag
-                            .requestMatchers(HttpMethod.POST, "api/v1/projects/*/tags/**").authenticated()
-                            .requestMatchers(HttpMethod.GET, "api/v1/projects*/tags/**").permitAll()
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/projects/*/tags/**").authenticated()
+                            .requestMatchers(HttpMethod.POST, "/api/v1/projects/*/tags/**").authenticated()
+                            .requestMatchers(HttpMethod.GET, "/api/v1/projects*/tags/**").permitAll()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/projects/*/tags/**").authenticated()
 
 //                            task
-                            .requestMatchers(HttpMethod.POST, "api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER")
-                            .requestMatchers(HttpMethod.GET, "api/v1/projects/*/tasks/**").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "api/v1/projects/*/tasks/**").authenticated()
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER");
+                            .requestMatchers(HttpMethod.POST, "/api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/projects/*/tasks/**").permitAll()
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/projects/*/tasks/**").authenticated()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER");
                 });
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

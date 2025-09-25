@@ -11,6 +11,7 @@ public class ApiMappingPattern {
         public static final String ROOT = BASE + "/users";
 
         public static final String MY_INFO = "/me";
+        public static final String MINI_MY_INFO = "/me/mini";
     }
 
     public static final class Auth {
