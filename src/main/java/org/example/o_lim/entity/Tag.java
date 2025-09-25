@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Comment;
 
 @Entity
 @Table(
@@ -29,9 +28,11 @@ public class Tag {
     @JoinColumn(name = "project_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_tags_project_id"))
     private Project project;
+
 //    태그명
     @Column(name = "name", nullable = false)
     private String name;
+
 //    태그색
     @Column(name = "color", nullable = false)
     private String color;

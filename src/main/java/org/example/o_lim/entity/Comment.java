@@ -18,11 +18,13 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "task_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_comments_task_id"))
     private Task task;
+
 //    작성자명
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_comments_author_id"))
     private User author;
+
 //    댓글 내용
     @Column(name = "content", nullable = false)
     private String content;

@@ -4,7 +4,6 @@ import org.example.o_lim.entity.User;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +18,7 @@ public class UserPrincipalMapper {
                         .map(r -> {
                             String name = r.getRole().getName().name();
                             String role = name.startsWith("ROLE") ? name : "ROLE_" + name;
+
                             return new SimpleGrantedAuthority(role);
                         })
                         .toList();

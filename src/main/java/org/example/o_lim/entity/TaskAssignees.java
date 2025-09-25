@@ -16,9 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TaskAssignees {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -43,7 +41,6 @@ public class TaskAssignees {
     public User getAssignees() {
         return assignees;
     }
-
 
     public void setTask(Task task) {
         if (this.task != null) {

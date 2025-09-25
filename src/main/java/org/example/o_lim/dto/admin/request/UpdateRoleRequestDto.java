@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.example.o_lim.common.enums.RoleType;
-
 import java.util.Set;
 
 public record UpdateRoleRequestDto(
@@ -14,5 +13,4 @@ public record UpdateRoleRequestDto(
 
         @NotEmpty(message = "roles는 비어있을 수 없습니다.")
         Set<@NotNull(message = "roles 항목은 null일 수 없습니다.") RoleType> roles
-) {
-}
+) {}

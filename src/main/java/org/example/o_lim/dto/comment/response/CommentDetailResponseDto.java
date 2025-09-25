@@ -6,7 +6,9 @@ import org.example.o_lim.repository.CommentRepository;
 
 public record CommentDetailResponseDto(
         String authorName,
+
         String content,
+
         String createdAt
 ) {
     public static CommentDetailResponseDto from(Comment comment) {

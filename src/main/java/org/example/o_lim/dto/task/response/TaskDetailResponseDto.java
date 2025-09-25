@@ -16,15 +16,25 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TaskDetailResponseDto(
         Long id,
+
         Long projectId,
+
         String title,
+
         String content,
+
         Long createUserId,
+
         List<String> assignees,
+
         TaskStatus status,
+
         PriorityStatus priority,
+
         List<TagResponseDto> tags,
+
         LocalDate dueDate,
+
         List<CommentDetailResponseDto> comments
 ) {
     public static  TaskDetailResponseDto from(Task task){

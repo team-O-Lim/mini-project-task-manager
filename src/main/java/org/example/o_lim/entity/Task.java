@@ -67,10 +67,13 @@ public class Task extends BaseTimeEntity {
 
     //TaskAssignee 관계
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskAssignees> assignee = new ArrayList<>();
+    private List<TaskAssignees> assignees = new ArrayList<>();
 
     public List<TaskAssignees> getAssignee() {
-        return assignee;
+        if(assignees == null) {
+            assignees = new ArrayList<>();
+        }
+        return assignees;
     }
 
     // task 내 comment 출력
@@ -111,18 +114,19 @@ public class Task extends BaseTimeEntity {
     }
 
     public void addAssignee(User user) {
-        if (this.assignee == null) {
-            this.assignee = new ArrayList<>();
+        if (this.assignees == null) {
+            this.assignees = new ArrayList<>();
         }
 
-        boolean alreadyAssigned = this.assignee.stream()
+        boolean alreadyAssigned = this.assignees.stream()
                 .anyMatch(assignee -> assignee.getAssignees().equals(user));
+
         if (alreadyAssigned) {
             return;
         }
 
         TaskAssignees taskAssignees = new TaskAssignees(this, user);
-        this.assignee.add(taskAssignees);
+        this.assignees.add(taskAssignees);
     }
 
     public void addTaskTag(TaskTag taskTag) {
@@ -138,18 +142,20 @@ public class Task extends BaseTimeEntity {
 
     public void setAssignee(List<Long> assigneeIds, UserRepository userRepository) {
         if(assigneeIds == null) {
-            this.assignee.clear();
+            this.assignees.clear();
+
             return;
         }
 
-        this.assignee.clear();
+        this.assignees.clear();
         userRepository.flush();
 
         for (Long userId : assigneeIds) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 존재하지 않습니다. ID: " + userId));
+
             TaskAssignees taskAssignees = new TaskAssignees(this, user);
-            this.assignee.add(taskAssignees);
+            this.assignees.add(taskAssignees);
         }
     }
 
@@ -160,13 +166,17 @@ public class Task extends BaseTimeEntity {
     public void setTagId(List<Long> tagIds, TagRepository tagRepository) {
         if(tagIds == null) {
             this.taskTags.clear();
+
             return;
         }
+
         this.taskTags.clear();
         tagRepository.flush();
+
         for (Long tagId : tagIds) {
             Tag tag = tagRepository.findById(tagId)
                     .orElseThrow(() -> new EntityNotFoundException("태그가 존재하지 않습니다. ID: " + tagId));
+
             TaskTag taskTag = new TaskTag(this, tag);
             this.taskTags.add(taskTag);
         }

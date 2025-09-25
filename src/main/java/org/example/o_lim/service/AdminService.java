@@ -12,8 +12,6 @@ import org.example.o_lim.security.UserPrincipal;
 
 public interface AdminService {
     ResponseDto<AddRoleResponseDto> addRoles(UserPrincipal principal, @Valid AddRoleRequestDto request);
-
     ResponseDto<RemoveRoleResponseDto> removeRole(UserPrincipal principal, @Valid RemoveRoleRequestDto request);
-
     ResponseDto<UpdateRoleResponseDto> replaceRoles(UserPrincipal principal, @Valid UpdateRoleRequestDto request);
 }

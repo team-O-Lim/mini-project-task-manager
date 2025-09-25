@@ -45,7 +45,7 @@ public interface TaskRepository  extends JpaRepository<Task, Long> {
 
     @Query("""
         SELECT t FROM Task t
-        JOIN FETCH t.assignee a
+        JOIN FETCH t.assignees a
         JOIN FETCH a.assignees
         WHERE t.id = :taskId
     """)

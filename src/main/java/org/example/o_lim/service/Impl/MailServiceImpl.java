@@ -9,7 +9,6 @@ import org.example.o_lim.service.MailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMailMessage;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,6 +35,7 @@ public class MailServiceImpl implements MailService {
 
         return message;
     }
+
 //    이메일 전송
     @Override
     public void sendEmail(SendMailRequestDto request) {
