@@ -187,10 +187,11 @@ public class TaskServiceImpl implements TaskService {
         String newContent = (request.content() != null && !request.content().isBlank()) ? request.content() : null;
         List<Long> newAssignee = (request.assigneeIds() != null && !request.assigneeIds().isEmpty()) ? request.assigneeIds() : null;
 //        TaskStatus newStatus = request.status();
-        TaskStatus newStatus;
+
+        TaskStatus newStatus = task.getStatus();
         String statusStr = request.status();
         if (statusStr == null || statusStr.isBlank()) {
-            newStatus = TaskStatus.TODO;
+
         } else {
             try {
                 newStatus = TaskStatus.valueOf(statusStr);
@@ -200,10 +201,10 @@ public class TaskServiceImpl implements TaskService {
         }
 
 //        PriorityStatus newPriority = request.priority();
-        PriorityStatus newPriority;
+        PriorityStatus newPriority = task.getPriority();
         String priorityStr = request.priority();
         if (priorityStr == null || priorityStr.isBlank()) {
-            newPriority = PriorityStatus.MEDIUM;
+
         } else {
             try {
                 newPriority = PriorityStatus.valueOf(priorityStr);
@@ -243,7 +244,7 @@ public class TaskServiceImpl implements TaskService {
         }
 
         boolean changedTitle = newTitle != null && !Objects.equals(task.getTitle(), newTitle);
-        boolean changedContent = newContent != null && !Objects.equals(task.getContent(), request.content());
+        boolean changedContent = newContent != null && !Objects.equals(task.getContent(), newContent);
         boolean changedAssignee = newAssignee != null;
 //        boolean changedStatus = newStatus != null;
         boolean changedStatus = !task.getStatus().equals(newStatus);
@@ -290,8 +291,13 @@ public class TaskServiceImpl implements TaskService {
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
-        Task task = taskRepository.findByIdWithAssignees(taskId)
+        Task task = taskRepository.findByIdWithAssigneesAndTags(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
+
+        if ((request.assigneeIds() == null || request.assigneeIds().isEmpty())
+                && (request.tagId() == null || request.tagId().isEmpty())) {
+            throw new IllegalArgumentException("삭제할 담당자 또는 태그가 없습니다");
+        }
 
         if (request.assigneeIds() != null && !request.assigneeIds().isEmpty()) {
             List<TaskAssignees> assigneesToDelete = task.getAssignee().stream()
@@ -318,7 +324,7 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.save(task);
         taskRepository.flush();
 
-        Task updatedTask = taskRepository.findByIdWithAssignees(taskId)
+        Task updatedTask = taskRepository.findByIdWithAssigneesAndTags(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("변경된 직무 정보를 불러올 수 없습니다."));
         return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(updatedTask));
     }

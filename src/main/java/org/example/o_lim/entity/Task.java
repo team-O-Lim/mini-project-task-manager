@@ -12,7 +12,9 @@ import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tasks",
@@ -69,6 +71,9 @@ public class Task extends BaseTimeEntity {
     //TaskAssignee 관계
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskAssignees> assignee = new ArrayList<>();
+//    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch =  FetchType.LAZY)
+//    private Set<TaskAssignees> assignee = new HashSet<>();
+
 
     public List<TaskAssignees> getAssignee() {
         return assignee;

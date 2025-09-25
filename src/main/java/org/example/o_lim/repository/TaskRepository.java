@@ -62,4 +62,11 @@ public interface TaskRepository  extends JpaRepository<Task, Long> {
     Optional<Task> findByIdWithTaskTags(@Param("id") Long id);
 
 
+    @Query("""
+        SELECT t FROM Task t
+        LEFT JOIN FETCH t.assignee a
+        LEFT JOIN FETCH t.taskTags tt
+        WHERE t.id = :taskId
+    """)
+    Optional<Task> findByIdWithAssigneesAndTags(@Param("taskId") Long taskId);
 }
