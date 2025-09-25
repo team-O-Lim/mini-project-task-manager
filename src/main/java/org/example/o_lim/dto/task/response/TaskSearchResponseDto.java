@@ -7,7 +7,6 @@ import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
 import org.example.o_lim.entity.Task;
 import org.example.o_lim.entity.TaskTag;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +50,6 @@ public record TaskSearchResponseDto(
                 task.getPriority(),
                 tagDtos,
                 task.getDueDate()
-
         );
     }
 }

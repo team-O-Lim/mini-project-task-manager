@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
-import org.example.o_lim.entity.User;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,6 +24,4 @@ public record TaskCreateRequestDto(
         PriorityStatus priority,
 
         LocalDate dueDate
-
-
 ){}

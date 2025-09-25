@@ -44,7 +44,14 @@ public class TaskAssignees {
         return assignees;
     }
 
+
     public void setTask(Task task) {
+        if (this.task != null) {
+            this.task.getAssignee().remove(this);
+        }
         this.task = task;
+        if (task != null) {
+            task.getAssignee().add(this);
+        }
     }
 }

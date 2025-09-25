@@ -1,11 +1,8 @@
 package org.example.o_lim.controller;
 
 import jakarta.validation.Valid;
-import org.example.o_lim.dto.task.request.TaskDeleteAssigneeAndTag;
 import org.example.o_lim.dto.task.request.TaskUpdateStatusRequestDto;
 import org.example.o_lim.entity.Project;
-import org.example.o_lim.entity.Task;
-import org.example.o_lim.entity.User;
 import org.example.o_lim.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
@@ -21,9 +18,7 @@ import org.example.o_lim.service.TaskService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -67,17 +62,6 @@ public class TaskController {
         return ResponseEntity.ok().body(response);
     }
 
-//    // 특정 task 작성자 기준 필터링 조회
-//    @GetMapping(ApiMappingPattern.Tasks.FILTER_CREATED_USER)
-//    public ResponseEntity<ResponseDto<List<TaskDetailResponseDto>>> getCreatedUser(
-//            @PathVariable Long projectId,
-//            @PathVariable Long createdUserId
-//            ) {
-//        ResponseDto<List<TaskDetailResponseDto>> response = taskService.getCreatedUser(projectId, createdUserId);
-//
-//        return ResponseEntity.ok().body(response);
-//    }
-
     // 검색 조회
     @GetMapping(ApiMappingPattern.Tasks.SEARCH)
     public ResponseEntity<ResponseDto<List<TaskDetailResponseDto>>> searchTasks(
@@ -109,20 +93,6 @@ public class TaskController {
 
         return ResponseEntity.ok().body(response);
     }
-
-    // 담당자 or 태그 삭제
-    @DeleteMapping(ApiMappingPattern.Tasks.DELETE_BY_ASSIGNEE_AND_TAG)
-    public ResponseEntity<ResponseDto<TaskDetailResponseDto>> deleteAssigneeAndTag(
-            @PathVariable Long projectId,
-            @PathVariable Long taskId,
-            @AuthenticationPrincipal UserPrincipal principal,
-            @Valid @RequestBody TaskDeleteAssigneeAndTag request
-            ) {
-        ResponseDto<TaskDetailResponseDto> response = taskService.deleteAssigneeAndTag(projectId, taskId, principal, request);
-
-        return ResponseEntity.ok().body(response);
-    }
-
 
      // 담당자 상태 수정
     @PutMapping(ApiMappingPattern.Tasks.UPDATE_BY_STATUS)
