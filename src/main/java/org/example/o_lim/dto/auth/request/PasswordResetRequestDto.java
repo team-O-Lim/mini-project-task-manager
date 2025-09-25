@@ -2,7 +2,6 @@ package org.example.o_lim.dto.auth.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 public record PasswordResetRequestDto(
         @NotBlank(message = "ID를 입력해주세요")
@@ -16,5 +15,4 @@ public record PasswordResetRequestDto(
 
         @NotBlank(message = "비밀번호를 확인해주세요")
         String confirmPassword
-) {
-}
+) {}

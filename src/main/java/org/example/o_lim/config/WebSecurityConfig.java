@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,6 +69,7 @@ public class WebSecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
 
@@ -91,6 +91,7 @@ public class WebSecurityConfig {
             http.headers(header
                     -> header.frameOptions(frame -> frame.sameOrigin()));
         }
+
         http
                 .authorizeHttpRequests(auth -> {
                     if(h2ConsoleEnabled) auth.requestMatchers("h2-console/**").permitAll();
@@ -136,6 +137,7 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
     private static List<String> splitToList(String csv) {
         return Arrays.stream(csv.split(","))
                 .map(String::trim)

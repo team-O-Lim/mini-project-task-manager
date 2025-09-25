@@ -18,5 +18,4 @@ public record SignUpRequestDto(
         String nickname,
 
         Gender gender
-) {
-}
+) {}

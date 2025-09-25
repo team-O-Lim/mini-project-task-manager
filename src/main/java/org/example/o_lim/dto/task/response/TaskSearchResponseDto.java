@@ -15,17 +15,26 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TaskSearchResponseDto(
         Long projectId,
+
         Long taskId,
+
         String title,
+
         Long createUserId,
+
         List<String> assignees,
+
         TaskStatus status,
+
         PriorityStatus priority,
+
         List<TagResponseDto> tags,
+
         LocalDate dueDate
 ){
     public static  TaskSearchResponseDto from(Task task) {
         if(task == null) return null;
+
         List<TagResponseDto> tagDtos = task.getTaskTags().stream()
                 .filter(Objects::nonNull)
                 .map(TaskTag::getTag)

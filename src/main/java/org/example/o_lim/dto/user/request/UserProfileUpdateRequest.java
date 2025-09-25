@@ -1,7 +1,6 @@
 package org.example.o_lim.dto.user.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.example.o_lim.common.enums.Gender;
 
@@ -13,5 +12,4 @@ public record UserProfileUpdateRequest(
         String email,
 
         Gender gender
-) {
-}
+) {}

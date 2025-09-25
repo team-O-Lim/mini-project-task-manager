@@ -9,11 +9,9 @@ import org.example.o_lim.dto.ResponseDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import javax.naming.AuthenticationException;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
@@ -51,6 +49,7 @@ public class GlobalExceptionHandler {
 
         return list;
     }
+
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
     public ResponseEntity<ResponseDto<Object>> handleBadRequest(Exception e) {
         log.warn("Bad Request: {}", e.getMessage());

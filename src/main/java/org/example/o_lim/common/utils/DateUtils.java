@@ -16,21 +16,23 @@ public class DateUtils {
         if (utcLocalDateTime == null) return null;
         ZonedDateTime zdtUtc = utcLocalDateTime.atZone(ZoneId.of("UTC"));
         ZonedDateTime zdtKst = zdtUtc.withZoneSameInstant(ZONE_KST);
+
         return zdtKst.format(KST_FORMAT);
     }
 
     public static String toUtcString(LocalDateTime utcLocalDateTime) {
         if (utcLocalDateTime == null) return null;
         OffsetDateTime odt = utcLocalDateTime.atOffset(ZoneOffset.UTC);
+
         return ISO_UTC.format(odt);
     }
 
     public static LocalDateTime kstToUtc(LocalDateTime kstDateTime) {
         if (kstDateTime == null) return null;
+
         return kstDateTime.atZone(ZONE_KST)
                 .withZoneSameInstant(ZoneOffset.UTC)
                 .toLocalDateTime();
     }
-
 }
 

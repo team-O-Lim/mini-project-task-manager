@@ -11,7 +11,6 @@ import org.example.o_lim.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -26,7 +25,7 @@ public class TagController {
              @AuthenticationPrincipal UserPrincipal principal,
              @Valid @RequestBody TagRequestDto request,
              @PathVariable Long projectId
-    ) {
+             ) {
         ResponseDto<TagResponseDto> response = tagService.createTag(principal, request, projectId);
 
         return ResponseEntity.ok().body(response);
@@ -36,7 +35,7 @@ public class TagController {
     @GetMapping
     public ResponseEntity<ResponseDto<List<TagResponseDto>>> getAllTags(
             @PathVariable Long projectId
-    ) {
+            ) {
         ResponseDto<List<TagResponseDto>> response = tagService.getAllTag(projectId);
 
         return ResponseEntity.ok().body(response);
@@ -48,7 +47,7 @@ public class TagController {
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId,
             @PathVariable Long tagId
-    ) {
+            ) {
         ResponseDto<TagResponseDto> response = tagService.deleteTag(principal, projectId, tagId);
 
         return ResponseEntity.ok().body(response);

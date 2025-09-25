@@ -1,8 +1,6 @@
 package org.example.o_lim.dto.admin.response;
 
 import org.example.o_lim.common.enums.RoleType;
-
-import java.time.LocalDateTime;
 import java.util.Set;
 
 public record AddRoleResponseDto(
@@ -11,5 +9,4 @@ public record AddRoleResponseDto(
         RoleType added,
         Set<RoleType> roles,
         String updatedAt
-) {
-}
+) {}

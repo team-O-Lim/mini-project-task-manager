@@ -116,7 +116,6 @@ public class TaskServiceImpl implements TaskService {
         return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));
     }
 
-
     @Override
     public ResponseDto<List<TaskDetailResponseDto>> searchTasks(
             Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDateTime from, LocalDateTime to, LocalDate dueDate
@@ -143,6 +142,7 @@ public class TaskServiceImpl implements TaskService {
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
 
@@ -184,7 +184,6 @@ public class TaskServiceImpl implements TaskService {
         String dueDateStr = request.dueDate();
         LocalDate newDueDate = null;
         boolean changedDueDate = false;
-
         if (dueDateStr == null) {
             if (task.getDueDate() != null) {
                 newDueDate = null;
@@ -242,6 +241,7 @@ public class TaskServiceImpl implements TaskService {
 
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+
         Task task = taskRepository.findByIdWithAssignees(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
 
@@ -257,8 +257,10 @@ public class TaskServiceImpl implements TaskService {
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
+
         taskRepository.delete(task);
 
         return ResponseDto.setSuccess("SUCCESS",null);
