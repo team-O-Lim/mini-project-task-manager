@@ -8,6 +8,7 @@ import org.example.o_lim.dto.tag.response.TagResponseDto;
 import org.example.o_lim.entity.Task;
 import org.example.o_lim.entity.TaskTag;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,11 +16,14 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TaskSearchResponseDto(
         Long projectId,
+        Long taskId,
         String title,
         Long createUserId,
+        List<String> assignees,
         TaskStatus status,
         PriorityStatus priority,
-        List<TagResponseDto> tags
+        List<TagResponseDto> tags,
+        LocalDate dueDate
 ){
     public static  TaskSearchResponseDto from(Task task) {
         if(task == null) return null;
@@ -30,13 +34,23 @@ public record TaskSearchResponseDto(
                 .map(TagResponseDto::from)
                 .toList();
 
+        List<String> assigneeNicknames = task.getAssignee().stream()
+                .filter(Objects::nonNull)
+                .map(a -> a.getAssignees())
+                .filter(Objects::nonNull)
+                .map(user -> user.getNickname())
+                .toList();
+
         return new TaskSearchResponseDto(
                 task.getProject().getId(),
+                task.getId(),
                 task.getTitle(),
                 task.getCreatedUser().getId(),
+                assigneeNicknames,
                 task.getStatus(),
                 task.getPriority(),
-                tagDtos
+                tagDtos,
+                task.getDueDate()
 
         );
     }
