@@ -9,7 +9,6 @@ import org.example.o_lim.entity.Task;
 import org.example.o_lim.entity.TaskAssignees;
 import org.example.o_lim.entity.TaskTag;
 import org.example.o_lim.entity.User;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -36,7 +35,6 @@ public record TaskCreateResponseDto(
                 .filter(Objects::nonNull)
                 .map(User::getNickname)
                 .toList();
-
 
         List<TagResponseDto> tagDtos = task.getTaskTags().stream()
                 .filter(Objects::nonNull)

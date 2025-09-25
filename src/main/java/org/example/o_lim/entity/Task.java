@@ -1,4 +1,5 @@
 package org.example.o_lim.entity;
+
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.entity.base.BaseTimeEntity;
@@ -8,13 +9,9 @@ import org.example.o_lim.repository.TagRepository;
 import org.example.o_lim.repository.UserRepository;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.springframework.security.core.parameters.P;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "tasks",
@@ -71,9 +68,6 @@ public class Task extends BaseTimeEntity {
     //TaskAssignee 관계
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskAssignees> assignee = new ArrayList<>();
-//    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch =  FetchType.LAZY)
-//    private Set<TaskAssignees> assignee = new HashSet<>();
-
 
     public List<TaskAssignees> getAssignee() {
         return assignee;
@@ -92,38 +86,26 @@ public class Task extends BaseTimeEntity {
     @Column(name = "due_date")
     private LocalDate dueDate;
 
-    // Task Assignee 연관관계 메서드
-
-
-
-
     // 직무 생성
     public static Task create(Project project, String title, String content, User createdUser,
                         TaskStatus status, PriorityStatus priority, LocalDate dueDate) {
+
+        TaskStatus safeStatus = (status != null) ? status : TaskStatus.TODO;
+        PriorityStatus safePriority = (priority != null) ? priority : PriorityStatus.MEDIUM;
+
         Task task = Task.builder()
                 .project(project)
                 .title(title)
                 .content(content)
                 .createdUser(createdUser)
-                .status(status)
-                .priority(priority)
+                .status(safeStatus)
+                .priority(safePriority)
                 .dueDate(dueDate)
                 .build();
 
         task.addAssignee(createdUser);
 
         return task;
-
-    }
-
-    public void update(
-            String title, String content, List<Long> longs, TaskStatus status, PriorityStatus priority, LocalDate dueDate
-    ) {
-        this.title = title;
-        this.content = content;
-        this.status = status;
-        this.priority = priority;
-        this.dueDate = dueDate;
     }
 
     public void updateStatus(TaskStatus status) {
@@ -182,7 +164,6 @@ public class Task extends BaseTimeEntity {
             this.taskTags.clear();
             return;
         }
-
         this.taskTags.clear();
         tagRepository.flush();
         for (Long tagId : tagIds) {
@@ -191,16 +172,6 @@ public class Task extends BaseTimeEntity {
             TaskTag taskTag = new TaskTag(this, tag);
             this.taskTags.add(taskTag);
         }
-    }
-
-    public void removeAssignee(TaskAssignees assigneeToRemove) {
-        this.assignee.remove(assigneeToRemove);
-        assigneeToRemove.setTask(null);
-    }
-
-    public void removeTaskTag(TaskTag tagToRemove) {
-        this.taskTags.remove(tagToRemove);
-        tagToRemove.setTask(null);
     }
 
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
