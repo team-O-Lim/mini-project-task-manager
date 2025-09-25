@@ -7,7 +7,6 @@ import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.comment.request.CommentRequestDto;
 import org.example.o_lim.dto.comment.response.CommentDetailResponseDto;
 import org.example.o_lim.dto.comment.response.CommentPageResponseDto;
-import org.example.o_lim.dto.comment.response.PageMeta;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.CommentService;
 import org.springframework.data.domain.Pageable;
@@ -21,13 +20,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-// "/api/v1/tasks/{taskId}/comments"
 @RequestMapping(ApiMappingPattern.Comments.ROOT)
 public class CommentController {
-
     private final CommentService commentService;
 
-    // 생성 "/api/v1/tasks/{taskId}/comments"
+//    댓글 생성
     @PostMapping
     public ResponseEntity<ResponseDto<CommentDetailResponseDto>> createComment(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -39,9 +36,9 @@ public class CommentController {
         return ResponseEntity.ok().body(response);
     }
 
-    // 조회 "/api/v1/tasks/{taskId}/comments"
+//    댓글 조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<CommentDetailResponseDto>>> getAllCommentByCreatedAtDesc(
+    public ResponseEntity<ResponseDto<List<CommentDetailResponseDto>>> getAllCommentsByCreatedAtDesc(
             @PathVariable Long taskId
     ) {
         ResponseDto<List<CommentDetailResponseDto>> response = commentService.getAllCommentByCreatedAtDesc(taskId);
@@ -49,7 +46,7 @@ public class CommentController {
         return ResponseEntity.ok().body(response);
     }
 
-    // 삭제 "/api/v1/tasks/{taskId}/comments/{commentId}"
+//    댓글 삭제
     @DeleteMapping(ApiMappingPattern.Comments.BY_ID)
     public ResponseEntity<ResponseDto<CommentDetailResponseDto>> deleteComment(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -61,9 +58,9 @@ public class CommentController {
         return  ResponseEntity.ok().body(response);
     }
 
-    // 조회 "/api/v1/tasks/{taskId}/comments"
+//    댓글 페이지네이션
     @GetMapping(ApiMappingPattern.Comments.PAGE)
-    public ResponseEntity<ResponseDto<CommentPageResponseDto>> getPageCommentByCreatedAtDesc(
+    public ResponseEntity<ResponseDto<CommentPageResponseDto>> getPageCommentsByCreatedAtDesc(
             @PathVariable Long taskId,
             @PageableDefault(
                     page = 0,

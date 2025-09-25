@@ -21,24 +21,22 @@ import org.hibernate.annotations.Comment;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tag {
 
-    @Comment("태그 고유키")
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Comment("프로젝트 외래키")
+//    프로젝트 외래키
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "project_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_tags_project_id"))
     private Project project;
-
-    @Comment("태그명")
+//    태그명
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Comment("태그색")
+//    태그색
     @Column(name = "color", nullable = false)
     private String color;
 
+//    생성자
     public Tag(Project project, String name, String color) {
         this.project = project;
         this.name = name;
@@ -48,5 +46,4 @@ public class Tag {
     public static Tag create(Project project, String name, String color) {
         return new Tag(project, name, color);
     }
-
 }

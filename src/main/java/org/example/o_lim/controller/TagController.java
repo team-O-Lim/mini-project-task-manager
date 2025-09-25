@@ -16,41 +16,39 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-// "/api/v1/projects/{projectId}/tags"
 @RequestMapping(ApiMappingPattern.Tags.ROOT)
 public class TagController {
-
     private final TagService tagService;
 
-    // 생성 "/api/v1/projects/{projectId}/tags"
+//    태그 생성
     @PostMapping
     public ResponseEntity<ResponseDto<TagResponseDto>> createTag(
              @AuthenticationPrincipal UserPrincipal principal,
              @Valid @RequestBody TagRequestDto request,
              @PathVariable Long projectId
-             ) {
+    ) {
         ResponseDto<TagResponseDto> response = tagService.createTag(principal, request, projectId);
 
         return ResponseEntity.ok().body(response);
     }
 
-    // 전체 조회 "/api/v1/projects/{projectId}/tags"
+//    전체 조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<TagResponseDto>>> getAllTag(
+    public ResponseEntity<ResponseDto<List<TagResponseDto>>> getAllTags(
             @PathVariable Long projectId
-            ) {
+    ) {
         ResponseDto<List<TagResponseDto>> response = tagService.getAllTag(projectId);
 
         return ResponseEntity.ok().body(response);
     }
 
-    // 삭제 "/api/v1/projects/{projectId}/tags/{tagId}"
+//    태그 삭제
     @DeleteMapping(ApiMappingPattern.Tags.BY_ID)
     public ResponseEntity<ResponseDto<TagResponseDto>> deleteTag(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId,
             @PathVariable Long tagId
-            ) {
+    ) {
         ResponseDto<TagResponseDto> response = tagService.deleteTag(principal, projectId, tagId);
 
         return ResponseEntity.ok().body(response);

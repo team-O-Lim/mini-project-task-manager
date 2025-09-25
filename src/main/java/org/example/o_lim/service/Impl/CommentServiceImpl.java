@@ -2,6 +2,7 @@ package org.example.o_lim.service.Impl;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.o_lim.common.utils.DateUtils;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.comment.request.CommentRequestDto;
 import org.example.o_lim.dto.comment.response.CommentDetailResponseDto;
@@ -14,6 +15,7 @@ import org.example.o_lim.repository.CommentRepository;
 import org.example.o_lim.repository.TaskRepository;
 import org.example.o_lim.repository.UserRepository;
 import org.example.o_lim.security.UserPrincipal;
+import org.example.o_lim.security.util.PrincipalUtils;
 import org.example.o_lim.service.CommentService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,70 +23,66 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
-
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
+//    댓글 생성
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseDto<CommentDetailResponseDto> createComment(UserPrincipal principal, CommentRequestDto request, Long taskId) {
-
-        CommentDetailResponseDto data = null;
+        PrincipalUtils.requiredActive(principal);
 
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다: " + taskId));
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 태스크를 찾을 수 없습니다."));
 
         User user = userRepository.findById(principal.getId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다."));
 
         Comment comment = Comment.create(task, user, request.content());
         Comment saved = commentRepository.save(comment);
 
-        data = CommentDetailResponseDto.from(saved);
+        CommentDetailResponseDto response  = CommentDetailResponseDto.from(saved);
 
-        return ResponseDto.setSuccess("댓글이 등록되었습니다.", data);
+        return ResponseDto.setSuccess("댓글이 생성되었습니다.", response);
     }
 
+//    전체 조회
     @Override
     public ResponseDto<List<CommentDetailResponseDto>> getAllCommentByCreatedAtDesc(Long taskId) {
-
-        List<CommentDetailResponseDto> data = null;
-
         List<CommentRepository.CommentWithCreatedAtProjection> comments = commentRepository.getCommentsByCreatedAtDesc(taskId);
 
-        data = comments.stream()
+        List<CommentDetailResponseDto> response = comments.stream()
                 .map(CommentDetailResponseDto::from)
                 .toList();
 
-        return ResponseDto.setSuccess("댓글이 조회되었습니다.", data);
-
+        return ResponseDto.setSuccess("댓글이 조회되었습니다.", response);
     }
 
+//    댓글 삭제
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER') or @commentz.isCommentAuthor(#commentId, authentication)")
     public ResponseDto<CommentDetailResponseDto> deleteComment(UserPrincipal principal, Long taskId, Long commentId) {
-
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 TaskId가 없습니다." + commentId));
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 태스크를 찾을 수 없습니다."));
 
         commentRepository.delete(comment);
 
         return ResponseDto.setSuccess("댓글이 삭제되었습니다.", null);
     }
 
+//    댓글 페이지네이션
     @Override
     public ResponseDto<CommentPageResponseDto> getPageCommentByCreatedAtDesc(Long taskId, Pageable pageable) {
-        CommentPageResponseDto data = null;
-
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new EntityNotFoundException("조회할 댓글이 없습니다"));
 
@@ -95,12 +93,12 @@ public class CommentServiceImpl implements CommentService {
 
         PageMeta meta = PageMeta.from(pageResult);
 
-        data = CommentPageResponseDto.builder()
+        CommentPageResponseDto response = CommentPageResponseDto.builder()
                 .content(content)
                 .meta(meta)
                 .build();
 
-        return ResponseDto.setSuccess("댓글이 조회되었습니다.", data);
+        return ResponseDto.setSuccess("댓글이 조회되었습니다.", response);
     }
 }
 
