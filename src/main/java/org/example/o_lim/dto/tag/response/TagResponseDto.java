@@ -3,7 +3,6 @@ package org.example.o_lim.dto.tag.response;
 import org.example.o_lim.entity.Tag;
 
 public record TagResponseDto(
-
         String name,
         String color
 ) {
