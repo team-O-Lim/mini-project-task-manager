@@ -5,7 +5,6 @@ import org.example.o_lim.entity.Comment;
 import org.example.o_lim.repository.CommentRepository;
 
 public record CommentDetailResponseDto(
-
         String authorName,
         String content,
         String createdAt

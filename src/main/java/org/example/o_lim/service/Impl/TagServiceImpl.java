@@ -25,13 +25,11 @@ public class TagServiceImpl implements TagService {
     private final TagRepository tagRepository;
     private final ProjectRepository projectRepository;
 
+//    태그 생성
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<TagResponseDto> createTag(UserPrincipal principal, TagRequestDto request,Long projectId) {
-
-        TagResponseDto data = null;
-
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
 
@@ -46,34 +44,32 @@ public class TagServiceImpl implements TagService {
         Tag tags = Tag.create(project, request.name(), request.color());
         Tag saved = tagRepository.save(tags);
 
-        data = TagResponseDto.from(saved);
+        TagResponseDto response = TagResponseDto.from(saved);
 
-        return ResponseDto.setSuccess("태그가 등록되었습니다.", data);
+        return ResponseDto.setSuccess("태그가 등록되었습니다.", response);
     }
 
+//    전체 조회
     @Override
     public ResponseDto<List<TagResponseDto>> getAllTag(Long projectId) {
-
-        List<TagResponseDto> data = null;
-
         List<Tag> tags = tagRepository.findByProjectId(projectId);
 
         if (tags == null || tags.isEmpty()) {
             throw new IllegalArgumentException("현재 없는 project 입니다.");
         }
 
-        data = tags.stream()
+        List<TagResponseDto> response = tags.stream()
                 .map(TagResponseDto::from)
                 .toList();
 
-        return ResponseDto.setSuccess("태그가 조회되었습니다.", data);
+        return ResponseDto.setSuccess("태그가 조회되었습니다.", response);
     }
 
+//    태그 삭제
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<TagResponseDto> deleteTag(UserPrincipal principal, Long projectId, Long tagId) {
-
         Tag tag = tagRepository.findById(tagId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다: " + tagId));
 
