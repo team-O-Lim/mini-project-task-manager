@@ -5,6 +5,7 @@ import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.task.request.TaskCreateRequestDto;
+import org.example.o_lim.dto.task.request.TaskDeleteAssigneeAndTag;
 import org.example.o_lim.dto.task.request.TaskUpdateRequestDto;
 import org.example.o_lim.dto.task.request.TaskUpdateStatusRequestDto;
 import org.example.o_lim.dto.task.response.TaskCreateResponseDto;
@@ -33,8 +34,10 @@ public interface TaskService {
     ResponseDto<TaskDetailResponseDto> updateTask(
             Long projectId, Long taskId, UserPrincipal principal, @Valid TaskUpdateRequestDto request);
 
-//    ResponseDto<TaskDetailResponseDto> updateTaskStatus(Long projectId, Long taskId, UserPrincipal principal,
-//                                                        @Valid TaskUpdateStatusRequestDto request);
+    ResponseDto<TaskDetailResponseDto> updateTaskStatus(Long projectId, Long taskId, UserPrincipal principal,
+                                                        @Valid TaskUpdateStatusRequestDto request);
 
     ResponseDto<Void> deleteTask(Long projectId, Long taskId, UserPrincipal principal);
+
+    ResponseDto<TaskDetailResponseDto> deleteAssigneeAndTag(Long projectId, Long taskId, UserPrincipal principal, @Valid TaskDeleteAssigneeAndTag request);
 }

@@ -16,8 +16,10 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TaskSearchResponseDto(
         Long projectId,
+        Long taskId,
         String title,
         Long createUserId,
+        List<String> assignees,
         TaskStatus status,
         PriorityStatus priority,
         List<TagResponseDto> tags,
@@ -32,10 +34,19 @@ public record TaskSearchResponseDto(
                 .map(TagResponseDto::from)
                 .toList();
 
+        List<String> assigneeNicknames = task.getAssignee().stream()
+                .filter(Objects::nonNull)
+                .map(a -> a.getAssignees())
+                .filter(Objects::nonNull)
+                .map(user -> user.getNickname())
+                .toList();
+
         return new TaskSearchResponseDto(
                 task.getProject().getId(),
+                task.getId(),
                 task.getTitle(),
                 task.getCreatedUser().getId(),
+                assigneeNicknames,
                 task.getStatus(),
                 task.getPriority(),
                 tagDtos,

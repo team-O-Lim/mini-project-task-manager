@@ -14,18 +14,18 @@ import java.util.List;
 public class AuthorizationChecker {
     private final TaskAssigneesRepository taskAssigneesRepository;
 
-    public boolean isChange(Long taskId, Authentication principal) throws AccessDeniedException {
+    public boolean isChange(Long taskId, Authentication principal) {
         if (principal == null || taskId == null) return false;
 
         String loginId = principal.getName();
 
-        List<TaskAssignees> results = taskAssigneesRepository.findByTaskId(taskId).stream()
+        List<TaskAssignees> results = taskAssigneesRepository.findByTaskIdWithUser(taskId).stream()
                 .filter(assignee -> assignee.getAssignees().getLoginId().equals(loginId))
                 .toList();
 
-        if(results.isEmpty()) {
-            throw new AccessDeniedException("해당 Task의 담당자가 아닙니다.");
-        }
-        return true;
+
+        return !results.isEmpty();
+//        return taskAssigneesRepository.existsByTaskIdAndAssigneesLoginId(taskId, loginId);
+
     }
 }

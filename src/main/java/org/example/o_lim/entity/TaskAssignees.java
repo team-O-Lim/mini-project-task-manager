@@ -17,19 +17,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TaskAssignees {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "task_id",
-        foreignKey = @ForeignKey(name = "fk_task_assignees_task_id"),
-        nullable = false
+            foreignKey = @ForeignKey(name = "fk_task_assignees_task_id"),
+            nullable = false
     )
     private Task task;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "assignee_id",
-        foreignKey = @ForeignKey(name = "fk_task_assignees_assignee_id")
+            foreignKey = @ForeignKey(name = "fk_task_assignees_assignee_id")
     )
     private User assignees;
 
@@ -37,5 +38,13 @@ public class TaskAssignees {
     public TaskAssignees(Task task, User assignee) {
         this.task = task;
         this.assignees = assignee;
+    }
+
+    public User getAssignees() {
+        return assignees;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 }

@@ -45,5 +45,21 @@ public interface TaskRepository  extends JpaRepository<Task, Long> {
             @Param("dueDate") LocalDate dueDate
     );
 
-//    List<Task> findByCreatedUser(Long createdUserId);
+    @Query("""
+        SELECT t FROM Task t
+        JOIN FETCH t.assignee a
+        JOIN FETCH a.assignees
+        WHERE t.id = :taskId
+    """)
+    Optional<Task> findByIdWithAssignees(@Param("taskId") Long id);
+
+    @Query("""
+        SELECT t FROM Task t
+        LEFT JOIN FETCH t.taskTags tt
+        LEFT JOIN FETCH tt.tag
+        WHERE t.id = :id
+    """)
+    Optional<Task> findByIdWithTaskTags(@Param("id") Long id);
+
+
 }

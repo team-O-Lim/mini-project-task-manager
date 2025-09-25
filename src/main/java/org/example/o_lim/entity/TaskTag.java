@@ -35,5 +35,18 @@ public class TaskTag {
 
         return taskTag;
     }
+
+    public void setTask(Task task) {
+//        if (this.task != null) {
+//            this.task.getAssignee().remove(this);
+//        }
+//        this.task
+        this.task = task;
+    }
+
+    public TaskTag(Task task, Tag tag) {
+        this.task = task;
+        this.tag = tag;
+    }
 }
 

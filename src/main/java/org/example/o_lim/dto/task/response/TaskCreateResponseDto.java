@@ -11,7 +11,6 @@ import org.example.o_lim.entity.TaskTag;
 import org.example.o_lim.entity.User;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +21,7 @@ public record TaskCreateResponseDto(
         String title,
         Long createUserId,
         String content,
-        List<User> assignees,
+        List<String> assignees,
         List<TagResponseDto> tags,
         TaskStatus status,
         PriorityStatus priority,
@@ -31,9 +30,11 @@ public record TaskCreateResponseDto(
     public static  TaskCreateResponseDto from(Task task){
         if(task == null) return null;
 
-        List<User> assignees = task.getAssignees().stream()
+        List<String> assignees = task.getAssignee().stream()
                 .filter(Objects::nonNull)
                 .map(TaskAssignees::getAssignees)
+                .filter(Objects::nonNull)
+                .map(User::getNickname)
                 .toList();
 
 

@@ -1,6 +1,7 @@
 package org.example.o_lim.controller;
 
 import jakarta.validation.Valid;
+import org.example.o_lim.dto.task.request.TaskDeleteAssigneeAndTag;
 import org.example.o_lim.dto.task.request.TaskUpdateStatusRequestDto;
 import org.example.o_lim.entity.Project;
 import org.example.o_lim.entity.Task;
@@ -20,6 +21,7 @@ import org.example.o_lim.service.TaskService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -108,18 +110,32 @@ public class TaskController {
         return ResponseEntity.ok().body(response);
     }
 
-    // 담당자 상태 수정
-//    @PutMapping(ApiMappingPattern.Tasks.BY_ID)
-//    public ResponseEntity<ResponseDto<TaskDetailResponseDto>> updateTaskStatus(
-//            @PathVariable Long projectId,
-//            @PathVariable Long taskId,
-//            @AuthenticationPrincipal UserPrincipal principal,
-//            @Valid @RequestBody TaskUpdateStatusRequestDto request
-//            ) {
-//        ResponseDto<TaskDetailResponseDto> response = taskService.updateTaskStatus(projectId, taskId, principal, request);
-//
-//        return ResponseEntity.ok().body(response);
-//    }
+    // 담당자 or 태그 삭제
+    @DeleteMapping(ApiMappingPattern.Tasks.DELETE_BY_ASSIGNEE_AND_TAG)
+    public ResponseEntity<ResponseDto<TaskDetailResponseDto>> deleteAssigneeAndTag(
+            @PathVariable Long projectId,
+            @PathVariable Long taskId,
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody TaskDeleteAssigneeAndTag request
+            ) {
+        ResponseDto<TaskDetailResponseDto> response = taskService.deleteAssigneeAndTag(projectId, taskId, principal, request);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+
+     // 담당자 상태 수정
+    @PutMapping(ApiMappingPattern.Tasks.UPDATE_BY_STATUS)
+    public ResponseEntity<ResponseDto<TaskDetailResponseDto>> updateTaskStatus(
+            @PathVariable Long projectId,
+            @PathVariable Long taskId,
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody TaskUpdateStatusRequestDto request
+            ) {
+        ResponseDto<TaskDetailResponseDto> response = taskService.updateTaskStatus(projectId, taskId, principal, request);
+
+        return ResponseEntity.ok().body(response);
+    }
 
     // 삭제
     @DeleteMapping(ApiMappingPattern.Tasks.BY_ID)
