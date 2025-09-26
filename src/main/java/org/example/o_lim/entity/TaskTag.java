@@ -37,11 +37,12 @@ public class TaskTag {
     }
 
     public void setTask(Task task) {
-        if (this.task != null) {
+        if (this.task != null && !this.task.equals(task)) {
             this.task.getTaskTags().remove(this);
         }
         this.task = task;
-        if (task != null) {
+
+        if(task != null && !task.getTaskTags().contains(this)) {
             task.getTaskTags().add(this);
         }
     }
