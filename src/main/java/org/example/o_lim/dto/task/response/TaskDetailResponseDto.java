@@ -8,9 +8,7 @@ import org.example.o_lim.dto.comment.response.CommentDetailResponseDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
 import org.example.o_lim.entity.*;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -40,12 +38,27 @@ public record TaskDetailResponseDto(
     public static  TaskDetailResponseDto from(Task task){
         if(task == null) return null;
 
-        List<TagResponseDto> tagDtos = task.getTaskTags().stream()
-                .filter(Objects::nonNull)
-                .map(TaskTag::getTag)
-                .filter(Objects::nonNull)
-                .map(TagResponseDto::from)
-                .toList();
+//        List<TagResponseDto> tagDtos = task.getTaskTags().stream()
+//                .filter(Objects::nonNull)
+//                .map(TaskTag::getTag)
+//                .filter(Objects::nonNull)
+//                .map(TagResponseDto::from)
+//                .toList();
+
+        List<TagResponseDto> tag = new ArrayList<>();
+        Set<Long> seenTagIds = new HashSet<>();
+
+        for(TaskTag taskTag: task.getTaskTags()) {
+            if(taskTag == null || taskTag.getTag() == null) continue;
+
+            Long tagId = taskTag.getTag().getId();
+            if(seenTagIds.contains(tagId)) continue;
+
+            seenTagIds.add(tagId);
+            tag.add(TagResponseDto.from(taskTag.getTag()));
+        }
+
+
 
         List<Comment> comments
                 = task.getComments() != null ? task.getComments() : Collections.emptyList();
@@ -71,7 +84,7 @@ public record TaskDetailResponseDto(
                 assigneeNicknames,
                 task.getStatus(),
                 task.getPriority(),
-                tagDtos,
+                tag,
                 task.getDueDate(),
                 commentDtos
         );

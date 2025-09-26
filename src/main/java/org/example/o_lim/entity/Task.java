@@ -6,12 +6,15 @@ import org.example.o_lim.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.o_lim.repository.TagRepository;
+import org.example.o_lim.repository.TaskRepository;
 import org.example.o_lim.repository.UserRepository;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tasks",
@@ -133,7 +136,17 @@ public class Task extends BaseTimeEntity {
         if (this.taskTags == null) {
             this.taskTags = new ArrayList<>();
         }
-        this.taskTags.add(taskTag);
+
+        Long tagId = taskTag.getTag().getId();
+
+        boolean exists = this.taskTags.stream()
+                .map(tt -> tt.getTag().getId())
+                .anyMatch(id -> id.equals(tagId));
+
+        if(!exists) {
+            taskTag.setTask(this);
+            this.taskTags.add(taskTag);
+        }
     }
 
     public void setTitle(String title) { this.title = title;}
@@ -163,22 +176,30 @@ public class Task extends BaseTimeEntity {
 
     public void setPriority(PriorityStatus priority) { this.priority = priority;}
 
-    public void setTagId(List<Long> tagIds, TagRepository tagRepository) {
-        if(tagIds == null) {
-            this.taskTags.clear();
+    public void setTagId(List<Long> tagIds, TagRepository tagRepository, TaskRepository taskRepository) {
+        List<TaskTag> oldTaskTags = new ArrayList<>(this.getTaskTags());
 
+        for(TaskTag oldTaskTag: oldTaskTags) {
+//            this.taskTags.remove(oldTaskTag);
+            oldTaskTag.setTask(null);
+        }
+        this.taskTags.clear();
+        taskRepository.flush();
+
+        if(tagIds == null || tagIds.isEmpty()) {
             return;
         }
 
-        this.taskTags.clear();
-        tagRepository.flush();
+        Set<Long> addedTagIds = new HashSet<>();
 
         for (Long tagId : tagIds) {
+            if(!addedTagIds.add(tagId)) continue;
+
             Tag tag = tagRepository.findById(tagId)
                     .orElseThrow(() -> new EntityNotFoundException("태그가 존재하지 않습니다. ID: " + tagId));
 
-            TaskTag taskTag = new TaskTag(this, tag);
-            this.taskTags.add(taskTag);
+            TaskTag taskTag = TaskTag.create(this, tag);
+            this.addTaskTag(taskTag);
         }
     }
 

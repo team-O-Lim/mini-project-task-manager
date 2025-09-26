@@ -1,6 +1,8 @@
 package org.example.o_lim.dto.task.request;
 
 import jakarta.validation.constraints.Size;
+import org.example.o_lim.dto.tag.request.TagRequestDto;
+
 import java.util.List;
 
 public record TaskUpdateRequestDto(
@@ -16,6 +18,8 @@ public record TaskUpdateRequestDto(
         String priority,
 
         List<Long> tagId,
+
+        List<TagRequestDto> newTags,
 
         String dueDate
 ){}
