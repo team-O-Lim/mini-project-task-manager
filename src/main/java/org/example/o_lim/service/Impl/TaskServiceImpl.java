@@ -168,7 +168,7 @@ public class TaskServiceImpl implements TaskService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
-        Task task = taskRepository.findById(taskId)
+        Task task = taskRepository.findByIdAndProjectId(taskId, projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
 
         if (request.title() == null
@@ -336,7 +336,7 @@ public class TaskServiceImpl implements TaskService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
-        Task task = taskRepository.findById(taskId)
+        Task task = taskRepository.findByIdAndProjectId(taskId, projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
 
         taskRepository.delete(task);
