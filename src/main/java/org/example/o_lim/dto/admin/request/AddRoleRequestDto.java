@@ -11,5 +11,4 @@ public record AddRoleRequestDto(
 
         @NotNull(message = "role은 필수입니다.")
         RoleType role
-) {
-}
+) {}

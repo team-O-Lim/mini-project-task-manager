@@ -3,10 +3,8 @@ package org.example.o_lim.provider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.annotation.WebServlet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import javax.crypto.SecretKey;
 import java.util.*;
 
@@ -134,6 +132,7 @@ public class JwtProvider {
 
     public String getEmailFromJwt(String token) {
         Claims claims = getClaims(token);
+
         return claims.get("email", String.class);
     }
 

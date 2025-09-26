@@ -13,10 +13,7 @@ import org.example.o_lim.dto.auth.response.SignUpResponseDto;
 
 public interface AuthService {
     ResponseDto<SignUpResponseDto> signUp(@Valid SignUpRequestDto request);
-
     ResponseDto<SignInResponseDto> signIn(@Valid SignInRequestDto request);
-
     ResponseDto<FindIdResponseDto> findId(@Valid FindIdRequestDto request);
-
-    ResponseDto<PasswordChangeResponseDto> changePassword(@Valid PasswordResetRequestDto request);
+    ResponseDto<PasswordChangeResponseDto> resetPassword(@Valid PasswordResetRequestDto request);
 }

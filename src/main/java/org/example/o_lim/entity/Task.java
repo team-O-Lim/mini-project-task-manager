@@ -1,12 +1,14 @@
 package org.example.o_lim.entity;
+
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.o_lim.repository.TagRepository;
+import org.example.o_lim.repository.UserRepository;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ import java.util.List;
        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 public class Task extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,8 +58,23 @@ public class Task extends BaseTimeEntity {
     private PriorityStatus priority = PriorityStatus.MEDIUM;
 
     // TaskTag 관계
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true, fetch =  FetchType.LAZY)
     private List<TaskTag> taskTags = new ArrayList<>();
+
+    public List<TaskTag> getTaskTags() {
+        return taskTags == null ? new ArrayList<>() : taskTags;
+    }
+
+    //TaskAssignee 관계
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskAssignees> assignees = new ArrayList<>();
+
+    public List<TaskAssignees> getAssignee() {
+        if(assignees == null) {
+            assignees = new ArrayList<>();
+        }
+        return assignees;
+    }
 
     // task 내 comment 출력
     @OneToMany(
@@ -67,15 +86,101 @@ public class Task extends BaseTimeEntity {
     private List<Comment> comments;
 
     // 마감일
+    @Column(name = "due_date")
     private LocalDate dueDate;
 
     // 직무 생성
-    public void newTask(String title, String content, User createdUser) {
-        this.title = title;
-        this.content = content;
-        this.createdUser = createdUser;
+    public static Task create(Project project, String title, String content, User createdUser,
+                        TaskStatus status, PriorityStatus priority, LocalDate dueDate) {
+
+        TaskStatus safeStatus = (status != null) ? status : TaskStatus.TODO;
+        PriorityStatus safePriority = (priority != null) ? priority : PriorityStatus.MEDIUM;
+
+        Task task = Task.builder()
+                .project(project)
+                .title(title)
+                .content(content)
+                .createdUser(createdUser)
+                .status(safeStatus)
+                .priority(safePriority)
+                .dueDate(dueDate)
+                .build();
+
+        return task;
     }
 
+    public void updateStatus(TaskStatus status) {
+        this.status = status;
+    }
 
+    public void addAssignee(User user) {
+        if (this.assignees == null) {
+            this.assignees = new ArrayList<>();
+        }
 
+        boolean alreadyAssigned = this.assignees.stream()
+                .anyMatch(assignee -> assignee.getAssignees().equals(user));
+
+        if (alreadyAssigned) {
+            return;
+        }
+
+        TaskAssignees taskAssignees = new TaskAssignees(this, user);
+        this.assignees.add(taskAssignees);
+    }
+
+    public void addTaskTag(TaskTag taskTag) {
+        if (this.taskTags == null) {
+            this.taskTags = new ArrayList<>();
+        }
+        this.taskTags.add(taskTag);
+    }
+
+    public void setTitle(String title) { this.title = title;}
+
+    public void setContent(String content) { this.content = content;}
+
+    public void setAssignee(List<Long> assigneeIds, UserRepository userRepository) {
+        if(assigneeIds == null) {
+            this.assignees.clear();
+
+            return;
+        }
+
+        this.assignees.clear();
+        userRepository.flush();
+
+        for (Long userId : assigneeIds) {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 존재하지 않습니다. ID: " + userId));
+
+            TaskAssignees taskAssignees = new TaskAssignees(this, user);
+            this.assignees.add(taskAssignees);
+        }
+    }
+
+    public void setStatus(TaskStatus status) { this.status = status; }
+
+    public void setPriority(PriorityStatus priority) { this.priority = priority;}
+
+    public void setTagId(List<Long> tagIds, TagRepository tagRepository) {
+        if(tagIds == null) {
+            this.taskTags.clear();
+
+            return;
+        }
+
+        this.taskTags.clear();
+        tagRepository.flush();
+
+        for (Long tagId : tagIds) {
+            Tag tag = tagRepository.findById(tagId)
+                    .orElseThrow(() -> new EntityNotFoundException("태그가 존재하지 않습니다. ID: " + tagId));
+
+            TaskTag taskTag = new TaskTag(this, tag);
+            this.taskTags.add(taskTag);
+        }
+    }
+
+    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 }

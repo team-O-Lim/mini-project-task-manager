@@ -28,5 +28,27 @@ public class TaskTag {
     )
     private Tag tag;
 
+    public static TaskTag create(Task task, Tag tag) {
+        TaskTag taskTag = new TaskTag();
+        taskTag.task = task;
+        taskTag.tag = tag;
+
+        return taskTag;
+    }
+
+    public void setTask(Task task) {
+        if (this.task != null) {
+            this.task.getTaskTags().remove(this);
+        }
+        this.task = task;
+        if (task != null) {
+            task.getTaskTags().add(this);
+        }
+    }
+
+    public TaskTag(Task task, Tag tag) {
+        this.task = task;
+        this.tag = tag;
+    }
 }
 

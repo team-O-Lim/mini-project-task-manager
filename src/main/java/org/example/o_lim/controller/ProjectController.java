@@ -15,17 +15,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-// "/api/v1/projects"
 @RequestMapping(ApiMappingPattern.Projects.ROOT)
 public class ProjectController {
     private final ProjectService projectService;
 
-    // 생성 "/api/v1/projects"
+    // 생성
     @PostMapping
     public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> createProject(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -36,17 +34,17 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    // 단건 조회 "/api/v1/projects/{projectId}"
+    // 단건 조회
     @GetMapping(ApiMappingPattern.Projects.BY_ID)
     public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> getProjectById(
             @PathVariable Long projectId
-    ) {
+            ) {
         ResponseDto<ProjectDetailResponseDto> response = projectService.getProjectById(projectId);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 전체 조회 "/api/v1/projects"
+    // 전체 조회
     @GetMapping
     public ResponseEntity<ResponseDto<List<ProjectListResponseDto>>> getAllProjects() {
         ResponseDto<List<ProjectListResponseDto>> response = projectService.getAllProjects();
@@ -54,7 +52,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // task 순 조회 "/api/v1/projects/task-desc"
+    // task 순 조회
     @GetMapping(ApiMappingPattern.Projects.SEARCH_BY_TASK_DESC)
     public ResponseEntity<ResponseDto<List<ProjectTaskCountResponseDto>>> getTaskCountDesc() {
         ResponseDto<List<ProjectTaskCountResponseDto>> response = projectService.getTaskCountDesc();
@@ -62,7 +60,7 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 수정 "/api/v1/projects/{projectId}"
+    // 수정
     @PutMapping(ApiMappingPattern.Projects.BY_ID)
     public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> updateProject(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -74,12 +72,12 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    // 삭제 "/api/v1/projects/{projectId}"
+    // 삭제
     @DeleteMapping(ApiMappingPattern.Projects.BY_ID)
     public ResponseEntity<ResponseDto<Void>> deleteProject(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId
-    ) {
+            ) {
         ResponseDto<Void> response = projectService.deleteProject(principal, projectId);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

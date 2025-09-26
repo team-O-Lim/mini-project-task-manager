@@ -1,6 +1,8 @@
 package org.example.o_lim.controller;
 
 import jakarta.validation.Valid;
+import org.example.o_lim.dto.task.request.TaskUpdateStatusRequestDto;
+import org.example.o_lim.entity.Project;
 import org.example.o_lim.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
@@ -17,8 +19,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,21 +30,23 @@ public class TaskController {
     private final TaskService taskService;
 
     // 생성
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<ResponseDto<TaskCreateResponseDto>> createTask(
+            @PathVariable("projectId") Project project,
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody TaskCreateRequestDto request
-
             ) {
-        ResponseDto<TaskCreateResponseDto> response = taskService.createTask(principal, request);
+        ResponseDto<TaskCreateResponseDto> response = taskService.createTask(project.getId(), principal, request);
 
         return ResponseEntity.ok().body(response);
     }
 
     // 전체 조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<TaskSearchResponseDto>>> getAllTasks() {
-        ResponseDto<List<TaskSearchResponseDto>> response = taskService.getAllTasks();
+    public ResponseEntity<ResponseDto<List<TaskSearchResponseDto>>> getAllTasks(
+            @PathVariable Long projectId
+            ) {
+        ResponseDto<List<TaskSearchResponseDto>> response = taskService.getAllTasks(projectId);
 
         return ResponseEntity.ok().body(response);
     }
@@ -50,19 +54,10 @@ public class TaskController {
     // 단건 조회
     @GetMapping(ApiMappingPattern.Tasks.BY_ID)
     public ResponseEntity<ResponseDto<TaskDetailResponseDto>> getTaskById(
+            @PathVariable Long projectId,
             @PathVariable Long taskId
             ) {
-        ResponseDto<TaskDetailResponseDto> response = taskService.getTaskById(taskId);
-
-        return ResponseEntity.ok().body(response);
-    }
-
-    // 특정 task 작성자 기준 필터링 조회
-    @GetMapping(ApiMappingPattern.Tasks.FILTER_CREATED_USER)
-    public ResponseEntity<ResponseDto<List<TaskDetailResponseDto>>> getCreatedUser(
-            @PathVariable Long createdUser
-            ) {
-        ResponseDto<List<TaskDetailResponseDto>> response = taskService.getCreatedUser(createdUser);
+        ResponseDto<TaskDetailResponseDto> response = taskService.getTaskById(projectId, taskId);
 
         return ResponseEntity.ok().body(response);
     }
@@ -70,16 +65,17 @@ public class TaskController {
     // 검색 조회
     @GetMapping(ApiMappingPattern.Tasks.SEARCH)
     public ResponseEntity<ResponseDto<List<TaskDetailResponseDto>>> searchTasks(
+            @PathVariable Long projectId,
             @RequestParam(required = false) Long createUserId,
             @RequestParam(required = false) TaskStatus status,
             @RequestParam(required = false) PriorityStatus priority,
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime from,
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate to
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDateTime to,
+            @RequestParam(required = false) LocalDate dueDate
             ) {
-        ResponseDto<List<TaskDetailResponseDto>> response
-                = taskService.searchTasks(createUserId, status, priority, from, to);
+        ResponseDto<List<TaskDetailResponseDto>> response = taskService.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
 
         return ResponseEntity.ok().body(response);
     }
@@ -87,11 +83,25 @@ public class TaskController {
     // 수정
     @PutMapping(ApiMappingPattern.Tasks.BY_ID)
     public ResponseEntity<ResponseDto<TaskDetailResponseDto>> updateTask(
+            @PathVariable Long projectId,
             @PathVariable Long taskId,
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody TaskUpdateRequestDto request
             ) {
-        ResponseDto<TaskDetailResponseDto> response = taskService.updateTask(principal, taskId, request);
+        ResponseDto<TaskDetailResponseDto> response = taskService.updateTask(projectId, taskId, principal, request);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+     // 담당자 상태 수정
+    @PutMapping(ApiMappingPattern.Tasks.UPDATE_BY_STATUS)
+    public ResponseEntity<ResponseDto<TaskDetailResponseDto>> updateTaskStatus(
+            @PathVariable Long projectId,
+            @PathVariable Long taskId,
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody TaskUpdateStatusRequestDto request
+            ) {
+        ResponseDto<TaskDetailResponseDto> response = taskService.updateTaskStatus(projectId, taskId, principal, request);
 
         return ResponseEntity.ok().body(response);
     }
@@ -99,10 +109,11 @@ public class TaskController {
     // 삭제
     @DeleteMapping(ApiMappingPattern.Tasks.BY_ID)
     public ResponseEntity<ResponseDto<Void>> deleteTask(
+            @PathVariable Long projectId,
             @PathVariable Long taskId,
             @AuthenticationPrincipal UserPrincipal principal
             ) {
-        ResponseDto<Void> response = taskService.deleteTask(taskId, principal);
+        ResponseDto<Void> response = taskService.deleteTask(projectId, taskId, principal);
 
         return ResponseEntity.ok().body(response);
     }

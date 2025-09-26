@@ -15,16 +15,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-
 @RestController
- //"/api/v1/notifications"
 @RequestMapping(ApiMappingPattern.Notification.ROOT)
 @RequiredArgsConstructor
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-  //   생성 "/api/v1/notifications"
+  // 생성
   @PostMapping
   public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> createNotification(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -35,8 +33,7 @@ public class NotificationController {
        return ResponseEntity.ok().body(response);
     }
 
-    // 전체 조회 "/api/v1/notifications"
-    // @GetMapping
+    // 전체 조회
     @GetMapping
     public ResponseEntity<ResponseDto<List<NotificationListResponseDto>>> getAllNotifications() {
         ResponseDto<List<NotificationListResponseDto>> response = notificationService.getAllNotifications();
@@ -44,17 +41,17 @@ public class NotificationController {
         return ResponseEntity.ok().body(response);
     }
 
-   // 단건 조회 "/api/v1/notifications/{notificationId}"
+   // 단건 조회
     @GetMapping(ApiMappingPattern.Notification.BY_ID)
     public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> getNotificationById(
            @PathVariable Long notificationId
-    ) {
+            ) {
         ResponseDto<NotificationDetailResponseDto> response = notificationService.getNotificationById(notificationId);
 
         return ResponseEntity.ok().body(response);
     }
 
-    // 수정 "/api/v1/notifications/{notificationId}"
+    // 수정
     @PutMapping(ApiMappingPattern.Notification.BY_ID)
     public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> updateNotification(
             @AuthenticationPrincipal UserPrincipal principal,
@@ -66,15 +63,14 @@ public class NotificationController {
            return ResponseEntity.ok().body(response);
     }
 
-    // 삭제 "/api/v1/notifications/{notificationId}"
+    // 삭제
     @DeleteMapping(ApiMappingPattern.Notification.BY_ID)
     public ResponseEntity<ResponseDto<Void>> deleteNotification(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long notificationId
-    ) {
+            ) {
         ResponseDto<Void> response = notificationService.deleteArticle(principal, notificationId);
 
         return ResponseEntity.ok().body(response);
     }
-
 }

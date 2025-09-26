@@ -11,18 +11,15 @@ import org.example.o_lim.service.TagService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-// "/api/v1/projects/{projectId}/tags"
 @RequestMapping(ApiMappingPattern.Tags.ROOT)
 public class TagController {
-
     private final TagService tagService;
 
-    // 생성 "/api/v1/projects/{projectId}/tags"
+//    태그 생성
     @PostMapping
     public ResponseEntity<ResponseDto<TagResponseDto>> createTag(
              @AuthenticationPrincipal UserPrincipal principal,
@@ -34,9 +31,9 @@ public class TagController {
         return ResponseEntity.ok().body(response);
     }
 
-    // 전체 조회 "/api/v1/projects/{projectId}/tags"
+//    전체 조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<TagResponseDto>>> getAllTag(
+    public ResponseEntity<ResponseDto<List<TagResponseDto>>> getAllTags(
             @PathVariable Long projectId
             ) {
         ResponseDto<List<TagResponseDto>> response = tagService.getAllTag(projectId);
@@ -44,7 +41,7 @@ public class TagController {
         return ResponseEntity.ok().body(response);
     }
 
-    // 삭제 "/api/v1/projects/{projectId}/tags/{tagId}"
+//    태그 삭제
     @DeleteMapping(ApiMappingPattern.Tags.BY_ID)
     public ResponseEntity<ResponseDto<TagResponseDto>> deleteTag(
             @AuthenticationPrincipal UserPrincipal principal,

@@ -20,7 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -70,6 +69,7 @@ public class WebSecurityConfig {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
 
@@ -91,6 +91,7 @@ public class WebSecurityConfig {
             http.headers(header
                     -> header.frameOptions(frame -> frame.sameOrigin()));
         }
+
         http
                 .authorizeHttpRequests(auth -> {
                     if(h2ConsoleEnabled) auth.requestMatchers("h2-console/**").permitAll();
@@ -99,42 +100,44 @@ public class WebSecurityConfig {
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
 //                            users/auth
-                            .requestMatchers("api/v1/auth/**").permitAll()
-                            .requestMatchers("api/v1/users/me/**").authenticated()
+                            .requestMatchers("/api/v1/auth/**").permitAll()
+                            .requestMatchers("/api/v1/users/me/**").authenticated()
+                            .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
 
 //                            admin
-                            .requestMatchers("api/v1/admin/**").authenticated()
+                            .requestMatchers("/api/v1/admin/**").authenticated()
 
 //                            comments
-                            .requestMatchers(HttpMethod.POST, "api/v1/task/*/comments/**").authenticated()
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/task/*/comments/**").authenticated()
+                            .requestMatchers(HttpMethod.POST, "/api/v1/tasks/*/comments/**").hasAnyRole("ADMIN", "MANAGER", "USER")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/tasks/*/comments/**").permitAll()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/tasks/*/comments/**").authenticated()
 
 //                            notifications
-                            .requestMatchers("api/v1/notifications/**").hasRole("ADMIN")
+                            .requestMatchers("/api/v1/notifications/**").hasRole("ADMIN")
 
 //                            project
-                            .requestMatchers(HttpMethod.POST, "api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
-                            .requestMatchers(HttpMethod.GET, "api/v1/projects/**").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
+                            .requestMatchers(HttpMethod.POST, "/api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/projects/**").permitAll()
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/projects/**").authenticated()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/projects/**").hasAnyRole("ADMIN","MANAGER")
 
 //                            tag
-                            .requestMatchers(HttpMethod.POST, "api/v1/projects/*/tags/**").authenticated()
-                            .requestMatchers(HttpMethod.GET, "api/v1/projects*/tags/**").permitAll()
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/projects/*/tags/**").authenticated()
+                            .requestMatchers(HttpMethod.POST, "/api/v1/projects/*/tags/**").authenticated()
+                            .requestMatchers(HttpMethod.GET, "/api/v1/projects*/tags/**").permitAll()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/projects/*/tags/**").authenticated()
 
 //                            task
-                            .requestMatchers(HttpMethod.POST, "api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER")
-                            .requestMatchers(HttpMethod.GET, "api/v1/projects/*/tasks/**").permitAll()
-                            .requestMatchers(HttpMethod.PUT, "api/v1/projects/*/tasks/**").authenticated()
-                            .requestMatchers(HttpMethod.DELETE, "api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER");
+                            .requestMatchers(HttpMethod.POST, "/api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER")
+                            .requestMatchers(HttpMethod.GET, "/api/v1/projects/*/tasks/**").permitAll()
+                            .requestMatchers(HttpMethod.PUT, "/api/v1/projects/*/tasks/**").authenticated()
+                            .requestMatchers(HttpMethod.DELETE, "/api/v1/projects/*/tasks/**").hasAnyRole("ADMIN", "MANAGER");
                 });
-
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
     private static List<String> splitToList(String csv) {
         return Arrays.stream(csv.split(","))
                 .map(String::trim)
