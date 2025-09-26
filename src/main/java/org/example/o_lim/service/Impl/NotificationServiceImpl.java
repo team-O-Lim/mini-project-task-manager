@@ -34,7 +34,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         final String loginId = principal.getUsername();
          Project projectId = projectRepository.findById(Long.valueOf(loginId))
-                .orElseThrow(() -> new IllegalArgumentException("NICKNAME_NOT_FOUND"));
+                .orElseThrow(() -> new IllegalArgumentException("PROJECT_NOT_FOUND"));
 
         Notification saved = notificationRepository.save(Notification.create(request.title(), request.content(), projectId));
 
