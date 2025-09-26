@@ -15,7 +15,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -40,7 +39,7 @@ public class CommentController {
     @GetMapping
     public ResponseEntity<ResponseDto<List<CommentDetailResponseDto>>> getAllCommentsByCreatedAtDesc(
             @PathVariable Long taskId
-    ) {
+            ) {
         ResponseDto<List<CommentDetailResponseDto>> response = commentService.getAllCommentByCreatedAtDesc(taskId);
 
         return ResponseEntity.ok().body(response);
@@ -68,7 +67,7 @@ public class CommentController {
                     sort = "createdAt",
                     direction = Sort.Direction.DESC
             ) Pageable pageable
-    ) {
+            ) {
         ResponseDto<CommentPageResponseDto> response = commentService.getPageCommentByCreatedAtDesc(taskId, pageable);
 
         return ResponseEntity.ok().body(response);

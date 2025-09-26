@@ -11,10 +11,8 @@ import org.example.o_lim.dto.user.response.UserProfileResponseDto;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -32,12 +30,13 @@ public class UserController {
 
         return ResponseEntity.ok().body(response);
     }
+
 //    회원정보수정
     @PutMapping(ApiMappingPattern.Users.MY_INFO)
     public ResponseEntity<ResponseDto<UserProfileResponseDto>> updateMyInfo(
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody UserProfileUpdateRequest request
-    ) {
+            ) {
         ResponseDto<UserProfileResponseDto> response = userService.updateMyInfo(principal, request);
 
         return ResponseEntity.ok().body(response);
@@ -55,7 +54,7 @@ public class UserController {
     @GetMapping(ApiMappingPattern.Users.MINI_MY_INFO)
     public ResponseEntity<ResponseDto<UserMiniProfileResponseDto>> getUserMiniProfile(
             @AuthenticationPrincipal UserPrincipal principal
-    ) {
+            ) {
         ResponseDto<UserMiniProfileResponseDto> response = userService.getUserMiniProfile(principal);
 
         return ResponseEntity.ok().body(response);

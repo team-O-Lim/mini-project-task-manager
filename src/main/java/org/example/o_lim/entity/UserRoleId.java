@@ -8,7 +8,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.o_lim.common.enums.RoleType;
-
 import java.io.Serializable;
 
 @Embeddable

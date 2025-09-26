@@ -120,6 +120,7 @@ public class Task extends BaseTimeEntity {
 
         boolean alreadyAssigned = this.assignees.stream()
                 .anyMatch(assignee -> assignee.getAssignees().equals(user));
+
         if (alreadyAssigned) {
             return;
         }
@@ -142,6 +143,7 @@ public class Task extends BaseTimeEntity {
     public void setAssignee(List<Long> assigneeIds, UserRepository userRepository) {
         if(assigneeIds == null) {
             this.assignees.clear();
+
             return;
         }
 
@@ -151,6 +153,7 @@ public class Task extends BaseTimeEntity {
         for (Long userId : assigneeIds) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 존재하지 않습니다. ID: " + userId));
+
             TaskAssignees taskAssignees = new TaskAssignees(this, user);
             this.assignees.add(taskAssignees);
         }
@@ -163,13 +166,17 @@ public class Task extends BaseTimeEntity {
     public void setTagId(List<Long> tagIds, TagRepository tagRepository) {
         if(tagIds == null) {
             this.taskTags.clear();
+
             return;
         }
+
         this.taskTags.clear();
         tagRepository.flush();
+
         for (Long tagId : tagIds) {
             Tag tag = tagRepository.findById(tagId)
                     .orElseThrow(() -> new EntityNotFoundException("태그가 존재하지 않습니다. ID: " + tagId));
+
             TaskTag taskTag = new TaskTag(this, tag);
             this.taskTags.add(taskTag);
         }

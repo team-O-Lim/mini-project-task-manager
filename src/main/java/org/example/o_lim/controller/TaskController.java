@@ -75,8 +75,7 @@ public class TaskController {
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDateTime to,
             @RequestParam(required = false) LocalDate dueDate
             ) {
-        ResponseDto<List<TaskDetailResponseDto>> response
-                = taskService.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
+        ResponseDto<List<TaskDetailResponseDto>> response = taskService.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
 
         return ResponseEntity.ok().body(response);
     }
