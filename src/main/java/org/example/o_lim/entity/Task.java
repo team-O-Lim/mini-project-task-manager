@@ -106,8 +106,6 @@ public class Task extends BaseTimeEntity {
                 .dueDate(dueDate)
                 .build();
 
-//        task.addAssignee(createdUser);
-
         return task;
     }
 
