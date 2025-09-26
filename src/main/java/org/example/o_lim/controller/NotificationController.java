@@ -8,6 +8,7 @@ import org.example.o_lim.dto.notification.request.NotificationCreatedRequestDto;
 import org.example.o_lim.dto.notification.request.NotificationUpdatedRequestDto;
 import org.example.o_lim.dto.notification.response.NotificationDetailResponseDto;
 import org.example.o_lim.dto.notification.response.NotificationListResponseDto;
+import org.example.o_lim.entity.Project;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.NotificationService;
 import org.springframework.http.ResponseEntity;
@@ -26,17 +27,20 @@ public class NotificationController {
   @PostMapping
   public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> createNotification(
             @AuthenticationPrincipal UserPrincipal principal,
+            @PathVariable Long projectId,
             @Valid @RequestBody NotificationCreatedRequestDto request
             ) {
-      ResponseDto<NotificationDetailResponseDto> response = notificationService.createNotification(principal, request);
+      ResponseDto<NotificationDetailResponseDto> response = notificationService.createNotification(principal, projectId, request);
 
        return ResponseEntity.ok().body(response);
     }
 
     // 전체 조회
     @GetMapping
-    public ResponseEntity<ResponseDto<List<NotificationListResponseDto>>> getAllNotifications() {
-        ResponseDto<List<NotificationListResponseDto>> response = notificationService.getAllNotifications();
+    public ResponseEntity<ResponseDto<List<NotificationListResponseDto>>> getAllNotifications(
+      @PathVariable Long projectId
+    ) {
+        ResponseDto<List<NotificationListResponseDto>> response = notificationService.getAllNotifications(projectId);
 
         return ResponseEntity.ok().body(response);
     }
@@ -56,9 +60,10 @@ public class NotificationController {
     public ResponseEntity<ResponseDto<NotificationDetailResponseDto>> updateNotification(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long notificationId,
+            @PathVariable Long projectId,
             @Valid @RequestBody NotificationUpdatedRequestDto request
             ) {
-        ResponseDto<NotificationDetailResponseDto> response = notificationService.updateNotification(principal, notificationId, request);
+        ResponseDto<NotificationDetailResponseDto> response = notificationService.updateNotification(principal, notificationId, projectId, request);
 
            return ResponseEntity.ok().body(response);
     }
@@ -67,9 +72,10 @@ public class NotificationController {
     @DeleteMapping(ApiMappingPattern.Notification.BY_ID)
     public ResponseEntity<ResponseDto<Void>> deleteNotification(
             @AuthenticationPrincipal UserPrincipal principal,
-            @PathVariable Long notificationId
+            @PathVariable Long notificationId,
+            @PathVariable Long projectId
             ) {
-        ResponseDto<Void> response = notificationService.deleteArticle(principal, notificationId);
+        ResponseDto<Void> response = notificationService.deleteNotification(principal, notificationId, projectId);
 
         return ResponseEntity.ok().body(response);
     }

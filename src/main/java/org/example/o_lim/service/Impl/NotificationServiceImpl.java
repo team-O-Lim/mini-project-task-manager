@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true) // 기본 조회
+@Transactional(readOnly = true) // 조회만 가능
 public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository notificationRepository;
     private final ProjectRepository projectRepository;
@@ -28,15 +28,14 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDto<NotificationDetailResponseDto> createNotification(UserPrincipal principal, NotificationCreatedRequestDto request) {
+    public ResponseDto<NotificationDetailResponseDto> createNotification(UserPrincipal principal, Long projectId, NotificationCreatedRequestDto request) {
 
         validateTitleAndContent(request.title(), request.content());
 
-        final String loginId = principal.getUsername();
-         Project projectId = projectRepository.findById(Long.valueOf(loginId))
+         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("PROJECT_NOT_FOUND"));
 
-        Notification saved = notificationRepository.save(Notification.create(request.title(), request.content(), projectId));
+        Notification saved = notificationRepository.save(Notification.create(request.title(), request.content(), project));
 
         NotificationDetailResponseDto data = NotificationDetailResponseDto.from(saved);
         return ResponseDto.setSuccess("SUCCESS", data);
@@ -45,12 +44,12 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseDto<NotificationDetailResponseDto> updateNotification(UserPrincipal principal, Long notificationId, NotificationUpdatedRequestDto request) {
+    public ResponseDto<NotificationDetailResponseDto> updateNotification(UserPrincipal principal, Long notificationId, Long projectId, NotificationUpdatedRequestDto request) {
        validateTitleAndContent(request.title(), request.content());
 
        if (notificationId == null) throw new IllegalArgumentException("NOTIFICATION_ID_REQUIRED");
 
-       Notification notification = notificationRepository.findById(notificationId)
+       Notification notification = notificationRepository.findByIdAndProjectId(notificationId, projectId)
                .orElseThrow(() -> new IllegalArgumentException("NOTIFICATION_NOT_FOUND"));
 
        notification.update(request.title(), request.content());
@@ -63,14 +62,16 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public ResponseDto<List<NotificationListResponseDto>> getAllNotifications() {
-     List<NotificationListResponseDto> data = null;
+    public ResponseDto<List<NotificationListResponseDto>> getAllNotifications(Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("PROJECT_NOT_FOUND"));
 
-     data = notificationRepository.findAll().stream()
-             .map(NotificationListResponseDto::from)
-             .toList();
+        List<Notification> notifications = notificationRepository.findAllNotificationById(projectId);
+        List<NotificationListResponseDto> result = notifications.stream()
+                .map(NotificationListResponseDto::from)
+                .toList();
 
-     return ResponseDto.setSuccess("SUCCESS", data);
+     return ResponseDto.setSuccess("SUCCESS", result);
     }
 
     @Override
@@ -87,19 +88,21 @@ public class NotificationServiceImpl implements NotificationService {
         return ResponseDto.setSuccess("SUCCESS",data);
     }
 
+
     @Override
     @Transactional
-    @PreAuthorize("hasRole('ADMIN') or @authz.isNotificationProjectId(#id, authentication)")
-    public ResponseDto<Void> deleteArticle(UserPrincipal principal, Long notificationId) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseDto<Void> deleteNotification(UserPrincipal principal, Long notificationId, Long projectId) {
         if (notificationId == null) throw new IllegalArgumentException("NOTIFICATION_ID_REQUIRED");
 
-        Notification notification = notificationRepository.findById(notificationId)
+        Notification notification = notificationRepository.findByIdAndProjectId(notificationId, projectId)
                 .orElseThrow(() -> new IllegalArgumentException("NOTIFICATION_NOT_FOUND"));
 
         notificationRepository.delete(notification);
 
         return ResponseDto.setSuccess("SUCCESS",null);
     }
+
     private void validateTitleAndContent(String title, String content) {
         if (!StringUtils.hasText(title)) {
             throw new IllegalArgumentException("TITLE_REQUIRED");
