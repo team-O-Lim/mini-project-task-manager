@@ -1,5 +1,8 @@
 package org.example.o_lim.repository;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.example.o_lim.dto.project.response.ProjectTaskCountResponseDto;
 import org.example.o_lim.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +12,10 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
+    boolean existsByTitle(String title);
+
+    List<Project> findByTitleContainingIgnoreCase(String keyword);
+
     public interface ProjectWithTaskCountProjection {
         Long getProjectId();
         String getTitle();
@@ -28,5 +35,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
         ORDER BY
             COUNT(t.id) DESC
     """, nativeQuery = true)
-    List<ProjectWithTaskCountProjection> findAllOrderByTaskCountDesc_Native();
+    List<ProjectTaskCountResponseDto> findProjectTaskCountDesc();
 }
