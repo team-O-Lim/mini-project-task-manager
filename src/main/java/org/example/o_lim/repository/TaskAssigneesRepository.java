@@ -2,9 +2,15 @@ package org.example.o_lim.repository;
 
 import org.example.o_lim.entity.TaskAssignees;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TaskAssigneesRepository extends JpaRepository<TaskAssignees, Long> {
-    List<TaskAssignees> findByTaskId(Long taskId);
+    @Query("""
+        SELECT t FROM TaskAssignees t
+        JOIN FETCH t.assignees
+        WHERE t.task.id = :taskId
+    """)
+    List<TaskAssignees> findByTaskIdWithUser(@Param("taskId") Long taskId);
 }

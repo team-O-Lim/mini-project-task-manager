@@ -1,6 +1,7 @@
 package org.example.o_lim.controller;
 
 import jakarta.validation.Valid;
+import org.example.o_lim.dto.task.request.TaskUpdateStatusRequestDto;
 import org.example.o_lim.entity.Project;
 import org.example.o_lim.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -61,17 +62,6 @@ public class TaskController {
         return ResponseEntity.ok().body(response);
     }
 
-    // 특정 task 작성자 기준 필터링 조회
-    @GetMapping(ApiMappingPattern.Tasks.FILTER_CREATED_USER)
-    public ResponseEntity<ResponseDto<List<TaskDetailResponseDto>>> getCreatedUser(
-            @PathVariable Long projectId,
-            @PathVariable Long createdUser
-            ) {
-        ResponseDto<List<TaskDetailResponseDto>> response = taskService.getCreatedUser(projectId, createdUser);
-
-        return ResponseEntity.ok().body(response);
-    }
-
     // 검색 조회
     @GetMapping(ApiMappingPattern.Tasks.SEARCH)
     public ResponseEntity<ResponseDto<List<TaskDetailResponseDto>>> searchTasks(
@@ -80,12 +70,12 @@ public class TaskController {
             @RequestParam(required = false) TaskStatus status,
             @RequestParam(required = false) PriorityStatus priority,
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime from,
             @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate to
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDateTime to,
+            @RequestParam(required = false) LocalDate dueDate
             ) {
-        ResponseDto<List<TaskDetailResponseDto>> response
-                = taskService.searchTasks(projectId, createUserId, status, priority, from, to);
+        ResponseDto<List<TaskDetailResponseDto>> response = taskService.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
 
         return ResponseEntity.ok().body(response);
     }
@@ -99,6 +89,19 @@ public class TaskController {
             @Valid @RequestBody TaskUpdateRequestDto request
             ) {
         ResponseDto<TaskDetailResponseDto> response = taskService.updateTask(projectId, taskId, principal, request);
+
+        return ResponseEntity.ok().body(response);
+    }
+
+     // 담당자 상태 수정
+    @PutMapping(ApiMappingPattern.Tasks.UPDATE_BY_STATUS)
+    public ResponseEntity<ResponseDto<TaskDetailResponseDto>> updateTaskStatus(
+            @PathVariable Long projectId,
+            @PathVariable Long taskId,
+            @AuthenticationPrincipal UserPrincipal principal,
+            @Valid @RequestBody TaskUpdateStatusRequestDto request
+            ) {
+        ResponseDto<TaskDetailResponseDto> response = taskService.updateTaskStatus(projectId, taskId, principal, request);
 
         return ResponseEntity.ok().body(response);
     }

@@ -11,6 +11,7 @@ public class ApiMappingPattern {
         public static final String ROOT = BASE + "/users";
 
         public static final String MY_INFO = "/me";
+        public static final String MINI_MY_INFO = "/me/mini";
     }
 
     public static final class Auth {
@@ -52,6 +53,7 @@ public class ApiMappingPattern {
         public static final String ROOT = BASE + "/projects/{projectId}/tasks";
 
         public static final String BY_ID = "/{taskId}";
+        public static final String UPDATE_BY_STATUS = BY_ID + "/status";
         public static final String FILTER_CREATED_USER = "/created-user/{createdUser}";
         public static final String SEARCH = "/search";
     }
@@ -70,12 +72,13 @@ public class ApiMappingPattern {
         public static final String ROOT = BASE + "/tasks/{taskId}/comments";
 
         public static final String BY_ID = "/{commentId}";
+        public static final String PAGE = "/page";
     }
 
     public static final class Notification {
         private Notification() {}
 
-        public static final String ROOT = BASE + "/notifications";
+        public static final String ROOT = BASE + "/projects/{projectId}/notifications";
 
         public static final String BY_ID = "/{notificationId}";
     }

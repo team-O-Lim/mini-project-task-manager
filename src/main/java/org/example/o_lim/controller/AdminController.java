@@ -13,7 +13,6 @@ import org.example.o_lim.dto.admin.response.UpdateRoleResponseDto;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.AdminService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 

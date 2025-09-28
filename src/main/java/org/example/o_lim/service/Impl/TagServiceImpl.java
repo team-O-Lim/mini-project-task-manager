@@ -5,14 +5,15 @@ import lombok.RequiredArgsConstructor;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.tag.request.TagRequestDto;
 import org.example.o_lim.dto.tag.response.TagResponseDto;
+import org.example.o_lim.entity.Project;
 import org.example.o_lim.entity.Tag;
+import org.example.o_lim.repository.ProjectRepository;
 import org.example.o_lim.repository.TagRepository;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.TagService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -21,48 +22,61 @@ import java.util.List;
 public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
+    private final ProjectRepository projectRepository;
 
+//    태그 생성
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<TagResponseDto> createTag(UserPrincipal principal, TagRequestDto request,Long projectId) {
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 프로젝트를 찾을 수 없습니다."));
 
-        Tag tag = tagRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
+        if (tagRepository.existsByNameAndProjectId(request.name(), projectId)) {
+            throw new IllegalArgumentException("이미 존재하는 태그명입니다: " + request.name());
+        }
 
-        Tag saved = tagRepository.save(tag);
+        if (tagRepository.existsByColorAndProjectId(request.color(), projectId)) {
+            throw new IllegalArgumentException("이미 존재하는 색상입니다: " + request.color());
+        }
 
-        TagResponseDto data = null;
+        Tag tags = Tag.create(project, request.name(), request.color());
+        Tag saved = tagRepository.save(tags);
 
-        data = TagResponseDto.from(saved);
+        TagResponseDto response = TagResponseDto.from(saved);
 
-        return ResponseDto.setSuccess("태그가 등록되었습니다.", data);
+        return ResponseDto.setSuccess("태그가 생성되었습니다.", response);
     }
 
+//    전체 조회
     @Override
     public ResponseDto<List<TagResponseDto>> getAllTag(Long projectId) {
+        List<Tag> tags = tagRepository.findByProjectId(projectId);
 
-        Tag tag = tagRepository.findByProjectId(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ProjectId가 없습니다." + projectId));
+        if (tags == null || tags.isEmpty()) {
+            throw new IllegalArgumentException("현재 프로젝트가 없습니다.");
+        }
 
-        List<TagResponseDto> data = null;
-
-        data = tagRepository.findByProjectId(projectId).stream()
+        List<TagResponseDto> response = tags.stream()
                 .map(TagResponseDto::from)
                 .toList();
 
-        return ResponseDto.setSuccess("태그가 조회되었습니다.", data);
+        return ResponseDto.setSuccess("태그가 조회되었습니다.", response);
     }
 
+//    태그 삭제
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<TagResponseDto> deleteTag(UserPrincipal principal, Long projectId, Long tagId) {
-
         Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 TagId 없습니다." + tagId));
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 태그가 찾을 수 없습니다."));
 
-        tag.delete(tag);
+        if (!tag.getProject().getId().equals(projectId)) {
+            throw new IllegalArgumentException("해당 ID의 프로젝트를 찾을 수 없습니다.");
+        }
+
+        tagRepository.delete(tag);
 
         return ResponseDto.setSuccess("태그가 삭제되었습니다.", null);
     }

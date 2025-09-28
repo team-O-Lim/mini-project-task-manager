@@ -1,13 +1,13 @@
 package org.example.o_lim.service.Impl;
 
-import io.jsonwebtoken.security.SecurityException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.enums.PriorityStatus;
 import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.dto.ResponseDto;
+import org.example.o_lim.dto.tag.request.TagRequestDto;
 import org.example.o_lim.dto.task.request.TaskCreateRequestDto;
 import org.example.o_lim.dto.task.request.TaskUpdateRequestDto;
+import org.example.o_lim.dto.task.request.TaskUpdateStatusRequestDto;
 import org.example.o_lim.dto.task.response.TaskCreateResponseDto;
 import org.example.o_lim.dto.task.response.TaskDetailResponseDto;
 import org.example.o_lim.dto.task.response.TaskSearchResponseDto;
@@ -18,9 +18,10 @@ import org.example.o_lim.service.TaskService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,29 +32,6 @@ public class TaskServiceImpl implements TaskService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
     private final TaskTagRepository taskTagRepository;
-
-    private TaskStatus parseTaskStatus(String status) {
-        if (status == null || status.isBlank()) {
-            return TaskStatus.TODO;
-        }
-        try {
-            return TaskStatus.valueOf(status.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("유효하지 않는 상태 값입니다: " + status);
-        }
-    }
-
-    private PriorityStatus parsePriorityStatus(String status) {
-        if (status == null || status.isBlank()) {
-            return PriorityStatus.MEDIUM;
-        }
-        try {
-            return PriorityStatus.valueOf(status.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("유효하지 않는 우선 순위 값입니다: " + status);
-        }
-    }
-
 
     @Override
     @Transactional
@@ -66,8 +44,9 @@ public class TaskServiceImpl implements TaskService {
 
         boolean isTask = taskRepository.existsByProjectIdAndTitle(project.getId(), request.title());
         if (isTask) {
-            throw new IllegalArgumentException("해당 프로젝트 내 테스트가 중복됩니다.");
+            throw new IllegalArgumentException("해당 프로젝트 내 직무가 중복됩니다.");
         }
+
         User user = userRepository.findById(principal.getId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
@@ -76,22 +55,66 @@ public class TaskServiceImpl implements TaskService {
                 request.title(),
                 request.content(),
                 user,
-                parseTaskStatus(request.status()),
-                parsePriorityStatus(request.priority()),
+                request.status(),
+                request.priority(),
                 request.dueDate()
         );
-        taskRepository.save(task);
 
-        if (request.tagId() != null) {
-            Tag tag = tagRepository.findById(request.tagId())
-                    .orElseThrow(() -> new EntityNotFoundException("해당 태그가 존재하지 않습니다."));
+        List<Long> assigneeIds = request.assigneeIds() != null ? request.assigneeIds() : Collections.emptyList();
+        List<User> assignees = userRepository.findAllById(assigneeIds);
 
-            TaskTag taskTag = TaskTag.create(task, tag);
-            task.addTaskTag(taskTag);
-            taskTagRepository.save(taskTag);
+        for (User assignee : assignees) {
+            task.addAssignee(assignee);
         }
 
-        return ResponseDto.setSuccess("SUCCESS", TaskCreateResponseDto.from(task));
+        taskRepository.save(task);
+        taskTagRepository.flush();
+
+        if (request.tagIds() != null && !request.tagIds().isEmpty()) {
+            List<Tag> tags = tagRepository.findAllById(request.tagIds());
+
+            for (Tag tag : tags) {
+                if (!tag.getProject().getId().equals(project.getId())) {
+                    throw new IllegalArgumentException("해당 프로젝트의 태그가 존재하지 않습니다." + tag.getId());
+                }
+
+                TaskTag taskTag = TaskTag.create(task, tag);
+                taskTagRepository.save(taskTag);
+                task.addTaskTag(taskTag);
+            }
+            taskTagRepository.flush();
+        }
+
+        if(request.newTags() != null && !request.newTags().isEmpty()) {
+            for(TagRequestDto newTagDto: request.newTags()) {
+
+                String name = newTagDto.name() != null ? newTagDto.name().trim() : "";
+                String color = newTagDto.color() != null ? newTagDto.color().trim() : "";
+
+                if(name.isEmpty() || color.isEmpty()) continue;
+
+                if(tagRepository.existsByNameAndProjectId(newTagDto.name(), project.getId())) {
+                    throw new IllegalArgumentException("이미 존재하는 태그명입니다." + newTagDto.name());
+                }
+
+                if(tagRepository.existsByColorAndProjectId(newTagDto.color(), project.getId())) {
+                    throw new IllegalArgumentException("이미 존재하는 색상입니다." + newTagDto.color());
+                }
+
+                Tag newTag = Tag.create(project, newTagDto.name(), newTagDto.color());
+                tagRepository.save(newTag);
+
+                TaskTag taskTag = TaskTag.create(task, newTag);
+                taskTagRepository.save(taskTag);
+                task.addTaskTag(taskTag);
+            }
+            taskTagRepository.flush();
+        }
+
+        Task saveTask = taskRepository.findByIdWithTaskTags(task.getId())
+                .orElseThrow(() -> new IllegalArgumentException("저장된 직무를 찾을 수 없습니다."));
+
+        return ResponseDto.setSuccess("SUCCESS", TaskCreateResponseDto.from(saveTask));
 
     }
 
@@ -101,7 +124,6 @@ public class TaskServiceImpl implements TaskService {
         List<TaskSearchResponseDto> result = tasks.stream()
                 .map(TaskSearchResponseDto::from)
                 .toList();
-
 
         return ResponseDto.setSuccess("SUCCESS", result);
     }
@@ -120,67 +142,203 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public ResponseDto<List<TaskDetailResponseDto>> getCreatedUser(Long projectId, Long createdUser
-    ) {
-        Project project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
-
-        User user = userRepository.findById(createdUser)
-                .orElseThrow(() -> new IllegalArgumentException("해당 작성자가 존재하지 않습니다."));
-        return null;
-    }
-
-    @Override
     public ResponseDto<List<TaskDetailResponseDto>> searchTasks(
-            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDate from, LocalDate to
+            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDateTime from, LocalDateTime to, LocalDate dueDate
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
-        LocalDate fromDate = (from != null) ? from : null;
-        LocalDate toDate = (to != null) ? to : null;
+        LocalDateTime fromDate = (from != null) ? from : null;
+        LocalDateTime toDate = (to != null) ? to : null;
 
-        List<Task> tasks = taskRepository.searchTasks(projectId, createUserId, status, priority, from, to);
+        List<Task> tasks = taskRepository.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
 
         List<TaskDetailResponseDto> dto = tasks.stream()
                 .map(TaskDetailResponseDto::from)
                 .toList();
+
         return ResponseDto.setSuccess("SUCCESS", dto);
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#request.createdUserId, authentication)")
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseDto<TaskDetailResponseDto> updateTask(Long projectId, Long taskId, UserPrincipal principal, TaskUpdateRequestDto request
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
-        Task task = taskRepository.findById(taskId)
+
+        Task task = taskRepository.findByIdAndProjectId(taskId, projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
 
-        if (!task.getCreatedUser().getId().equals(request.createdUserId())) {
-            throw new SecurityException("작성자만 수정할 수 있습니다.");
+        if (request.title() == null
+                && request.content() == null
+                && request.assigneeIds() == null
+                && request.status() == null
+                && request.priority() == null
+                && request.dueDate() == null
+                && (request.tagId() == null || request.tagId().isEmpty())
+                && (request.newTags() == null || request.newTags().isEmpty())
+        ) {
+                throw new IllegalArgumentException("수정할 정보를 입력해주세요.");
         }
 
-        task.update(
-                request.title(),
-                request.content(),
-                parseTaskStatus(request.status()),
-                parsePriorityStatus(request.priority()),
-                request.dueDate()
-        );
+        String newTitle = (request.title() != null && !request.title().isBlank()) ? request.title() : null;
+        String newContent = (request.content() != null && !request.content().isBlank()) ? request.content() : null;
+        List<Long> newAssignee = (request.assigneeIds() != null && !request.assigneeIds().isEmpty()) ? request.assigneeIds() : null;
+
+        TaskStatus newStatus = task.getStatus();
+        String statusStr = request.status();
+        if (statusStr == null || statusStr.isBlank()) {
+
+        } else {
+            try {
+                newStatus = TaskStatus.valueOf(statusStr);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("잘못된 status 값입니다.");
+            }
+        }
+
+        PriorityStatus newPriority = task.getPriority();
+        String priorityStr = request.priority();
+        if (priorityStr == null || priorityStr.isBlank()) {
+
+        } else {
+            try {
+                newPriority = PriorityStatus.valueOf(priorityStr);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("잘못된 priority 값입니다.");
+            }
+        }
+
+        List<Long> existingTagIds = task.getTaskTags().stream()
+                .map(tt -> tt.getTag().getId())
+                .toList();
+
+        List<Long> newTagIds = new ArrayList<>();
+
+        if(request.tagId() != null && !request.tagId().isEmpty()) {
+            newTagIds.addAll(request.tagId());
+        } else {
+            newTagIds.addAll(existingTagIds);
+        }
+
+        if(request.newTags() != null && !request.newTags().isEmpty()) {
+            for(TagRequestDto newTagDto: request.newTags()) {
+                String name = newTagDto.name() != null ? newTagDto.name().trim() : "";
+                String color = newTagDto.color() != null ? newTagDto.color().trim() : "";
+
+                if(name.isEmpty() || color.isEmpty()) continue;
+
+                if(tagRepository.existsByNameAndProjectId(name, project.getId())) {
+                    throw new IllegalArgumentException("이미 존재하는 태그명입니다.");
+                }
+                if(tagRepository.existsByColorAndProjectId(color, project.getId())) {
+                    throw new IllegalArgumentException("이미 존재하는 색상입니다.");
+                }
+
+                Tag newTag = Tag.create(project, name, color);
+                tagRepository.save(newTag);
+
+//                TaskTag taskTag = TaskTag.create(task, newTag);
+//                task.addTaskTag(taskTag);
+
+                newTagIds.add(newTag.getId());
+            }
+        }
+
+        if(request.tagId() != null && !request.tagId().isEmpty()) {
+            if(newTagIds == null) {
+                newTagIds = new ArrayList<>(request.tagId());
+            }
+        }
+
+        String dueDateStr = request.dueDate();
+        LocalDate newDueDate = null;
+        boolean changedDueDate = false;
+        if (dueDateStr == null) {
+            if (task.getDueDate() != null) {
+                newDueDate = null;
+                changedDueDate = true;
+            }
+        } else if (dueDateStr.isBlank()) {
+            newDueDate = task.getDueDate();
+            changedDueDate = false;
+        } else {
+            try {
+                LocalDate parsedDate = LocalDate.parse(dueDateStr);
+                if (!parsedDate.equals(task.getDueDate())) {
+                    newDueDate = parsedDate;
+                    changedDueDate = true;
+                } else {
+                    newDueDate = task.getDueDate();
+                    changedDueDate = false;
+                }
+            } catch (DateTimeParseException e) {
+                throw new IllegalArgumentException("dueDate 형식이 올바르지 않습니다.");
+            }
+        }
+
+        boolean changedTitle = newTitle != null && !Objects.equals(task.getTitle(), newTitle);
+        boolean changedContent = newContent != null && !Objects.equals(task.getContent(), newContent);
+        boolean changedAssignee = newAssignee != null;
+        boolean changedStatus = !task.getStatus().equals(newStatus);
+        boolean changedPriority = !task.getPriority().equals(newPriority);
+        boolean changedTagId = false;
+        if(newTagIds != null) {
+            changedTagId = !new HashSet<>(existingTagIds).equals(new HashSet<>(newTagIds));
+        }
+
+        if (!changedTitle && !changedContent && !changedAssignee && !changedStatus
+             && !changedPriority && !changedTagId && !changedDueDate) {
+            throw new IllegalArgumentException("변경된 정보가 없습니다.");
+        }
+
+        if (changedTitle) task.setTitle(newTitle);
+        if (changedContent) task.setContent(newContent);
+        if (changedAssignee) task.setAssignee(newAssignee, userRepository);
+        if (changedStatus) task.setStatus(newStatus);
+        if (changedPriority) task.setPriority(newPriority);
+        if (changedTagId) {
+            task.setTagId(newTagIds, tagRepository, taskRepository);
+            taskRepository.flush();
+        }
+        if (changedDueDate) task.setDueDate(newDueDate);
+
+//        Task updatedTask = taskRepository.findByIdWithAssignees(taskId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 직무의 담당자를 찾을 수 없습니다."));
+
         return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));
     }
 
     @Override
     @Transactional
-    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN') or @authz.isSelf(#request.createdUserId, authentication)")
+    @PreAuthorize("@authz.isChange(#taskId, authentication)")
+    public ResponseDto<TaskDetailResponseDto> updateTaskStatus(
+            Long projectId, Long taskId, UserPrincipal principal, TaskUpdateStatusRequestDto request) {
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
+
+        Task task = taskRepository.findByIdWithAssignees(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
+
+        task.updateStatus(request.status());
+
+        return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseDto<Void> deleteTask(Long projectId, Long taskId, UserPrincipal principal
     ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
-        Task task = taskRepository.findById(taskId)
+
+        Task task = taskRepository.findByIdAndProjectId(taskId, projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
+
         taskRepository.delete(task);
 
         return ResponseDto.setSuccess("SUCCESS",null);

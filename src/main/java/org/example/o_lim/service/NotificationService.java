@@ -12,14 +12,13 @@ import java.util.List;
 
 public interface NotificationService {
 
-    ResponseDto<NotificationDetailResponseDto> createNotification(UserPrincipal principal, @Valid NotificationCreatedRequestDto request);
+    ResponseDto<NotificationDetailResponseDto> createNotification(UserPrincipal principal, Long projectId, @Valid NotificationCreatedRequestDto request);
 
-    ResponseDto<NotificationDetailResponseDto> updateNotification(UserPrincipal principal, Long notificationId, @Valid NotificationUpdatedRequestDto request);
+    ResponseDto<NotificationDetailResponseDto> updateNotification(UserPrincipal principal, Long notificationId, Long projectId, @Valid NotificationUpdatedRequestDto request);
 
-    ResponseDto<List<NotificationListResponseDto>> getAllNotifications();
+    ResponseDto<List<NotificationListResponseDto>> getAllNotifications(Long projectId);
 
     ResponseDto<NotificationDetailResponseDto> getNotificationById(Long notificationId);
 
-    ResponseDto<Void> deleteArticle(UserPrincipal principal, Long notificationId);
-
+    ResponseDto<Void> deleteNotification(UserPrincipal principal, Long notificationId, Long projectId);
 }

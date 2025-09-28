@@ -4,5 +4,4 @@ public record FieldErrorItem(
         String field,
         String rejected,
         String message
-) {
-}
+) {}

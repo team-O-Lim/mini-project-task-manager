@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.example.o_lim.common.enums.Gender;
 import org.example.o_lim.common.enums.RoleType;
 import org.example.o_lim.entity.base.BaseTimeEntity;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -35,19 +34,24 @@ public class User extends BaseTimeEntity {
 //    로그인 아이디
     @Column(name="login_id", nullable = false, length = 50)
     private String loginId;
+
 //    비밀번호
     @Column(name="password", nullable = false, length = 255)
     private String password;
+
 //    이메일
     @Column(name="email", nullable = false, length = 255)
     private String email;
+
 //    닉네임
     @Column(name="nickname", nullable = false, length = 50)
     private String nickname;
+
 //    성별
     @Column(name="gender", length = 10)
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
 //    권한
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles = new HashSet<>();
@@ -74,23 +78,33 @@ public class User extends BaseTimeEntity {
     public void changePassword(String password) {
         this.password = password;
     }
+
 //    프로필 수정을 위한 setter
     public void setEmail(String email) {
         this.email = email;
     }
+
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
 //    권한 부여/회수
     public void grantRole(Role role) {
         boolean exists = userRoles.stream().anyMatch(ur -> ur.getRole().equals(role));
+
         if(!exists) {
             userRoles.add(new UserRole(this, role));
         }
     }
+
     public void revokeRole(Role role) {
         userRoles.removeIf(ur -> ur.getRole().equals(role));
     }
+
 //    JWT 활용
     public Set<RoleType> getRoleTypes() {
         return userRoles.stream()
