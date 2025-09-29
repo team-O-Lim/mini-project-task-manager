@@ -20,11 +20,17 @@ public interface TaskService {
     ResponseDto<List<TaskSearchResponseDto>> getAllTasks(Long projectId);
     ResponseDto<TaskDetailResponseDto> getTaskById(Long projectId, Long taskId);
     ResponseDto<List<TaskDetailResponseDto>> searchTasks(
-            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDateTime from, LocalDateTime to, LocalDate dueDate);
+            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority,
+            LocalDateTime from, LocalDateTime to, LocalDate dueDate
+    );
     ResponseDto<TaskDetailResponseDto> updateTask(
-            Long projectId, Long taskId, UserPrincipal principal, @Valid TaskUpdateRequestDto request);
-    ResponseDto<TaskDetailResponseDto> updateTaskStatus(Long projectId, Long taskId, UserPrincipal principal,
-                                                        @Valid TaskUpdateStatusRequestDto request);
+            Long projectId, Long taskId, UserPrincipal principal,
+            @Valid TaskUpdateRequestDto request
+    );
+    ResponseDto<TaskDetailResponseDto> updateTaskStatus(
+            Long projectId, Long taskId, UserPrincipal principal,
+            @Valid TaskUpdateStatusRequestDto request
+    );
     ResponseDto<Void> deleteTask(Long projectId, Long taskId, UserPrincipal principal);
 
 }

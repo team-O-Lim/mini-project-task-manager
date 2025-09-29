@@ -15,6 +15,7 @@ public record ProjectTaskCountResponseDto(
 ) {
     public static ProjectTaskCountResponseDto from(Project project, long taskCount) {
         if (project == null) return null;
+
         return new ProjectTaskCountResponseDto(
                 project.getId(),
                 project.getTitle(),

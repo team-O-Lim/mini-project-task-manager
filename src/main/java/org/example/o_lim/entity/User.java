@@ -56,7 +56,7 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserRole> userRoles = new HashSet<>();
 
-//    생성자
+//    생성자(성별 미포함)
     public User(String name, String loginId, String password, String email, String nickname) {
         this.name = name;
         this.loginId = loginId;
@@ -65,6 +65,7 @@ public class User extends BaseTimeEntity {
         this.nickname = nickname;
     }
 
+//    생성자(성별 포함)
     public User(String name, String loginId, String password, String email, String nickname, Gender gender) {
         this.name = name;
         this.loginId = loginId;

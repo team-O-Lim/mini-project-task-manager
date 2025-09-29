@@ -6,6 +6,5 @@ import java.util.List;
 @Builder
 public record CommentPageResponseDto(
         List<CommentDetailResponseDto> content,
-
         PageMeta meta
 ) {}

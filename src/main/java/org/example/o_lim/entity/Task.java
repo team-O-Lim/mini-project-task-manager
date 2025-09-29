@@ -26,6 +26,7 @@ import java.util.Set;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 public class Task extends BaseTimeEntity {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -76,6 +77,7 @@ public class Task extends BaseTimeEntity {
         if(assignees == null) {
             assignees = new ArrayList<>();
         }
+
         return assignees;
     }
 

@@ -17,14 +17,12 @@ import org.example.o_lim.service.ProjectService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProjectServiceImpl implements ProjectService {
-
     private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
 
@@ -33,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService {
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<ProjectDetailResponseDto> createProject(
             UserPrincipal principal, ProjectCreateRequestDto dto
-    ) {
+            ) {
         User admin = userRepository.findById(principal.getId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 유저가 존재하지 않습니다."));
 
@@ -47,7 +45,6 @@ public class ProjectServiceImpl implements ProjectService {
                 dto.title(),
                 dto.description()
         );
-
         projectRepository.save(project);
 
         return ResponseDto.setSuccess("SUCCESS", ProjectDetailResponseDto.from(project));
@@ -76,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<ProjectDetailResponseDto> updateProject(
             UserPrincipal principal, Long projectId, ProjectUpdateRequestDto dto
-    ) {
+            ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 프로젝트가 존재하지 않습니다."));
 

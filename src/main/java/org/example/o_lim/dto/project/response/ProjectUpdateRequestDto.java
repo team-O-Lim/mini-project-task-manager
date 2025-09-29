@@ -1,9 +1,7 @@
 package org.example.o_lim.dto.project.response;
 
 import org.example.o_lim.entity.Project;
-
 import java.time.LocalDateTime;
-
 
 public record ProjectUpdateRequestDto (
         Long id,

@@ -46,9 +46,11 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByLoginId(request.loginId())) {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
+
         if (userRepository.existsByEmail(request.email())) {
             throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
         }
+
         if (userRepository.existsByNickname(request.nickname())) {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }

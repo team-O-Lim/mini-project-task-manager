@@ -8,11 +8,8 @@ import org.example.o_lim.repository.UserRepository;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record AllUserInfoResponseDto(
     String name,
-
     String nickname,
-
     String loginId,
-
     String role
 ) {
     public static AllUserInfoResponseDto from(UserRepository.UserWithRolesProjection u) {

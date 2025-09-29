@@ -9,7 +9,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component("authz")
-public class AuthorizationChecker {
+public class TaskStatusChecker {
     private final TaskAssigneesRepository taskAssigneesRepository;
 
     public boolean isChange(Long taskId, Authentication principal) {

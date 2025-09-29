@@ -50,7 +50,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             String authorization = request.getHeader(AUTH_HEADER);
-
             if(authorization == null || authorization.isBlank()) {
                 filterChain.doFilter(request, response);
 

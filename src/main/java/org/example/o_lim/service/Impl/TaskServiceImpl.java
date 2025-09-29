@@ -38,11 +38,12 @@ public class TaskServiceImpl implements TaskService {
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     public ResponseDto<TaskCreateResponseDto> createTask(
             Long projectId, UserPrincipal principal, TaskCreateRequestDto request
-    ) {
+            ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
         boolean isTask = taskRepository.existsByProjectIdAndTitle(project.getId(), request.title());
+
         if (isTask) {
             throw new IllegalArgumentException("해당 프로젝트 내 직무가 중복됩니다.");
         }
@@ -66,7 +67,6 @@ public class TaskServiceImpl implements TaskService {
         for (User assignee : assignees) {
             task.addAssignee(assignee);
         }
-
         taskRepository.save(task);
         taskTagRepository.flush();
 
@@ -121,6 +121,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseDto<List<TaskSearchResponseDto>> getAllTasks(Long projectId) {
         List<Task> tasks = taskRepository.findAllTaskById(projectId);
+
         List<TaskSearchResponseDto> result = tasks.stream()
                 .map(TaskSearchResponseDto::from)
                 .toList();
@@ -129,8 +130,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public ResponseDto<TaskDetailResponseDto> getTaskById(Long projectId, Long taskId
-    ) {
+    public ResponseDto<TaskDetailResponseDto> getTaskById(Long projectId, Long taskId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
@@ -143,8 +143,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public ResponseDto<List<TaskDetailResponseDto>> searchTasks(
-            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDateTime from, LocalDateTime to, LocalDate dueDate
-    ) {
+            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority,
+            LocalDateTime from, LocalDateTime to, LocalDate dueDate
+            ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
@@ -163,8 +164,9 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
-    public ResponseDto<TaskDetailResponseDto> updateTask(Long projectId, Long taskId, UserPrincipal principal, TaskUpdateRequestDto request
-    ) {
+    public ResponseDto<TaskDetailResponseDto> updateTask(
+            Long projectId, Long taskId, UserPrincipal principal, TaskUpdateRequestDto request
+            ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
@@ -189,6 +191,7 @@ public class TaskServiceImpl implements TaskService {
 
         TaskStatus newStatus = task.getStatus();
         String statusStr = request.status();
+
         if (statusStr == null || statusStr.isBlank()) {
 
         } else {
@@ -201,6 +204,7 @@ public class TaskServiceImpl implements TaskService {
 
         PriorityStatus newPriority = task.getPriority();
         String priorityStr = request.priority();
+
         if (priorityStr == null || priorityStr.isBlank()) {
 
         } else {
@@ -216,9 +220,11 @@ public class TaskServiceImpl implements TaskService {
                 .toList();
 
         List<Long> newTagIds = new ArrayList<>();
+
         if(request.tagId() != null && !request.tagId().isEmpty()) {
             newTagIds.addAll(request.tagId());
         }
+
         if(request.newTags() != null && !request.newTags().isEmpty()) {
             for(TagRequestDto newTagDto: request.newTags()) {
                 String name = newTagDto.name() != null ? newTagDto.name().trim() : "";
@@ -229,6 +235,7 @@ public class TaskServiceImpl implements TaskService {
                 if(tagRepository.existsByNameAndProjectId(name, project.getId())) {
                     throw new IllegalArgumentException("이미 존재하는 태그명입니다.");
                 }
+
                 if(tagRepository.existsByColorAndProjectId(color, project.getId())) {
                     throw new IllegalArgumentException("이미 존재하는 색상입니다.");
                 }
@@ -249,6 +256,7 @@ public class TaskServiceImpl implements TaskService {
         String dueDateStr = request.dueDate();
         LocalDate newDueDate = null;
         boolean changedDueDate = false;
+
         if (dueDateStr == null) {
             if (task.getDueDate() != null) {
                 newDueDate = null;
@@ -278,6 +286,7 @@ public class TaskServiceImpl implements TaskService {
         boolean changedStatus = !task.getStatus().equals(newStatus);
         boolean changedPriority = !task.getPriority().equals(newPriority);
         boolean changedTagId = false;
+
         if(newTagIds != null) {
             changedTagId = !new HashSet<>(existingTagIds).equals(new HashSet<>(newTagIds));
         }
@@ -305,8 +314,8 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     @PreAuthorize("@authz.isChange(#taskId, authentication)")
     public ResponseDto<TaskDetailResponseDto> updateTaskStatus(
-            Long projectId, Long taskId, UserPrincipal principal, TaskUpdateStatusRequestDto request) {
-
+            Long projectId, Long taskId, UserPrincipal principal, TaskUpdateStatusRequestDto request
+            ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
@@ -321,8 +330,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
-    public ResponseDto<Void> deleteTask(Long projectId, Long taskId, UserPrincipal principal
-    ) {
+    public ResponseDto<Void> deleteTask(Long projectId, Long taskId, UserPrincipal principal) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 

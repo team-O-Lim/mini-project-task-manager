@@ -32,8 +32,7 @@ public class UserServiceImpl implements UserService {
         PrincipalUtils.requiredActive(principal);
 
         User user = userRepository.findByLoginId(principal.getUsername())
-                .orElseThrow(() ->
-                        new UsernameNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new UsernameNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
 
         UserProfileResponseDto response
                 = new UserProfileResponseDto(
@@ -94,6 +93,7 @@ public class UserServiceImpl implements UserService {
 //    모든 유저 조회(권한 정보 포함)
     public ResponseDto<List<AllUserInfoResponseDto>> getAllUsers() {
         List<UserRepository.UserWithRolesProjection> result  = userRepository.findAllUsersWithRole_Native();
+
         List<AllUserInfoResponseDto> response = result.stream()
                 .map(AllUserInfoResponseDto::from)
                 .toList();
