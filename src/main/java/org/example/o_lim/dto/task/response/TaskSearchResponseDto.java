@@ -15,21 +15,13 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TaskSearchResponseDto(
         Long projectId,
-
         Long taskId,
-
         String title,
-
         Long createUserId,
-
         List<String> assignees,
-
         TaskStatus status,
-
         PriorityStatus priority,
-
         List<TagResponseDto> tags,
-
         LocalDate dueDate
 ){
     public static  TaskSearchResponseDto from(Task task) {

@@ -5,11 +5,11 @@ import org.example.o_lim.entity.Notification;
 import java.time.LocalDateTime;
 
 public record NotificationListResponseDto (
-     Long id,
-     Long project_id,
-     String title,
-     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-     LocalDateTime createdAt
+        Long id,
+        Long project_id,
+        String title,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+        LocalDateTime createdAt
  ) {
     public static NotificationListResponseDto from(Notification notification) {
       return new NotificationListResponseDto(

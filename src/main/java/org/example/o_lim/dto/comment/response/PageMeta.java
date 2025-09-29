@@ -6,17 +6,11 @@ import org.springframework.data.domain.Page;
 @Builder
 public record PageMeta(
         int page,
-
         int size,
-
         long totalElements,
-
         int totalPages,
-
         boolean hasNext,
-
         boolean hasPrevious,
-
         String sort
 ) {
     public static PageMeta from(Page<?> p) {

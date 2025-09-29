@@ -8,7 +8,6 @@ public record ProjectListResponseDto(
         String description,
         String adminManagerNickname
 ) {
-
     // 전체 조회
     public static ProjectListResponseDto from(Project project) {
         return new ProjectListResponseDto(

@@ -14,6 +14,7 @@ public class DateUtils {
 
     public static String toKstString(LocalDateTime utcLocalDateTime) {
         if (utcLocalDateTime == null) return null;
+
         ZonedDateTime zdtUtc = utcLocalDateTime.atZone(ZoneId.of("UTC"));
         ZonedDateTime zdtKst = zdtUtc.withZoneSameInstant(ZONE_KST);
 
@@ -22,6 +23,7 @@ public class DateUtils {
 
     public static String toUtcString(LocalDateTime utcLocalDateTime) {
         if (utcLocalDateTime == null) return null;
+
         OffsetDateTime odt = utcLocalDateTime.atOffset(ZoneOffset.UTC);
 
         return ISO_UTC.format(odt);

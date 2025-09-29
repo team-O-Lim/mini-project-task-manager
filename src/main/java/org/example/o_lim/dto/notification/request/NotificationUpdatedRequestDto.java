@@ -5,10 +5,11 @@ import jakarta.validation.constraints.Size;
 
 public record NotificationUpdatedRequestDto (
         Long projectId,
-       @NotBlank(message = "제목은 필수 입력 값입니다")
-       @Size(max = 50, message = "제목은 최대 50자까지 입력 가능합니다.")
-       String title,
 
-       @NotBlank(message = "내용은 필수 입력 값입니다")
-       String content
+        @NotBlank(message = "제목은 필수 입력 값입니다")
+        @Size(max = 50, message = "제목은 최대 50자까지 입력 가능합니다.")
+        String title,
+
+        @NotBlank(message = "내용은 필수 입력 값입니다")
+        String content
  ) {}

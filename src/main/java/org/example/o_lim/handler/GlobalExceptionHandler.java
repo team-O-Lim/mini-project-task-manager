@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ResponseDto<Object>> failed(
             ErrorCode code, String reason, List<FieldErrorItem> errors
-    ) {
+            ) {
         String finalReason = (reason != null && !reason.isBlank()) ? reason : code.defaultMessage;
         ErrorResponse body = ErrorResponse.of(code.code, finalReason, errors);
 

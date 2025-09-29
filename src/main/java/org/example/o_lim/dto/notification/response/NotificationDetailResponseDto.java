@@ -2,7 +2,6 @@ package org.example.o_lim.dto.notification.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.example.o_lim.entity.Notification;
-
 import java.time.LocalDateTime;
 
 public record NotificationDetailResponseDto (

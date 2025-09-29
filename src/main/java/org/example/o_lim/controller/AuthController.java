@@ -28,7 +28,8 @@ public class AuthController {
 //    회원가입
     @PostMapping(ApiMappingPattern.Auth.SIGN_UP)
     public ResponseEntity<ResponseDto<SignUpResponseDto>> signUp(
-            @Valid @RequestBody SignUpRequestDto request) {
+            @Valid @RequestBody SignUpRequestDto request
+            ) {
         ResponseDto<SignUpResponseDto> response = authService.signUp(request);
 
         return ResponseEntity.ok().body(response);
@@ -37,7 +38,8 @@ public class AuthController {
 //    로그인
     @PostMapping(ApiMappingPattern.Auth.SIGN_IN)
     public ResponseEntity<ResponseDto<SignInResponseDto>> signIn(
-            @Valid @RequestBody SignInRequestDto request) {
+            @Valid @RequestBody SignInRequestDto request
+            ) {
         ResponseDto<SignInResponseDto> response = authService.signIn(request);
 
         return ResponseEntity.ok().body(response);
@@ -46,7 +48,8 @@ public class AuthController {
 //  이메일 전송
     @PostMapping(ApiMappingPattern.Auth.SEND_EMAIL)
     public ResponseEntity<ResponseDto<Void>> sendEmail(
-            @Valid @RequestBody SendMailRequestDto request) {
+            @Valid @RequestBody SendMailRequestDto request
+            ) {
         mailService.sendEmail(request);
 
         return ResponseEntity.noContent().build();
@@ -55,7 +58,8 @@ public class AuthController {
 //    이메일 인증
     @GetMapping(ApiMappingPattern.Auth.VERIFY)
     public ResponseEntity<ResponseDto<Void>> verifyEmail(
-            @RequestParam String token) {
+            @RequestParam String token
+            ) {
         mailService.verifyEmail(token);
 
         return ResponseEntity.noContent().build();
@@ -64,7 +68,8 @@ public class AuthController {
 //    아이디 찾기
     @GetMapping(ApiMappingPattern.Auth.FIND_ID)
     public ResponseEntity<ResponseDto<FindIdResponseDto>> findId(
-            @Valid @RequestBody FindIdRequestDto request) {
+            @Valid @RequestBody FindIdRequestDto request
+            ) {
         ResponseDto<FindIdResponseDto> response = authService.findId(request);
 
         return ResponseEntity.ok().body(response);
@@ -73,7 +78,8 @@ public class AuthController {
 //    비밀번호 재설정
     @PostMapping(ApiMappingPattern.Auth.RESET_PASSWORD)
     public ResponseEntity<ResponseDto<PasswordChangeResponseDto>> resetPassword(
-            @Valid @RequestBody PasswordResetRequestDto request) {
+            @Valid @RequestBody PasswordResetRequestDto request
+            ) {
         ResponseDto<PasswordChangeResponseDto> response = authService.resetPassword(request);
 
         return ResponseEntity.ok().body(response);

@@ -25,7 +25,7 @@ public class JwtProvider {
             @Value("${jwt.expiration}") long jwtExpirationMs,
             @Value("${jwt.email-expiration}") long jwtEmailExpirationMs,
             @Value("${jwt.clock-skew-seconds}") int clockSkewSeconds
-    ) {
+            ) {
         byte[] secretBytes = Decoders.BASE64.decode(secret);
         if(secretBytes.length < 32) {
             throw new IllegalArgumentException("jwt.secret은 256 비트 이상이어야 합니다.");
@@ -80,6 +80,7 @@ public class JwtProvider {
         } catch (ExpiredJwtException e) {
             if(allowClockSkewOnExpiry && clockSkewSeconds > 0 && e.getClaims() != null) {
                 Date exp = e.getClaims().getExpiration();
+
                 if(exp != null) {
                     long skewMs = clockSkewSeconds * 1000L;
                     long now = System.currentTimeMillis();
@@ -112,6 +113,7 @@ public class JwtProvider {
 
     public Set<String> getRolesFromJwt(String tokenWithoutBearer) {
         Object raw = getClaims(tokenWithoutBearer).get(CLAIM_ROLES);
+
         if (raw == null) return Set.of();
 
         if(raw instanceof List<?> list) {

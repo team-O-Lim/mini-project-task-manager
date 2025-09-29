@@ -20,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TagServiceImpl implements TagService {
-
     private final TagRepository tagRepository;
     private final ProjectRepository projectRepository;
 

@@ -1,13 +1,10 @@
 package org.example.o_lim.repository;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.example.o_lim.dto.project.response.ProjectTaskCountResponseDto;
 import org.example.o_lim.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository

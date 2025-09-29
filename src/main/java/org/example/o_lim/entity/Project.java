@@ -1,12 +1,8 @@
 package org.example.o_lim.entity;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.example.o_lim.entity.base.BaseTimeEntity;
-
 import jakarta.persistence.*;
-
 
 @Entity
 @Table( name = "projects")
@@ -15,6 +11,7 @@ import jakarta.persistence.*;
 @Getter
 @Builder
 public class Project extends BaseTimeEntity {
+
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 

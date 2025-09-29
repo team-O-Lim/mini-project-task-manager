@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class MailServiceImpl implements MailService {
     private final JavaMailSender javaMailSender;
     private final JwtProvider jwtProvider;
-
     @Value("${spring.mail.username}")
     private String senderEmail;
 
@@ -44,6 +43,7 @@ public class MailServiceImpl implements MailService {
             MimeMessage message = createEmail(request.email(), token);
 
             javaMailSender.send(message);
+
             System.out.println("인증 이메일이 전송되었습니다.");
         } catch (MessagingException | MailException e) {
             System.err.println("이메일 전송 실패" + e.getMessage());
@@ -54,6 +54,7 @@ public class MailServiceImpl implements MailService {
     @Override
     public void verifyEmail(String token) {
         String email = jwtProvider.getEmailFromJwt(token);
+
         System.out.println("이메일 인증이 완료되었습니다. 이메일: " + email);
     }
 }

@@ -34,7 +34,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseDto<AddRoleResponseDto> addRoles(
-            UserPrincipal principal, AddRoleRequestDto request) {
+            UserPrincipal principal, AddRoleRequestDto request
+            ) {
         User user = userRepository.findWithRolesById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
 
@@ -59,7 +60,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseDto<RemoveRoleResponseDto> removeRole(
-            UserPrincipal principal, RemoveRoleRequestDto request) {
+            UserPrincipal principal, RemoveRoleRequestDto request
+            ) {
         User user = userRepository.findWithRolesById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
 
@@ -88,7 +90,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseDto<UpdateRoleResponseDto> replaceRoles(
-            UserPrincipal principal, UpdateRoleRequestDto request) {
+            UserPrincipal principal, UpdateRoleRequestDto request
+            ) {
         User user = userRepository.findWithRolesById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
 
