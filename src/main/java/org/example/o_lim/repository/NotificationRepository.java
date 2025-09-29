@@ -9,10 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface NotificationRepository extends JpaRepository <Notification, Long> {
-    static Optional<Object> findByLoginId(String loginId) {
-        return null;
-    }
-
     Long id(Long id);
 
     @Query("""
