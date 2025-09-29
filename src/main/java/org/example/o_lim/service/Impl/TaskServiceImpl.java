@@ -149,9 +149,6 @@ public class TaskServiceImpl implements TaskService {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
-        LocalDateTime fromDate = (from != null) ? from : null;
-        LocalDateTime toDate = (to != null) ? to : null;
-
         List<Task> tasks = taskRepository.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
 
         List<TaskDetailResponseDto> dto = tasks.stream()
@@ -193,8 +190,6 @@ public class TaskServiceImpl implements TaskService {
         String statusStr = request.status();
 
         if (statusStr == null || statusStr.isBlank()) {
-
-        } else {
             try {
                 newStatus = TaskStatus.valueOf(statusStr);
             } catch (IllegalArgumentException e) {
@@ -206,8 +201,6 @@ public class TaskServiceImpl implements TaskService {
         String priorityStr = request.priority();
 
         if (priorityStr == null || priorityStr.isBlank()) {
-
-        } else {
             try {
                 newPriority = PriorityStatus.valueOf(priorityStr);
             } catch (IllegalArgumentException e) {
