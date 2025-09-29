@@ -23,8 +23,6 @@ import java.util.Set;
        })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 public class Task extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +70,6 @@ public class Task extends BaseTimeEntity {
     //TaskAssignee 관계
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskAssignees> assignees = new ArrayList<>();
-
     public List<TaskAssignees> getAssignee() {
         if(assignees == null) {
             assignees = new ArrayList<>();
@@ -94,6 +91,18 @@ public class Task extends BaseTimeEntity {
     @Column(name = "due_date")
     private LocalDate dueDate;
 
+    public Task(Project project, String title, String content, User createdUser,
+                TaskStatus status, PriorityStatus priority, LocalDate dueDate
+    ) {
+        this.project = project;
+        this.title = title;
+        this.content = content;
+        this.createdUser = createdUser;
+        this.status = status;
+        this.priority = priority;
+        this.dueDate = dueDate;
+    }
+
     // 직무 생성
     public static Task create(Project project, String title, String content, User createdUser,
                         TaskStatus status, PriorityStatus priority, LocalDate dueDate) {
@@ -101,17 +110,7 @@ public class Task extends BaseTimeEntity {
         TaskStatus safeStatus = (status != null) ? status : TaskStatus.TODO;
         PriorityStatus safePriority = (priority != null) ? priority : PriorityStatus.MEDIUM;
 
-        Task task = Task.builder()
-                .project(project)
-                .title(title)
-                .content(content)
-                .createdUser(createdUser)
-                .status(safeStatus)
-                .priority(safePriority)
-                .dueDate(dueDate)
-                .build();
-
-        return task;
+        return new Task(project, title, content, createdUser, safeStatus, safePriority, dueDate);
     }
 
     public void updateStatus(TaskStatus status) {
