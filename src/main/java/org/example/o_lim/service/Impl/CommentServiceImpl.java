@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
         PrincipalUtils.requiredActive(principal);
 
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 태스크를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 테스크를 찾을 수 없습니다."));
 
         User user = userRepository.findById(principal.getId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID의 사용자를 찾을 수 없습니다."));
@@ -57,6 +57,10 @@ public class CommentServiceImpl implements CommentService {
     public ResponseDto<List<CommentDetailResponseDto>> getAllCommentByCreatedAtDesc(Long taskId) {
         List<CommentRepository.CommentWithCreatedAtProjection> comments = commentRepository.getCommentsByCreatedAtDesc(taskId);
 
+        if (comments == null || comments.isEmpty()) {
+            throw new IllegalArgumentException("현재 테스크에 댓글이 없습니다.");
+        }
+
         List<CommentDetailResponseDto> response = comments.stream()
                 .map(CommentDetailResponseDto::from)
                 .toList();
@@ -70,7 +74,7 @@ public class CommentServiceImpl implements CommentService {
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER') or @commentz.isCommentAuthor(#commentId, authentication)")
     public ResponseDto<CommentDetailResponseDto> deleteComment(UserPrincipal principal, Long taskId, Long commentId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 태스크를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 테스크를 찾을 수 없습니다."));
 
         commentRepository.delete(comment);
 
@@ -81,7 +85,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ResponseDto<CommentPageResponseDto> getPageCommentByCreatedAtDesc(Long taskId, Pageable pageable) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new EntityNotFoundException("조회할 댓글이 없습니다"));
+                .orElseThrow(() -> new EntityNotFoundException("현재 테스크에 댓글이 없습니다."));
 
         Page<Comment> pageResult = commentRepository.findAll(pageable);
         List<CommentDetailResponseDto> content = pageResult.getContent().stream()

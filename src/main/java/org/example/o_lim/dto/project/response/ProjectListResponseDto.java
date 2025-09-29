@@ -10,7 +10,7 @@ public record ProjectListResponseDto(
 ) {
 
     // 전체 조회
-    public static ProjectListResponseDto fromEntity(Project project) {
+    public static ProjectListResponseDto from(Project project) {
         return new ProjectListResponseDto(
                 project.getId(),
                 project.getTitle(),
