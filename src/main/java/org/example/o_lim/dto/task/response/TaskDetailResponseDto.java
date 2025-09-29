@@ -38,13 +38,6 @@ public record TaskDetailResponseDto(
     public static  TaskDetailResponseDto from(Task task){
         if(task == null) return null;
 
-//        List<TagResponseDto> tagDtos = task.getTaskTags().stream()
-//                .filter(Objects::nonNull)
-//                .map(TaskTag::getTag)
-//                .filter(Objects::nonNull)
-//                .map(TagResponseDto::from)
-//                .toList();
-
         List<TagResponseDto> tag = new ArrayList<>();
         Set<Long> seenTagIds = new HashSet<>();
 
@@ -57,8 +50,6 @@ public record TaskDetailResponseDto(
             seenTagIds.add(tagId);
             tag.add(TagResponseDto.from(taskTag.getTag()));
         }
-
-
 
         List<Comment> comments
                 = task.getComments() != null ? task.getComments() : Collections.emptyList();

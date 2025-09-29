@@ -216,13 +216,9 @@ public class TaskServiceImpl implements TaskService {
                 .toList();
 
         List<Long> newTagIds = new ArrayList<>();
-
         if(request.tagId() != null && !request.tagId().isEmpty()) {
             newTagIds.addAll(request.tagId());
-        } else {
-            newTagIds.addAll(existingTagIds);
         }
-
         if(request.newTags() != null && !request.newTags().isEmpty()) {
             for(TagRequestDto newTagDto: request.newTags()) {
                 String name = newTagDto.name() != null ? newTagDto.name().trim() : "";
@@ -239,9 +235,6 @@ public class TaskServiceImpl implements TaskService {
 
                 Tag newTag = Tag.create(project, name, color);
                 tagRepository.save(newTag);
-
-//                TaskTag taskTag = TaskTag.create(task, newTag);
-//                task.addTaskTag(taskTag);
 
                 newTagIds.add(newTag.getId());
             }
@@ -304,9 +297,6 @@ public class TaskServiceImpl implements TaskService {
             taskRepository.flush();
         }
         if (changedDueDate) task.setDueDate(newDueDate);
-
-//        Task updatedTask = taskRepository.findByIdWithAssignees(taskId)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 직무의 담당자를 찾을 수 없습니다."));
 
         return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));
     }
