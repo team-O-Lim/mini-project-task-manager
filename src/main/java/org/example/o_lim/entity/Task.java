@@ -180,10 +180,9 @@ public class Task extends BaseTimeEntity {
         List<TaskTag> oldTaskTags = new ArrayList<>(this.getTaskTags());
 
         for(TaskTag oldTaskTag: oldTaskTags) {
-//            this.taskTags.remove(oldTaskTag);
             oldTaskTag.setTask(null);
+            this.taskTags.remove(oldTaskTag);
         }
-        this.taskTags.clear();
         taskRepository.flush();
 
         if(tagIds == null || tagIds.isEmpty()) {

@@ -10,8 +10,7 @@ import org.example.o_lim.entity.TaskAssignees;
 import org.example.o_lim.entity.TaskTag;
 import org.example.o_lim.entity.User;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -44,12 +43,18 @@ public record TaskCreateResponseDto(
                 .map(User::getNickname)
                 .toList();
 
-        List<TagResponseDto> tagDtos = task.getTaskTags().stream()
-                .filter(Objects::nonNull)
-                .map(TaskTag::getTag)
-                .filter(Objects::nonNull)
-                .map(TagResponseDto::from)
-                .toList();
+        List<TagResponseDto> tag = new ArrayList<>();
+        Set<Long> seenTagIds = new HashSet<>();
+
+        for(TaskTag taskTag: task.getTaskTags()) {
+            if(taskTag == null || taskTag.getTag() == null) continue;
+
+            Long tagId = taskTag.getTag().getId();
+            if(seenTagIds.contains(tagId)) continue;
+
+            seenTagIds.add(tagId);
+            tag.add(TagResponseDto.from(taskTag.getTag()));
+        }
 
         return new TaskCreateResponseDto(
                 task.getProject().getId(),
@@ -57,7 +62,7 @@ public record TaskCreateResponseDto(
                 task.getCreatedUser().getId(),
                 task.getContent(),
                 assignees,
-                tagDtos,
+                tag,
                 task.getStatus(),
                 task.getPriority(),
                 task.getDueDate()
