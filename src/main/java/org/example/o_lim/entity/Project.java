@@ -7,9 +7,7 @@ import jakarta.persistence.*;
 @Entity
 @Table( name = "projects")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Getter
-@Builder
 public class Project extends BaseTimeEntity {
 
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +27,14 @@ public class Project extends BaseTimeEntity {
   @Column(nullable = false, length = 255)
   private String description;
 
+  private Project(User admin, String title, String description) {
+    this.admin = admin;
+    this.title = title;
+    this.description = description;
+  }
+
   public static Project create(User admin, String title, String description) {
-    return Project.builder()
-            .admin(admin)
-            .title(title)
-            .description(description)
-            .build();
+    return new Project(admin, title, description);
   }
 
   public void update(String title, String description) {
