@@ -6,7 +6,7 @@ import java.util.Set;
 public record RemoveRoleResponseDto(
         Long userId,
         String loginId,
-        RoleType removed,
+        String removed,
         Set<RoleType> roles,
         String updatedAt
 ) {}

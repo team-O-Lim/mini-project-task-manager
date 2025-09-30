@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.o_lim.common.enums.Gender;
 import org.example.o_lim.common.enums.RoleType;
+import org.example.o_lim.dto.auth.request.SignUpRequestDto;
 import org.example.o_lim.entity.base.BaseTimeEntity;
 import java.util.HashSet;
 import java.util.Set;
@@ -73,6 +74,29 @@ public class User extends BaseTimeEntity {
         this.email = email;
         this.nickname = nickname;
         this.gender = gender;
+    }
+
+    //    User 생성 메서드
+    public static User getUser(SignUpRequestDto request, String encoded) {
+        Gender gender = request.gender();
+
+        User user = gender != null ?
+                new User(
+                        request.name(),
+                        request.loginId(),
+                        encoded,
+                        request.email(),
+                        request.nickname(),
+                        request.gender())
+                :
+                new User(
+                        request.name(),
+                        request.loginId(),
+                        encoded,
+                        request.email(),
+                        request.nickname()
+                );
+        return user;
     }
 
 //    비밀번호 재설정

@@ -6,7 +6,7 @@ import java.util.Set;
 public record AddRoleResponseDto(
         Long userId,
         String loginId,
-        RoleType added,
+        String added,
         Set<RoleType> roles,
         String updatedAt
 ) {}
