@@ -142,6 +142,6 @@ public class AuthServiceImpl implements AuthService {
                 user.getLoginId()
         );
 
-        return ResponseDto.setSuccess("비밀번호 재설정을 성공적으로 완료하였습니다.", response);
+        return ResponseDto.setSuccess("비밀번호가 재설정되었습니다.", response);
     }
 }
