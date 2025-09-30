@@ -13,7 +13,7 @@ public interface ProjectService {
     ResponseDto<ProjectCreateResponseDto> createProject(UserPrincipal principal, @Valid ProjectCreateRequestDto dto);
     ResponseDto<ProjectDetailResponseDto> getProjectById(Long projectId);
     ResponseDto<List<ProjectListResponseDto>> getAllProjects();
-    ResponseDto<ProjectDetailResponseDto> updateProject(UserPrincipal principal, Long projectId, @Valid ProjectUpdateRequestDto dto);
+    ResponseDto<ProjectUpdateResponseDto> updateProject(UserPrincipal principal, Long projectId, @Valid ProjectUpdateRequestDto dto);
     ResponseDto<Void> deleteProject(UserPrincipal principal, Long projectId);
     ResponseDto<List<ProjectTaskCountResponseDto>> getTaskCountDesc();
     ResponseDto<List<ProjectListResponseDto>> getProjectByKeyword(String keyword);

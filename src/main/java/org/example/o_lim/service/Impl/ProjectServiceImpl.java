@@ -69,7 +69,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<ProjectDetailResponseDto> updateProject(
+    public ResponseDto<ProjectUpdateResponseDto> updateProject(
             UserPrincipal principal, Long projectId, ProjectUpdateRequestDto dto
             ) {
         Project project = projectRepository.findById(projectId)
@@ -77,7 +77,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         project.update(dto.title(), dto.description());
 
-        return ResponseDto.setSuccess("SUCCESS", ProjectDetailResponseDto.from(project));
+        return ResponseDto.setSuccess("SUCCESS", ProjectUpdateResponseDto.from(project));
     }
 
     @Override

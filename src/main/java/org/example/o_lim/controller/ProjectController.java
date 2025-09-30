@@ -71,12 +71,12 @@ public class ProjectController {
 
     // 수정
     @PutMapping(ApiMappingPattern.Projects.BY_ID)
-    public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> updateProject(
+    public ResponseEntity<ResponseDto<ProjectUpdateResponseDto>> updateProject(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId,
             @Valid @RequestBody ProjectUpdateRequestDto request
             ) {
-        ResponseDto<ProjectDetailResponseDto> response = projectService.updateProject(principal, projectId, request);
+        ResponseDto<ProjectUpdateResponseDto> response = projectService.updateProject(principal, projectId, request);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
