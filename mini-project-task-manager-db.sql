@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `tags` (
   color      VARCHAR(20) NOT NULL,
   CONSTRAINT `uk_tags_project_id_name` UNIQUE (project_id, name),
   CONSTRAINT `uk_tags_project_id_color` UNIQUE (project_id, color),
-  CONSTRAINT `fk_tags_project_id` FOREIGN KEY (project_id) REFERENCES projects(id),
+  CONSTRAINT `fk_tags_project_id` FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
   INDEX `idx_tags_project_id` (project_id)
 ) ENGINE=InnoDB
   DEFAULT CHARSET = utf8mb4
