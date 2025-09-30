@@ -1,6 +1,7 @@
 package org.example.o_lim.service.Impl;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.enums.RoleType;
 import org.example.o_lim.common.utils.DateUtils;
@@ -34,13 +35,25 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseDto<AddRoleResponseDto> addRoles(
-            UserPrincipal principal, AddRoleRequestDto request
+            UserPrincipal principal, @Valid AddRoleRequestDto request
             ) {
         User user = userRepository.findWithRolesById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
 
-        Role role = roleRepository.findById(request.role())
-                .orElseThrow(() -> new EntityNotFoundException("해당 권한을 찾을 수 없습니다."));
+        RoleType roleType;
+
+        try {
+            roleType = RoleType.valueOf(request.role());
+        } catch (IllegalArgumentException e) {
+            throw new EntityNotFoundException("요청한 권한 값이 올바르지 않습니다.");
+        }
+
+        Role role = roleRepository.findByName(roleType)
+                .orElseThrow(() -> new EntityNotFoundException("해당 권한이 존재하지 않습니다."));
+
+        if(user.getRoleTypes().contains(roleType)) {
+           throw new IllegalArgumentException("해당 권한을 이미 보유 중입니다.");
+        }
 
         user.grantRole(role);
         userRepository.flush();
@@ -60,13 +73,25 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseDto<RemoveRoleResponseDto> removeRole(
-            UserPrincipal principal, RemoveRoleRequestDto request
+            UserPrincipal principal, @Valid RemoveRoleRequestDto request
             ) {
         User user = userRepository.findWithRolesById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));
 
-        Role role = roleRepository.findById(request.role())
+        RoleType roleType;
+
+        try {
+            roleType = RoleType.valueOf(request.role());
+        } catch (IllegalArgumentException e) {
+            throw new EntityNotFoundException("요청한 권한 값이 올바르지 않습니다.");
+        }
+
+        Role role = roleRepository.findById(roleType)
                 .orElseThrow(() -> new EntityNotFoundException("해당 권한을 찾을 수 없습니다."));
+
+        if(!user.getRoleTypes().contains(roleType)) {
+            throw new IllegalArgumentException("해당 권한을 보유하고 있지 않습니다.");
+        }
 
         user.revokeRole(role);
         userRepository.flush();
@@ -90,7 +115,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ResponseDto<UpdateRoleResponseDto> replaceRoles(
-            UserPrincipal principal, UpdateRoleRequestDto request
+            UserPrincipal principal, @Valid UpdateRoleRequestDto request
             ) {
         User user = userRepository.findWithRolesById(request.userId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 사용자를 찾을 수 없습니다."));

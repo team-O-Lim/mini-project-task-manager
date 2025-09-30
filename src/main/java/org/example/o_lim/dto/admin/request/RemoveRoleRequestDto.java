@@ -10,5 +10,5 @@ public record RemoveRoleRequestDto(
         Long userId,
 
         @NotNull(message = "role은 필수입니다.")
-        RoleType role
+        String role
 ) {}

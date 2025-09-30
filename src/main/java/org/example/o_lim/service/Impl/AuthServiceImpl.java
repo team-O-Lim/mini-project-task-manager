@@ -2,7 +2,6 @@ package org.example.o_lim.service.Impl;
 
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.example.o_lim.common.enums.Gender;
 import org.example.o_lim.common.enums.RoleType;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.auth.request.FindIdRequestDto;
@@ -55,9 +54,13 @@ public class AuthServiceImpl implements AuthService {
             throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
         }
 
+        if(!request.password().equals(request.confirmPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
         String encoded = passwordEncoder.encode(request.password());
 
-        User user = getUser(request, encoded);
+        User user = User.getUser(request, encoded);
         Role defaultRole = roleRepository.getReferenceById(RoleType.USER);
         user.grantRole(defaultRole);
         userRepository.save(user);
@@ -139,29 +142,6 @@ public class AuthServiceImpl implements AuthService {
                 user.getLoginId()
         );
 
-        return ResponseDto.setSuccess("비밀번호 재설정을 성공적으로 완료하였습니다.", response);
-    }
-
-//    User 생성 메서드
-    private static User getUser(SignUpRequestDto request, String encoded) {
-        Gender gender = request.gender();
-
-        User user = gender != null ?
-                new User(
-                        request.name(),
-                        request.loginId(),
-                        encoded,
-                        request.email(),
-                        request.nickname(),
-                        request.gender())
-                :
-                new User(
-                        request.name(),
-                        request.loginId(),
-                        encoded,
-                        request.email(),
-                        request.nickname()
-                );
-        return user;
+        return ResponseDto.setSuccess("비밀번호가 재설정되었습니다.", response);
     }
 }
