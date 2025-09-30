@@ -1,5 +1,6 @@
 package org.example.o_lim.dto.project.response;
 
+import org.example.o_lim.common.utils.DateUtils;
 import org.example.o_lim.entity.Project;
 import java.time.LocalDateTime;
 
@@ -9,7 +10,7 @@ public record ProjectCreateResponseDto(
         String title,
         String description,
         String adminManagerNickname,
-        LocalDateTime createdAt
+        String createdAt
 ) {
     public static ProjectCreateResponseDto from(Project project) {
         return new ProjectCreateResponseDto(
@@ -18,7 +19,7 @@ public record ProjectCreateResponseDto(
                 project.getTitle(),
                 project.getDescription(),
                 project.getAdmin().getNickname(),
-                project.getCreatedAt()
+                DateUtils.toKstString(project.getCreatedAt())
         );
     }
 }

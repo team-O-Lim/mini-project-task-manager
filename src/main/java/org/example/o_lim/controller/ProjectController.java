@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.o_lim.common.constants.ApiMappingPattern;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.project.request.ProjectCreateRequestDto;
-import org.example.o_lim.dto.project.response.ProjectDetailResponseDto;
-import org.example.o_lim.dto.project.response.ProjectListResponseDto;
-import org.example.o_lim.dto.project.response.ProjectTaskCountResponseDto;
-import org.example.o_lim.dto.project.response.ProjectUpdateResponseDto;
+import org.example.o_lim.dto.project.request.ProjectUpdateRequestDto;
+import org.example.o_lim.dto.project.response.*;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.ProjectService;
 import org.springframework.http.HttpStatus;
@@ -26,11 +24,11 @@ public class ProjectController {
 
     // 생성
     @PostMapping
-    public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> createProject(
+    public ResponseEntity<ResponseDto<ProjectCreateResponseDto>> createProject(
             @AuthenticationPrincipal UserPrincipal principal,
             @Valid @RequestBody ProjectCreateRequestDto request
             ) {
-        ResponseDto<ProjectDetailResponseDto> response = projectService.createProject(principal, request);
+        ResponseDto<ProjectCreateResponseDto> response = projectService.createProject(principal, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -76,7 +74,7 @@ public class ProjectController {
     public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> updateProject(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId,
-            @Valid @RequestBody ProjectUpdateResponseDto request
+            @Valid @RequestBody ProjectUpdateRequestDto request
             ) {
         ResponseDto<ProjectDetailResponseDto> response = projectService.updateProject(principal, projectId, request);
 
