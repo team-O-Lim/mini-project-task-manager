@@ -3,7 +3,7 @@ package org.example.o_lim.dto.project.response;
 import org.example.o_lim.entity.Project;
 import java.time.LocalDateTime;
 
-public record ProjectUpdateRequestDto (
+public record ProjectUpdateResponseDto(
         Long id,
         Long adminId,
         String title,
@@ -11,8 +11,8 @@ public record ProjectUpdateRequestDto (
         String adminManagerNickname,
         LocalDateTime updatedAt
 ) {
-    public static ProjectUpdateRequestDto from(Project project) {
-        return new ProjectUpdateRequestDto(
+    public static ProjectUpdateResponseDto from(Project project) {
+        return new ProjectUpdateResponseDto(
                 project.getId(),
                 project.getAdmin().getId(),
                 project.getTitle(),

@@ -7,7 +7,7 @@ import org.example.o_lim.dto.project.request.ProjectCreateRequestDto;
 import org.example.o_lim.dto.project.response.ProjectDetailResponseDto;
 import org.example.o_lim.dto.project.response.ProjectListResponseDto;
 import org.example.o_lim.dto.project.response.ProjectTaskCountResponseDto;
-import org.example.o_lim.dto.project.response.ProjectUpdateRequestDto;
+import org.example.o_lim.dto.project.response.ProjectUpdateResponseDto;
 import org.example.o_lim.entity.Project;
 import org.example.o_lim.entity.User;
 import org.example.o_lim.repository.ProjectRepository;
@@ -72,7 +72,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseDto<ProjectDetailResponseDto> updateProject(
-            UserPrincipal principal, Long projectId, ProjectUpdateRequestDto dto
+            UserPrincipal principal, Long projectId, ProjectUpdateResponseDto dto
             ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 프로젝트가 존재하지 않습니다."));

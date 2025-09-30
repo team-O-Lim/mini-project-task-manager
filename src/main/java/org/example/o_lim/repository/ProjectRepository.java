@@ -22,7 +22,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     @Query(value = """
         SELECT 
-            p.* 
+            p.id as id,
+            p.title as title,
+            p.description as description,
+            COUNT(t.id) as taskCount
         FROM 
             projects p
             LEFT JOIN 
