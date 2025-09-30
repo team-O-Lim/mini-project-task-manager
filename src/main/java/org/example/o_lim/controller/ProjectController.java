@@ -8,7 +8,7 @@ import org.example.o_lim.dto.project.request.ProjectCreateRequestDto;
 import org.example.o_lim.dto.project.response.ProjectDetailResponseDto;
 import org.example.o_lim.dto.project.response.ProjectListResponseDto;
 import org.example.o_lim.dto.project.response.ProjectTaskCountResponseDto;
-import org.example.o_lim.dto.project.response.ProjectUpdateRequestDto;
+import org.example.o_lim.dto.project.response.ProjectUpdateResponseDto;
 import org.example.o_lim.security.UserPrincipal;
 import org.example.o_lim.service.ProjectService;
 import org.springframework.http.HttpStatus;
@@ -76,7 +76,7 @@ public class ProjectController {
     public ResponseEntity<ResponseDto<ProjectDetailResponseDto>> updateProject(
             @AuthenticationPrincipal UserPrincipal principal,
             @PathVariable Long projectId,
-            @Valid @RequestBody ProjectUpdateRequestDto request
+            @Valid @RequestBody ProjectUpdateResponseDto request
             ) {
         ResponseDto<ProjectDetailResponseDto> response = projectService.updateProject(principal, projectId, request);
 
