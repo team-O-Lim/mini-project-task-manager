@@ -55,6 +55,4 @@ public interface TaskRepository  extends JpaRepository<Task, Long> {
     Optional<Task> findByIdWithTaskTags(@Param("id") Long id);
 
     Optional<Task> findByIdAndProjectId(Long taskId, Long projectId);
-
-//    Optional<Task> findByAssigneesId(List<Long> assigneesId);
 }

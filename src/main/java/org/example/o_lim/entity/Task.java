@@ -5,14 +5,10 @@ import org.example.o_lim.common.enums.TaskStatus;
 import org.example.o_lim.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.o_lim.repository.TagRepository;
-import org.example.o_lim.repository.TaskRepository;
-import org.example.o_lim.repository.UserRepository;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tasks",
@@ -138,7 +134,6 @@ public class Task extends BaseTimeEntity {
         this.assignees.removeIf(taskAssignees ->
                 taskAssignees.getAssignees() != null &&
                 taskAssignees.getAssignees().getId().equals(userId));
-
     }
 
     public void addTaskTag(TaskTag taskTag) {
@@ -162,50 +157,9 @@ public class Task extends BaseTimeEntity {
 
     public void setContent(String content) { this.content = content;}
 
-    public void setAssignee(List<Long> assigneeIds, UserRepository userRepository) {
-        this.assignees.clear();
-
-        if(assigneeIds == null || assigneeIds.isEmpty()) {
-            return;
-        }
-
-        for (Long userId : assigneeIds) {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 존재하지 않습니다. ID: " + userId));
-
-            this.assignees.add(new TaskAssignees(this, user));
-        }
-    }
-
     public void setStatus(TaskStatus status) { this.status = status; }
 
     public void setPriority(PriorityStatus priority) { this.priority = priority;}
-
-    public void setTagId(List<Long> tagIds, TagRepository tagRepository, TaskRepository taskRepository) {
-        List<TaskTag> oldTaskTags = new ArrayList<>(this.getTaskTags());
-
-        for(TaskTag oldTaskTag: oldTaskTags) {
-            oldTaskTag.setTask(null);
-            this.taskTags.remove(oldTaskTag);
-        }
-        taskRepository.flush();
-
-        if(tagIds == null || tagIds.isEmpty()) {
-            return;
-        }
-
-        Set<Long> addedTagIds = new HashSet<>();
-
-        for (Long tagId : tagIds) {
-            if(!addedTagIds.add(tagId)) continue;
-
-            Tag tag = tagRepository.findById(tagId)
-                    .orElseThrow(() -> new EntityNotFoundException("태그가 존재하지 않습니다. ID: " + tagId));
-
-            TaskTag taskTag = TaskTag.create(this, tag);
-            this.addTaskTag(taskTag);
-        }
-    }
 
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
@@ -216,24 +170,10 @@ public class Task extends BaseTimeEntity {
 
         boolean alreadyExists = taskTags.stream()
                 .anyMatch(tt -> tt.getTag().getId().equals(tag.getId()));
+
         if (alreadyExists) return;
 
         TaskTag taskTag = TaskTag.create(this, tag);
         this.taskTags.add(taskTag);
     }
-
-
-    public Set<User> getTaskAssigneeUsers() {
-        return this.assignees.stream()
-                .map(TaskAssignees::getAssignees)
-                .collect(Collectors.toSet());
-    }
-
-    public void setAssignees(Set<User> users) {
-        this.assignees.clear();
-        for(User user: users) {
-            this.assignees.add(new TaskAssignees(this, user));
-        }
-    }
-
 }
