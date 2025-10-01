@@ -1,5 +1,6 @@
 package org.example.o_lim.dto.project.response;
 
+import org.example.o_lim.common.utils.DateUtils;
 import org.example.o_lim.entity.Project;
 import java.time.LocalDateTime;
 
@@ -9,8 +10,8 @@ public record ProjectDetailResponseDto (
         String adminManagerNickname,
         String title,
         String description,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        String createdAt,
+        String updatedAt
 ) {
     // 단건 조회
     public static ProjectDetailResponseDto from(Project project) {
@@ -20,8 +21,8 @@ public record ProjectDetailResponseDto (
                 project.getAdmin().getNickname(),
                 project.getTitle(),
                 project.getDescription(),
-                project.getCreatedAt(),
-                project.getUpdatedAt()
+                DateUtils.toKstString(project.getCreatedAt()),
+                DateUtils.toKstString(project.getUpdatedAt())
             );
         }
     }

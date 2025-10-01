@@ -4,10 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.o_lim.dto.ResponseDto;
 import org.example.o_lim.dto.project.request.ProjectCreateRequestDto;
-import org.example.o_lim.dto.project.response.ProjectDetailResponseDto;
-import org.example.o_lim.dto.project.response.ProjectListResponseDto;
-import org.example.o_lim.dto.project.response.ProjectTaskCountResponseDto;
-import org.example.o_lim.dto.project.response.ProjectUpdateRequestDto;
+import org.example.o_lim.dto.project.request.ProjectUpdateRequestDto;
+import org.example.o_lim.dto.project.response.*;
 import org.example.o_lim.entity.Project;
 import org.example.o_lim.entity.User;
 import org.example.o_lim.repository.ProjectRepository;
@@ -29,7 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<ProjectDetailResponseDto> createProject(
+    public ResponseDto<ProjectCreateResponseDto> createProject(
             UserPrincipal principal, ProjectCreateRequestDto dto
             ) {
         User admin = userRepository.findById(principal.getId())
@@ -47,7 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
         );
         projectRepository.save(project);
 
-        return ResponseDto.setSuccess("SUCCESS", ProjectDetailResponseDto.from(project));
+        return ResponseDto.setSuccess("SUCCESS", ProjectCreateResponseDto.from(project));
     }
 
     @Override
@@ -71,7 +69,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     @Transactional
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
-    public ResponseDto<ProjectDetailResponseDto> updateProject(
+    public ResponseDto<ProjectUpdateResponseDto> updateProject(
             UserPrincipal principal, Long projectId, ProjectUpdateRequestDto dto
             ) {
         Project project = projectRepository.findById(projectId)
@@ -79,7 +77,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         project.update(dto.title(), dto.description());
 
-        return ResponseDto.setSuccess("SUCCESS", ProjectDetailResponseDto.from(project));
+        return ResponseDto.setSuccess("SUCCESS", ProjectUpdateResponseDto.from(project));
     }
 
     @Override
