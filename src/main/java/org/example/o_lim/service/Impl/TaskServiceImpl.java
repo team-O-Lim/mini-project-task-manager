@@ -170,13 +170,6 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findByIdAndProjectId(taskId, projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
 
-//        Task addTaskAssignees = taskRepository.findByAssigneesId(request.addAssigneeIds())
-//                .orElseThrow(() -> new IllegalArgumentException("해당 직무의 담당자가 존재하지 않습니다."));
-//
-//        Task removeTaskAssignees = taskRepository.findByAssigneesId(request.removeAssigneeIds())
-//                .orElseThrow(() -> new IllegalArgumentException("해당 직무의 담당자가 존재하지 않습니다."));
-
-
         if (request.title() == null
                 && request.content() == null
                 && request.status() == null
@@ -192,12 +185,10 @@ public class TaskServiceImpl implements TaskService {
 
         String newTitle = (request.title() != null && !request.title().isBlank()) ? request.title() : null;
         String newContent = (request.content() != null && !request.content().isBlank()) ? request.content() : null;
-//        List<Long> newAssignee = (request.assigneeIds() != null && !request.assigneeIds().isEmpty())
-//                ? request.assigneeIds() : null;
         Set<Long> addAssignees = request.addAssigneeIds() == null ? Collections.emptySet() : new HashSet<>(request.addAssigneeIds());
-        Set<Long> removeAssignee = request.removeAssigneeIds() == null ? Collections.emptySet() : new HashSet<>(request.removeAssigneeIds());
+        Set<Long> removeAssignees = request.removeAssigneeIds() == null ? Collections.emptySet() : new HashSet<>(request.removeAssigneeIds());
 
-        boolean changedAssignee = !addAssignees.isEmpty() || !removeAssignee.isEmpty();
+        boolean changedAssignee = !addAssignees.isEmpty() || !removeAssignees.isEmpty();
 
         TaskStatus newStatus = task.getStatus();
         String statusStr = request.status();
@@ -297,7 +288,6 @@ public class TaskServiceImpl implements TaskService {
         // 변경사항 판단
         boolean changedTitle = newTitle != null && !java.util.Objects.equals(task.getTitle(), newTitle);
         boolean changedContent = newContent != null && !java.util.Objects.equals(task.getContent(), newContent);
-//        boolean changedAssignee = newAssignee != null;
         boolean changedStatus = !task.getStatus().equals(newStatus);
         boolean changedPriority = !task.getPriority().equals(newPriority);
         boolean changedTag = (!toAdd.isEmpty() || !toRemove.isEmpty());
@@ -311,13 +301,22 @@ public class TaskServiceImpl implements TaskService {
         if (changedTitle) task.setTitle(newTitle);
         if (changedContent) task.setContent(newContent);
         if (changedAssignee) {
-            if (!removeAssignee.isEmpty()) {
-                List<User> usersToRemove = userRepository.findAllById(removeAssignee);
-//                for (User user : usersToRemove) {
-//                    task.removeAssignee(user);
-////                }
-                if (usersToRemove.size() != removeAssignee.size()) {
-                    throw new IllegalArgumentException("존재하지 않는 담당자가 포함되어 있습니다.");
+            if (!removeAssignees.isEmpty()) {
+
+                List<Long> removeAssigneeIds = new ArrayList<>(removeAssignees);
+
+                List<User> usersToRemove = userRepository.findAllById(removeAssigneeIds);
+
+                Set<Long> foundIds = usersToRemove.stream()
+                            .map(User::getId)
+                            .collect(Collectors.toSet());
+
+                List<Long> notFoundIds = removeAssigneeIds.stream()
+                            .filter(id -> !foundIds.contains(id))
+                            .collect(Collectors.toList());
+
+                if(!notFoundIds.isEmpty()) {
+                    throw new IllegalArgumentException("존재하지 않는 유저가 포함되어 있습니다. ID: " +notFoundIds);
                 }
 
                 Set<Long> currentAssigneeIds = task.getAssignee().stream()
@@ -325,22 +324,30 @@ public class TaskServiceImpl implements TaskService {
                         .map(User::getId)
                         .collect(Collectors.toSet());
 
-                for (Long removeId : removeAssignee) {
-                    if (!currentAssigneeIds.contains(removeId)) {
-                        throw new IllegalArgumentException("해당 작업에 할당되지 않은 담당자(ID= " + removeId + ")가 포함되어 있습니다.");
+                List<Long> notAssignedIds = removeAssignees.stream()
+                        .filter(id -> !currentAssigneeIds.contains(id))
+                        .collect(Collectors.toList());
+
+                    if (!notAssignedIds.isEmpty()) {
+                        throw new IllegalArgumentException("해당 작업에 할당되지 않은 담당자(ID= " + notAssignedIds + ")가 포함되어 있습니다.");
 
                     }
-                }
+
                 usersToRemove.forEach(task::removeAssignee);
             }
 
            if (!addAssignees.isEmpty()) {
                 List<User> usersToAdd = userRepository.findAllById(addAssignees);
-//                for (User user : usersToAdd) {
-//                    task.addAssignee(user);
-//                }
                if (usersToAdd.size() != addAssignees.size()) {
-                   throw new IllegalArgumentException("존재하지 않는 유저가 포함되어 있습니다.");
+
+                   Set<Long> foundIds = usersToAdd.stream()
+                           .map(User::getId)
+                           .collect(Collectors.toSet());
+
+                   List<Long> notFoundIds = addAssignees.stream()
+                           .filter(id -> !foundIds.contains(id))
+                           .collect(Collectors.toList());
+                   throw new IllegalArgumentException("존재하지 않는 유저가 포함되어 있습니다. ID: " + notFoundIds);
                }
                usersToAdd.forEach(task::addAssignee);
             }
@@ -349,7 +356,6 @@ public class TaskServiceImpl implements TaskService {
 
         if (changedStatus) task.setStatus(newStatus);
         if (changedPriority) task.setPriority(newPriority);
-
         if (changedTag) {
             // 추가
             for (Long tagId : toAdd) {
