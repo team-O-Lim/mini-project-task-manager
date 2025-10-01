@@ -19,9 +19,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -144,12 +144,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public ResponseDto<List<TaskDetailResponseDto>> searchTasks(
             Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority,
-            LocalDateTime from, LocalDateTime to, LocalDate dueDate
+            LocalDate dueDate
             ) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 프로젝트가 존재하지 않습니다."));
 
-        List<Task> tasks = taskRepository.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
+        List<Task> tasks = taskRepository.searchTasks(projectId, createUserId, status, priority, dueDate);
 
         List<TaskDetailResponseDto> dto = tasks.stream()
                 .map(TaskDetailResponseDto::from)
@@ -170,26 +170,38 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskRepository.findByIdAndProjectId(taskId, projectId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 직무가 존재하지 않습니다."));
 
+//        Task addTaskAssignees = taskRepository.findByAssigneesId(request.addAssigneeIds())
+//                .orElseThrow(() -> new IllegalArgumentException("해당 직무의 담당자가 존재하지 않습니다."));
+//
+//        Task removeTaskAssignees = taskRepository.findByAssigneesId(request.removeAssigneeIds())
+//                .orElseThrow(() -> new IllegalArgumentException("해당 직무의 담당자가 존재하지 않습니다."));
+
+
         if (request.title() == null
                 && request.content() == null
-                && request.assigneeIds() == null
                 && request.status() == null
                 && request.priority() == null
                 && request.dueDate() == null
                 && (request.tagId() == null || request.tagId().isEmpty())
                 && (request.newTags() == null || request.newTags().isEmpty())
+                && (request.addAssigneeIds() == null || request.addAssigneeIds().isEmpty())
+                && (request.removeAssigneeIds() == null || request.removeAssigneeIds().isEmpty())
         ) {
                 throw new IllegalArgumentException("수정할 정보를 입력해주세요.");
         }
 
         String newTitle = (request.title() != null && !request.title().isBlank()) ? request.title() : null;
         String newContent = (request.content() != null && !request.content().isBlank()) ? request.content() : null;
-        List<Long> newAssignee = (request.assigneeIds() != null && !request.assigneeIds().isEmpty()) ? request.assigneeIds() : null;
+//        List<Long> newAssignee = (request.assigneeIds() != null && !request.assigneeIds().isEmpty())
+//                ? request.assigneeIds() : null;
+        Set<Long> addAssignees = request.addAssigneeIds() == null ? Collections.emptySet() : new HashSet<>(request.addAssigneeIds());
+        Set<Long> removeAssignee = request.removeAssigneeIds() == null ? Collections.emptySet() : new HashSet<>(request.removeAssigneeIds());
+
+        boolean changedAssignee = !addAssignees.isEmpty() || !removeAssignee.isEmpty();
 
         TaskStatus newStatus = task.getStatus();
         String statusStr = request.status();
-
-        if (statusStr == null || statusStr.isBlank()) {
+        if (statusStr != null && !statusStr.isBlank()) {
             try {
                 newStatus = TaskStatus.valueOf(statusStr);
             } catch (IllegalArgumentException e) {
@@ -199,8 +211,7 @@ public class TaskServiceImpl implements TaskService {
 
         PriorityStatus newPriority = task.getPriority();
         String priorityStr = request.priority();
-
-        if (priorityStr == null || priorityStr.isBlank()) {
+        if (priorityStr != null && !priorityStr.isBlank()) {
             try {
                 newPriority = PriorityStatus.valueOf(priorityStr);
             } catch (IllegalArgumentException e) {
@@ -208,56 +219,16 @@ public class TaskServiceImpl implements TaskService {
             }
         }
 
-        List<Long> existingTagIds = task.getTaskTags().stream()
-                .map(tt -> tt.getTag().getId())
-                .toList();
-
-        List<Long> newTagIds = new ArrayList<>();
-
-        if(request.tagId() != null && !request.tagId().isEmpty()) {
-            newTagIds.addAll(request.tagId());
-        }
-
-        if(request.newTags() != null && !request.newTags().isEmpty()) {
-            for(TagRequestDto newTagDto: request.newTags()) {
-                String name = newTagDto.name() != null ? newTagDto.name().trim() : "";
-                String color = newTagDto.color() != null ? newTagDto.color().trim() : "";
-
-                if(name.isEmpty() || color.isEmpty()) continue;
-
-                if(tagRepository.existsByNameAndProjectId(name, project.getId())) {
-                    throw new IllegalArgumentException("이미 존재하는 태그명입니다.");
-                }
-
-                if(tagRepository.existsByColorAndProjectId(color, project.getId())) {
-                    throw new IllegalArgumentException("이미 존재하는 색상입니다.");
-                }
-
-                Tag newTag = Tag.create(project, name, color);
-                tagRepository.save(newTag);
-
-                newTagIds.add(newTag.getId());
-            }
-        }
-
-        if(request.tagId() != null && !request.tagId().isEmpty()) {
-            if(newTagIds == null) {
-                newTagIds = new ArrayList<>(request.tagId());
-            }
-        }
-
         String dueDateStr = request.dueDate();
         LocalDate newDueDate = null;
         boolean changedDueDate = false;
-
         if (dueDateStr == null) {
-            if (task.getDueDate() != null) {
+            if (task.getDueDate() != null) { // null로 초기화(제거) 요청
                 newDueDate = null;
                 changedDueDate = true;
             }
         } else if (dueDateStr.isBlank()) {
             newDueDate = task.getDueDate();
-            changedDueDate = false;
         } else {
             try {
                 LocalDate parsedDate = LocalDate.parse(dueDateStr);
@@ -266,38 +237,137 @@ public class TaskServiceImpl implements TaskService {
                     changedDueDate = true;
                 } else {
                     newDueDate = task.getDueDate();
-                    changedDueDate = false;
                 }
             } catch (DateTimeParseException e) {
                 throw new IllegalArgumentException("dueDate 형식이 올바르지 않습니다.");
             }
         }
 
-        boolean changedTitle = newTitle != null && !Objects.equals(task.getTitle(), newTitle);
-        boolean changedContent = newContent != null && !Objects.equals(task.getContent(), newContent);
-        boolean changedAssignee = newAssignee != null;
-        boolean changedStatus = !task.getStatus().equals(newStatus);
-        boolean changedPriority = !task.getPriority().equals(newPriority);
-        boolean changedTagId = false;
+        // ====== 태그: "교체" -> "추가/삭제" 방식으로 변경 ======
+        // 현재 태그
+        Set<Long> existingTagIds = task.getTaskTags().stream()
+                .map(tt -> tt.getTag().getId())
+                .collect(java.util.stream.Collectors.toSet());
 
-        if(newTagIds != null) {
-            changedTagId = !new HashSet<>(existingTagIds).equals(new HashSet<>(newTagIds));
+        // 요청으로 들어온 추가/삭제 목록
+        Set<Long> toAdd = request.addTagIds() == null ? new java.util.HashSet<>() : new java.util.HashSet<>(request.addTagIds());
+        Set<Long> toRemove = request.removeTagIds() == null ? new java.util.HashSet<>() : new java.util.HashSet<>(request.removeTagIds());
+
+        // 새 태그 생성(newTags): 이름/색상 유효성 + 중복 검사 후 생성, 생성된 ID를 toAdd에 합치기
+        if (request.newTags() != null && !request.newTags().isEmpty()) {
+            for (TagRequestDto newTagDto : request.newTags()) {
+                String name = newTagDto.name() != null ? newTagDto.name().trim() : "";
+                String color = newTagDto.color() != null ? newTagDto.color().trim() : "";
+                if (name.isEmpty() || color.isEmpty()) continue;
+
+                if (tagRepository.existsByNameAndProjectId(name, project.getId())) {
+                    throw new IllegalArgumentException("이미 존재하는 태그명입니다.");
+                }
+                if (tagRepository.existsByColorAndProjectId(color, project.getId())) {
+                    throw new IllegalArgumentException("이미 존재하는 색상입니다.");
+                }
+
+                Tag newTag = Tag.create(project, name, color);
+                tagRepository.save(newTag);
+                toAdd.add(newTag.getId());
+            }
         }
 
+        // 동일 ID가 add/remove 양쪽에 들어온 경우 제거
+        if (!toAdd.isEmpty() && !toRemove.isEmpty()) {
+            Set<Long> intersection = new java.util.HashSet<>(toAdd);
+            intersection.retainAll(toRemove);
+            if (!intersection.isEmpty()) {
+                // 일반적으로는 충돌을 에러로 처리하거나, 여기서는 "무시" 정책 선택
+                toAdd.removeAll(intersection);
+                toRemove.removeAll(intersection);
+            }
+        }
+
+        // 유효성: 프로젝트에 속한 태그인지 확인
+        for (Long tagId : toAdd) {
+            boolean exists = tagRepository.existsByIdAndProjectId(tagId, project.getId());
+            if (!exists) throw new IllegalArgumentException("프로젝트에 속하지 않는 태그(ID=" + tagId + ") 입니다.");
+        }
+        for (Long tagId : toRemove) {
+            // 삭제 대상이 현재 달려있지 않다면 그냥 무시(혹은 에러 처리도 가능)
+            // 여기서는 무시 정책 선택
+        }
+
+        // 변경사항 판단
+        boolean changedTitle = newTitle != null && !java.util.Objects.equals(task.getTitle(), newTitle);
+        boolean changedContent = newContent != null && !java.util.Objects.equals(task.getContent(), newContent);
+//        boolean changedAssignee = newAssignee != null;
+        boolean changedStatus = !task.getStatus().equals(newStatus);
+        boolean changedPriority = !task.getPriority().equals(newPriority);
+        boolean changedTag = (!toAdd.isEmpty() || !toRemove.isEmpty());
+
         if (!changedTitle && !changedContent && !changedAssignee && !changedStatus
-             && !changedPriority && !changedTagId && !changedDueDate) {
+                && !changedPriority && !changedTag && !changedDueDate) {
             throw new IllegalArgumentException("변경된 정보가 없습니다.");
         }
 
+        // ====== 실제 반영 ======
         if (changedTitle) task.setTitle(newTitle);
         if (changedContent) task.setContent(newContent);
-        if (changedAssignee) task.setAssignee(newAssignee, userRepository);
-        if (changedStatus) task.setStatus(newStatus);
-        if (changedPriority) task.setPriority(newPriority);
-        if (changedTagId) {
-            task.setTagId(newTagIds, tagRepository, taskRepository);
+        if (changedAssignee) {
+            if (!removeAssignee.isEmpty()) {
+                List<User> usersToRemove = userRepository.findAllById(removeAssignee);
+//                for (User user : usersToRemove) {
+//                    task.removeAssignee(user);
+////                }
+                if (usersToRemove.size() != removeAssignee.size()) {
+                    throw new IllegalArgumentException("존재하지 않는 담당자가 포함되어 있습니다.");
+                }
+
+                Set<Long> currentAssigneeIds = task.getAssignee().stream()
+                        .map(TaskAssignees::getAssignees)
+                        .map(User::getId)
+                        .collect(Collectors.toSet());
+
+                for (Long removeId : removeAssignee) {
+                    if (!currentAssigneeIds.contains(removeId)) {
+                        throw new IllegalArgumentException("해당 작업에 할당되지 않은 담당자(ID= " + removeId + ")가 포함되어 있습니다.");
+
+                    }
+                }
+                usersToRemove.forEach(task::removeAssignee);
+            }
+
+           if (!addAssignees.isEmpty()) {
+                List<User> usersToAdd = userRepository.findAllById(addAssignees);
+//                for (User user : usersToAdd) {
+//                    task.addAssignee(user);
+//                }
+               if (usersToAdd.size() != addAssignees.size()) {
+                   throw new IllegalArgumentException("존재하지 않는 유저가 포함되어 있습니다.");
+               }
+               usersToAdd.forEach(task::addAssignee);
+            }
             taskRepository.flush();
         }
+
+        if (changedStatus) task.setStatus(newStatus);
+        if (changedPriority) task.setPriority(newPriority);
+
+        if (changedTag) {
+            // 추가
+            for (Long tagId : toAdd) {
+                if (!existingTagIds.contains(tagId)) {
+                    Tag tag = tagRepository.findById(tagId)
+                            .orElseThrow(() -> new IllegalArgumentException("태그(ID=" + tagId + ")를 찾을 수 없습니다."));
+                    task.addTag(tag); // <-- Task 엔티티에 addTag(Tag) 유틸 메서드가 있다고 가정
+                    existingTagIds.add(tagId);
+                }
+            }
+            // 삭제
+            if (!toRemove.isEmpty()) {
+                // TaskTag 컬렉션에서 제거
+                task.getTaskTags().removeIf(tt -> toRemove.contains(tt.getTag().getId()));
+            }
+            taskRepository.flush(); // FK/조인테이블 반영 보장
+        }
+
         if (changedDueDate) task.setDueDate(newDueDate);
 
         return ResponseDto.setSuccess("SUCCESS", TaskDetailResponseDto.from(task));

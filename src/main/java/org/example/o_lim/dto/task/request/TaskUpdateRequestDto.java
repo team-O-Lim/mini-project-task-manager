@@ -11,13 +11,19 @@ public record TaskUpdateRequestDto(
 
         String content,
 
-        List<Long> assigneeIds,
+        List<Long> addAssigneeIds,
+
+        List<Long> removeAssigneeIds,
 
         String status,
 
         String priority,
 
         List<Long> tagId,
+
+        List<Long> addTagIds,
+
+        List<Long> removeTagIds,
 
         List<TagRequestDto> newTags,
 
