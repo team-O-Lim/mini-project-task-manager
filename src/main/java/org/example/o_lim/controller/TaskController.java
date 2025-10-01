@@ -15,12 +15,10 @@ import org.example.o_lim.dto.task.response.TaskCreateResponseDto;
 import org.example.o_lim.dto.task.response.TaskDetailResponseDto;
 import org.example.o_lim.dto.task.response.TaskSearchResponseDto;
 import org.example.o_lim.service.TaskService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -69,13 +67,9 @@ public class TaskController {
             @RequestParam(required = false) Long createUserId,
             @RequestParam(required = false) TaskStatus status,
             @RequestParam(required = false) PriorityStatus priority,
-            @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime from,
-            @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDateTime to,
             @RequestParam(required = false) LocalDate dueDate
             ) {
-        ResponseDto<List<TaskDetailResponseDto>> response = taskService.searchTasks(projectId, createUserId, status, priority, from, to, dueDate);
+        ResponseDto<List<TaskDetailResponseDto>> response = taskService.searchTasks(projectId, createUserId, status, priority, dueDate);
 
         return ResponseEntity.ok().body(response);
     }

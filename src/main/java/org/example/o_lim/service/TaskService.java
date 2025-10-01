@@ -12,7 +12,6 @@ import org.example.o_lim.dto.task.response.TaskDetailResponseDto;
 import org.example.o_lim.dto.task.response.TaskSearchResponseDto;
 import org.example.o_lim.security.UserPrincipal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface TaskService {
@@ -20,9 +19,7 @@ public interface TaskService {
     ResponseDto<List<TaskSearchResponseDto>> getAllTasks(Long projectId);
     ResponseDto<TaskDetailResponseDto> getTaskById(Long projectId, Long taskId);
     ResponseDto<List<TaskDetailResponseDto>> searchTasks(
-            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority,
-            LocalDateTime from, LocalDateTime to, LocalDate dueDate
-    );
+            Long projectId, Long createUserId, TaskStatus status, PriorityStatus priority, LocalDate dueDate);
     ResponseDto<TaskDetailResponseDto> updateTask(
             Long projectId, Long taskId, UserPrincipal principal,
             @Valid TaskUpdateRequestDto request

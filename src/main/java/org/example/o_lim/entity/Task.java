@@ -11,10 +11,8 @@ import org.example.o_lim.repository.UserRepository;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "tasks",
@@ -133,6 +131,16 @@ public class Task extends BaseTimeEntity {
         this.assignees.add(taskAssignees);
     }
 
+    public void removeAssignee(User user) {
+        if (this.assignees == null || user == null) return;
+
+        Long userId = user.getId();
+        this.assignees.removeIf(taskAssignees ->
+                taskAssignees.getAssignees() != null &&
+                taskAssignees.getAssignees().getId().equals(userId));
+
+    }
+
     public void addTaskTag(TaskTag taskTag) {
         if (this.taskTags == null) {
             this.taskTags = new ArrayList<>();
@@ -155,21 +163,17 @@ public class Task extends BaseTimeEntity {
     public void setContent(String content) { this.content = content;}
 
     public void setAssignee(List<Long> assigneeIds, UserRepository userRepository) {
-        if(assigneeIds == null) {
-            this.assignees.clear();
+        this.assignees.clear();
 
+        if(assigneeIds == null || assigneeIds.isEmpty()) {
             return;
         }
-
-        this.assignees.clear();
-        userRepository.flush();
 
         for (Long userId : assigneeIds) {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("해당 사용자가 존재하지 않습니다. ID: " + userId));
 
-            TaskAssignees taskAssignees = new TaskAssignees(this, user);
-            this.assignees.add(taskAssignees);
+            this.assignees.add(new TaskAssignees(this, user));
         }
     }
 
@@ -204,4 +208,32 @@ public class Task extends BaseTimeEntity {
     }
 
     public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
+
+    public void addTag(Tag tag) {
+        if (this.taskTags == null) {
+            this.taskTags = new ArrayList<>();
+        }
+
+        boolean alreadyExists = taskTags.stream()
+                .anyMatch(tt -> tt.getTag().getId().equals(tag.getId()));
+        if (alreadyExists) return;
+
+        TaskTag taskTag = TaskTag.create(this, tag);
+        this.taskTags.add(taskTag);
+    }
+
+
+    public Set<User> getTaskAssigneeUsers() {
+        return this.assignees.stream()
+                .map(TaskAssignees::getAssignees)
+                .collect(Collectors.toSet());
+    }
+
+    public void setAssignees(Set<User> users) {
+        this.assignees.clear();
+        for(User user: users) {
+            this.assignees.add(new TaskAssignees(this, user));
+        }
+    }
+
 }

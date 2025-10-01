@@ -37,6 +37,10 @@ public class TaskTag {
         return taskTag;
     }
 
+    public Tag getTag() {
+        return tag;
+    }
+
     public void setTask(Task task) {
         if (this.task != null && !this.task.equals(task)) {
             this.task.getTaskTags().remove(this);
