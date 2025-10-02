@@ -1,0 +1,57 @@
+.project {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.project-card {
+  max-width: 400px;
+  margin: 0;
+  padding: 20px;
+}
+
+.project-detail {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.project-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 5px;
+}
+
+.project-desc {
+  font-size: 1rem;
+  color: #777;
+}
+
+.project-author,
+.project-date {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #555;
+  margin: 20px;
+  margin-bottom: 10px;
+}
+
+.notification {
+  background-color: honeydew;
+  font-size: 24px;
+  font-weight: bold;
+  max-width: 400px;
+  margin: 0;
+  padding: 20px;
+}
+
+.notification-title {
+  background-color: aliceblue;
+  max-width: 400px;
+  margin: 0;
+  padding: 20px;
+}
+
