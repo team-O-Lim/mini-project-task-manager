@@ -5,6 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0bc68b09-dd73-4eac-9404-22fe18ed71af" name="변경" comment="">
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/css/layout.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/layout.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/html/index.html" afterDir="false" />
+=======
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
 <<<<<<< HEAD
 =======
@@ -17,6 +24,7 @@
 >>>>>>> develop
 >>>>>>> develop
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+>>>>>>> develop
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +35,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
 <<<<<<< HEAD
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;minion-K&quot;
+=======
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -36,14 +50,21 @@
   &quot;lastFilter&quot;: {
     &quot;state&quot;: &quot;OPEN&quot;,
     &quot;assignee&quot;: &quot;untilthe-end&quot;
+>>>>>>> develop
   }
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/team-O-Lim/mini-project-task-manager.git&quot;,
+<<<<<<< HEAD
+    &quot;accountId&quot;: &quot;36668922-f6ae-41b4-9c01-5bb123b3a511&quot;
+  }
+}</component>
+=======
     &quot;accountId&quot;: &quot;83f7a3c4-31f8-4905-9fc6-a9cd000b337b&quot;
   }
 }</component>
+>>>>>>> develop
 >>>>>>> develop
 >>>>>>> develop
 >>>>>>> develop
@@ -56,6 +77,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -66,10 +89,20 @@
 <<<<<<< HEAD
 =======
 =======
+>>>>>>> develop
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+<<<<<<< HEAD
+    &quot;git-widget-placeholder&quot;: &quot;fix/updated-code/minion&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+=======
     &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
 <<<<<<< HEAD
     &quot;last_opened_file_path&quot;: &quot;C:/_이상은/mini-project-task-manager&quot;,
@@ -80,6 +113,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
 >>>>>>> develop
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+>>>>>>> develop
 >>>>>>> develop
 >>>>>>> develop
   }
@@ -101,6 +135,11 @@
       <updated>1759309500435</updated>
       <workItem from="1759309501670" duration="1000" />
 <<<<<<< HEAD
+      <workItem from="1759372677451" duration="3866000" />
+      <workItem from="1759385838777" duration="5905000" />
+      <workItem from="1759394994609" duration="593000" />
+=======
+<<<<<<< HEAD
       <workItem from="1759372786888" duration="1000" />
       <workItem from="1759372808410" duration="30000" />
 =======
@@ -113,6 +152,7 @@
 =======
       <workItem from="1759372462321" duration="79000" />
       <workItem from="1759372553071" duration="84000" />
+>>>>>>> develop
 >>>>>>> develop
 >>>>>>> develop
 >>>>>>> develop

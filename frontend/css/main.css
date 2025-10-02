@@ -7,7 +7,12 @@
   --accent: #4B382A;
   --primary: #C08A44;
   --text: #6B5E56;
+
+  --form: #F7EAE4;
+  --form-width: 600px;
+
   --radius: 16px;
+  --shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 @font-face {
@@ -24,4 +29,8 @@
   text-decoration: none;
   box-sizing: border-box;
   font-family: 'NexonMaplestory';
+  color: var(--text);
+}
+body {
+  height: 100vh;
 }
