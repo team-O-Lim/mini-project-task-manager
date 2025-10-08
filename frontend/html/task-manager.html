@@ -70,9 +70,10 @@
     <input type="checkbox" id="resizeToggle" hidden> 
 
 <div class="main">
+  <div class="main-header">
   <h1>Project Title</h1>
-  <label for="togglePanel" class="task-btn">Task 열기 테스트</label>
-
+  <label for="togglePanel" class="task-btn">Task 생성 +</label>
+</div>
 
   <div class="task-list">
     
@@ -84,14 +85,14 @@
     <div class="cell">tags</div>
   </div>
   <div class="task-row">
-    <div class="cell">Task Title1</div>
+    <label for="togglePanel" class="cell">Task Title1</label>
     <div class="cell">assignees1</div>
     <div class="cell">LOW</div>
     <div class="cell">Todo</div>
     <div class="cell">tagIds</div>
   </div>
   <div class="task-row">
-    <div class="cell">Task Title2</div>
+    <label for="togglePanel" class="cell">Task Title2</label>
     <div class="cell">assignees3</div>
     <div class="cell">MEDIUM</div>
     <div class="cell">DONE</div>
@@ -151,7 +152,7 @@
       <button>+</button>
     </div>
     <article>
-    <div class="section">
+    <div class="form-group">
       <label for="message">직무 내용</label>
             <textarea name="message" id="message" rows="4"></textarea>
     </div>

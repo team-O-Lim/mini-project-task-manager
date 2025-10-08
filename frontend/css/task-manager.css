@@ -1,15 +1,16 @@
 .task-panel {
-  position: absolute;
+  position: fixed;
       top: 0;
       right: 0;
       width: 0;
-      height: auto;
+      height: 100vh;
       min-height: 100%;
       bottom: 0;
       background: #fff;
       overflow: hidden;
       border-left: 2px solid #ddd;
       transition: width 0.3s ease;
+      z-index: 1000;
 }
 
 #togglePanel:checked ~ .task-panel {
@@ -17,6 +18,7 @@
   overflow: auto;
   min-width: 300px;
   max-width: 100%;
+  resize: horizontal;
 }
 
 #togglePanel:checked ~ #resizeToggle:checked ~ .task-panel {
@@ -85,10 +87,65 @@
       background: #fafafa;
     }
 
-    .panel-body { padding: 15px; }
+    .panel-body { 
+      padding: 40px 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: center;
+      height: 100%;
+      /* align-items: stretch;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto; */
+    }
 
     .title {
       flex: 1;
       text-align: center;
       font-weight: bold;
+    }
+    .main-header{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .task-row label.cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      /* justify-content: space-between; */
+      justify-content: flex-start;
+      width: 100%;
+      max-width: 400px;
+      gap: 40px;
+    }
+
+    .form-group label {
+      width: 100px;
+      text-align: right;
+      font-weight: 600;
+      
+    }
+
+.form-group input:focus {
+  outline: none;
+  border: 2px solid rgb(238, 164, 138);
+}
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      flex: 1;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
     }
