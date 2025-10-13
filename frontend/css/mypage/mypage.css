@@ -14,9 +14,31 @@
   display: flex;
   gap: 30px;
 }
+.profile-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
 .my-profile {
   margin:0 10px 30px;
 }
+
+.update-button {
+  width: 80px;
+  height: 35px;
+  background-color: var(--side);
+  border-radius: var(--radius);
+  color: var(--accent);
+  position: relative;
+  top: 0;
+  cursor: pointer;
+}
+
+.update-button:hover {
+  background-color: var(--accent);
+  color: var(--header);
+}
+
 .mypage-items {
   width: 40%;
   margin: 0 auto;
@@ -44,7 +66,7 @@
 }
 
 .task-text {
-  margin: 0 10px 23px;
+  margin: 0 10px 30px;
 }
 
 .task-header {
