@@ -191,7 +191,7 @@
 }
 
 .comment-text {
-  width: 90%;
+  width: var(--form-width);
   height: 40px;
   font-size: 18px;
   border: 1px solid var(--sub);
