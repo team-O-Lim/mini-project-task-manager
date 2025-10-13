@@ -5,7 +5,7 @@
 }
 
 .main h2 {
-  margin: 5px 0 12px;
+  margin: 15px 0 20px;
   font-size: 1rem;
   color: #666;
 }
@@ -20,7 +20,7 @@
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   max-width: 300px;
 }
 
