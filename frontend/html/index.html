@@ -68,20 +68,24 @@
       <h2 style="font-size: 24px;">Project</h2>
 
     <div class="add-project">
+      <a href="#modal-add" class="open-modal">
       <button>+</button>
       <span>Add Project</span>
+      </a>
     </div>
 
     <div class="project-list">
       <div class="project-card">
-        <div class="project-info">
-          <div class="project-title">프로젝트 1</div>
-          <div class="project-author">작성자: 박현우</div>
-          <div class="project-desc">프로젝트 1 내용 예시.</div>
-        </div>
+        <a href="../html/project/project_detail.html" class="project-link">
+          <div class="project-info">
+            <div class="project-title">프로젝트 1</div>
+            <div class="project-author">작성자: 박현우</div>
+            <div class="project-desc">프로젝트 1 내용 예시.</div>
+          </div>
+        </a>
         <div class="edit-delete-btn">
-          <button class="edit-btn">수정</button>
-          <button class="delete-btn">삭제</button>
+          <a href="#modal-edit" class="edit-btn">수정</a>
+          <a href="#modal-delete" class="delete-btn">삭제</a>
         </div>
       </div>
 
@@ -92,8 +96,8 @@
           <div class="project-desc">프로젝트 2 내용 예시.</div>
         </div>
         <div class="edit-delete-btn">
-          <button class="edit-btn">수정</button>
-          <button class="delete-btn">삭제</button>
+          <a href="#modal-edit" class="edit-btn">수정</a>
+          <a href="#modal-delete" class="delete-btn">삭제</a>
         </div>
       </div>
 
@@ -104,8 +108,8 @@
           <div class="project-desc">프로젝트 3 내용 예시.</div>
         </div>
         <div class="edit-delete-btn">
-          <button class="edit-btn">수정</button>
-          <button class="delete-btn">삭제</button>
+          <a href="#modal-edit" class="edit-btn">수정</a>
+          <a href="#modal-delete" class="delete-btn">삭제</a>
         </div>
       </div>
 
@@ -116,13 +120,47 @@
           <div class="project-desc">프로젝트 3 내용 예시.</div>
         </div>
         <div class="edit-delete-btn">
-          <button class="edit-btn">수정</button>
-          <button class="delete-btn">삭제</button>
+          <a href="#modal-edit" class="edit-btn">수정</a>
+          <a href="#modal-delete" class="delete-btn">삭제</a>
         </div>
       </div>
     </div>
     </div>
   </div>
-  
+
+<div id="modal-add" class="modal">
+  <div class="modal-content">
+    <h2>프로젝트 추가</h2>
+    <input type="text" placeholder="프로젝트 명" class="modal-input">
+    <input type="text" placeholder="작성자" class="modal-input">
+    <textarea placeholder="프로젝트 내용"></textarea>
+    <div class="modal-btns">
+      <a href="#" class="btn">취소</a>
+      <a href="#" class="btn btn-primary">추가</a>
+    </div>
+  </div>
+</div>
+
+<div id="modal-edit" class="modal">
+  <div class="modal-content">
+    <h2>프로젝트 수정</h2>
+    <input type="text" value="수정 시 제목" class="modal-input">
+    <textarea>수정 시 내용</textarea>
+    <div class="modal-btns">
+      <a href="#" class="btn">취소</a>
+      <a href="#" class="btn btn-primary">저장</a>
+    </div>
+  </div>
+</div>
+
+<div id="modal-delete" class="modal">
+  <div class="modal-content">
+    <h2>정말 삭제하시겠습니까?</h2>
+    <div class="modal-btns">
+      <a href="#" class="btn">아니오</a>
+      <a href="#" class="btn btn-danger">예</a>
+    </div>
+  </div>
+</div>
 </body>
 </html>
