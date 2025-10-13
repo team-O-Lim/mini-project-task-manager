@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="../../css/main.css">
   <link rel="stylesheet" href="../../css/task/task-manager.css">
   <link rel="stylesheet" href="../../css/task/new-task.css">
+  <link rel="stylesheet" href="../../css/component/commet_tag.css">
 </head>
 <body>
   <header class="header">
@@ -109,8 +110,50 @@
       <input type="text">
       <label for="assignee">담당자:</label>
       <input type="text" id="assignee">
-      <label>태그:</label>
-      <input type="text">
+      <div class="tags ">
+        <div>
+          <label>Tag: </label>
+        </div>
+        <div class="tag-add">
+          <div class="selectedTagsWrapper">
+            <div class="selectedTags">
+              <div class="selected-tag">
+                <span style="color: [color값];">태그명</span>
+              </div>
+            </div>
+          </div>
+          <div class="tagToggleWrapper">
+            <button class="tagToggle">+</button>
+            <div class="tag-modal">
+              <div class="modal-new">
+                <div class="modal-top">
+                  <input class="tag-top-input" type="text" placeholder="new 태그">
+                  <input class="tag-top-input" type="text" placeholder="new 색상">
+                </div>
+                <div class="modal-footer">
+                  <button class="tag-btn">생성</button>
+                  <button class="tag-btn">제거</button>
+                </div>
+              </div>
+              <hr />
+              <div class="tag-itemsWrapper">
+                <input class="tag-item-input" type="checkbox" id="tag1">
+                <label for="tag1">
+                  <span style="color: color값;"></span>태그명값
+                </label>
+                <input class="tag-item-input" type="checkbox" id="tag2">
+                <label for="tag2">
+                  <span style="color: color값;"></span>태그명값
+                </label>
+                <input class="tag-item-input" type="checkbox" id="tag3">
+                <label for="tag3">
+                  <span style="color: color값;"></span>태그명값
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <label>진행 상태:</label>
       <select>
         <option>선택하세요</option>
@@ -181,25 +224,96 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <label>태그:</label>
-      <input type="text">
-      <button class="new-tag-btn">+</button>
-    </div>
+          <div class="tags ">
+        <div>
+          <label>Tag: </label>
+        </div>
+        <div class="tag-add">
+          <div class="selectedTagsWrapper">
+            <div class="selectedTags">
+              <div class="selected-tag">
+                <span style="color: [color값];">태그명</span>
+              </div>
+            </div>
+          </div>
+          <div class="tagToggleWrapper">
+            <button class="tagToggle">+</button>
+            <div class="tag-modal">
+              <div class="modal-new">
+                <div class="modal-top">
+                  <input class="tag-top-input" type="text" placeholder="new 태그">
+                  <input class="tag-top-input" type="text" placeholder="new 색상">
+                </div>
+                <div class="modal-footer">
+                  <button class="tag-btn">생성</button>
+                  <button class="tag-btn">제거</button>
+                </div>
+              </div>
+              <hr />
+              <div class="tag-itemsWrapper">
+                <input class="tag-item-input" type="checkbox" id="tag1">
+                <label for="tag1">
+                  <span style="color: color값;"></span>태그명값
+                </label>
+                <input class="tag-item-input" type="checkbox" id="tag2">
+                <label for="tag2">
+                  <span style="color: color값;"></span>태그명값
+                </label>
+                <input class="tag-item-input" type="checkbox" id="tag3">
+                <label for="tag3">
+                  <span style="color: color값;"></span>태그명값
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     <article>
     <div class="form-group top-align">
       <label for="message">직무 내용:</label>
             <textarea name="message" id="message" rows="4"></textarea>
     </div>
     </article>
-    <div class="section">
-      댓글
-    </div>
+          <div class="comment-header">
+        <!-- 코멘트 -->
+        <div>
+          <h2>Comment</h2>
+        </div>
+      </div>
+      <div class="comments inner1">
+        <div class="comment item1">
+          <input class="comment-text" type="text" placeholder="코멘트 내용을 입력해주세요.">
+        </div>
+        <div class="comment item2">
+          <button class="comment-btn">확인</button>
+        </div>
+      </div>
+
+      <div class="comments-out inner2">
+        <div class="comment-field item1">
+          <div>작성자값</div>
+        </div>
+        <div class="comment-field item2">
+          <div>내용값</div>
+        </div>
+        <div class="comment-field item3">
+          <div>날짜값</div>
+        </div>
+      </div>
+      <div class="comments-out inner2">
+        <div class="comment-field item1">
+          <div>작성자값</div>
+        </div>
+        <div class="comment-field item2">
+          <div>내용값</div>
+        </div>
+        <div class="comment-field item3">
+          <div>날짜값</div>
+        </div>
+      </div>
   </div>
   </div>
 </div>
-
-  </div>
-  
+</div>
 </body>
 </html>
