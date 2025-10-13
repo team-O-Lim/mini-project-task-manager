@@ -24,16 +24,15 @@ p {
   display: flex;
   justify-content: right;
   align-items: center;
+  gap: 15px;
+  padding: 10px;
 }
 
 .header-button {
   width: 100px;
   height: 40px;
-  margin: 10px 0;
   background-color: var(--side);
   color: var(--header);
-  border: none;
-  margin-right: 10px;
   border-radius: var(--radius);
   cursor: pointer;
 }
@@ -68,6 +67,10 @@ p {
   margin: 0 auto;
   align-items: center;
   gap: 10px;
+}
+
+.home-wrap:hover {
+  transform: translateY(-2px);
 }
 
 .home-wrap a{
@@ -115,7 +118,7 @@ p {
 .search-bar:focus {
   outline: none;
   background-color: var(--header);
-  border: 1.2px solid var(--sub);
+  border: 2px solid rgb(238, 164, 138);
 }
 
 .search-wrap p{
@@ -144,6 +147,9 @@ p {
 .project-wrap p {
   font-size: 24px;
 }
+.project-wrap:hover {
+  transform: translateY(-2px);
+}
 
 .side-project {
   height: 60px;
@@ -165,7 +171,7 @@ p {
 }
 
 .side-project a:hover {
-  color: var(--primary) !important;
+  color: var(--primary) !important
 }
 
 .setting-icon {

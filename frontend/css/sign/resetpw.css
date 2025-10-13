@@ -1,5 +1,8 @@
 body {
   background-color: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -25,7 +28,7 @@ body {
 
 .input-box:focus {
   outline: none;
-  border: 2px solid rgb(238, 164, 138);
+  border: 2px solid var(--focus);
 }
 
 .verify-btn {
