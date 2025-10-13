@@ -3,7 +3,7 @@
   display: flex;
   gap: 10px;
   align-items: top;
-  padding:5px 3px;
+  padding: 5px 3px;
 }
 
 .tag-message {
@@ -49,7 +49,7 @@
 .tagToggleWrapper {
   display: flex;
   padding-left: 20px;
-  
+
 }
 
 .tagToggle {
@@ -110,7 +110,8 @@
   margin-bottom: 15px;
 }
 
-.tag-top-input:focus, .tag-top-input:hover {
+.tag-top-input:focus,
+.tag-top-input:hover {
   outline: none;
   border: 2px solid rgb(238, 164, 138);
 }
@@ -169,7 +170,7 @@
 .comment-header {
   margin: 2px;
   padding: 5px 0;
-} 
+}
 
 .comments {
   display: flex;
@@ -177,11 +178,11 @@
   /* padding: 10px; */
   width: 90%;
   flex-wrap: nowrap;
-  
+
   align-items: center;
 }
 
-.comment{
+.comment {
   min-width: 50px;
   text-align: left;
 }
@@ -191,7 +192,7 @@
 }
 
 .comment-text {
-  width: var(--form-width);
+  width: 90%;
   height: 40px;
   font-size: 18px;
   border: 1px solid var(--sub);
@@ -199,7 +200,8 @@
   padding-left: 20px;
 }
 
-.comment-text:focus, .comment-text:hover {
+.comment-text:focus,
+.comment-text:hover {
   outline: none;
   border: 2px solid rgb(238, 164, 138);
 }
@@ -236,10 +238,12 @@
 .inner2 .item1 {
   flex: 1;
 }
+
 .inner2 .item2 {
   flex: 3;
   text-align: left;
 }
+
 .inner2 .item3 {
   flex: 1;
   text-align: right;
