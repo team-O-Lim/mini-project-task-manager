@@ -39,12 +39,40 @@
   color: #444;
 }
 
+.notice-box {
+  position: relative;
+}
+
 .notice-box p {
+  position: relative;
   background: #fff7ed;
   border: 1px solid #f2d9b0;
   border-radius: 8px;
   padding: 12px;
   color: #6B5E56;
+}
+
+.notice-btn {
+  position: absolute;
+  top: 15px;       
+  right: 20px;     
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  background-color: #f3f3f3;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.notice-btn:hover {
+  background-color: #6B5E56;
+  color: #fff;
 }
 
 .task-list {
@@ -62,13 +90,6 @@
 
 .task-list li:last-child {
   border-bottom: none;
-}
-
-.task-list input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: #CBBBAA;
-  cursor: pointer;
 }
 
 .back-btn {
@@ -168,3 +189,4 @@
 .priority.low {
   background-color: #2ecc71; /* 초록 */
 }
+

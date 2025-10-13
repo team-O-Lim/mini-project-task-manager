@@ -21,7 +21,7 @@ body {
     height: 45px;
     padding-left: 20px;
     border-radius: var(--radius);
-    border: 1px solid var(--sub);
+    border: 2px solid var(--sub);
 }
 
 .input-box:focus {
