@@ -49,6 +49,8 @@
 
 .model textarea {
   flex: 1;
+  min-width: 300px;
+  max-width: var(--form-width);
   padding: 8px 10px;
   border: 1px solid #ccc;
   border-radius: var(--radius);
