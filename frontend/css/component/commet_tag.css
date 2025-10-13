@@ -17,6 +17,7 @@
 
 /* 태그 생성 */
 .selectedTagsWrapper {
+  background-color: #fff;
   width: 200px;
   height: 70px;
   overflow-y: auto;
@@ -33,6 +34,7 @@
 
 .selected-tag {
   background-color: var(--side);
+  color: var(--header);
   padding: 4px 10px;
   border: 1px solid var(--sub);
   border-radius: var(--radius);
@@ -167,32 +169,13 @@
 
 /* 코멘트 작성 */
 
-.comment-header {
-  margin: 2px;
-  padding: 5px 0;
-}
-
-.comments {
-  display: flex;
-  margin: 10px 0;
-  /* padding: 10px; */
-  width: 90%;
-  flex-wrap: nowrap;
-
-  align-items: center;
-}
-
 .comment {
-  min-width: 50px;
-  text-align: left;
+  width: 50px;
 }
 
-.inner1 .item1 {
-  flex: 2;
-}
 
-.comment-text {
-  width: 90%;
+/* .comment-text {
+  width: var(--form-width);
   height: 40px;
   font-size: 18px;
   border: 1px solid var(--sub);
@@ -213,38 +196,43 @@
   font-size: 20px;
   background-color: var(--side);
   border-radius: var(--radius);
+  white-space: nowrap;
 }
 
 .comment-btn:hover {
   background-color: var(--accent);
   color: var(--header);
-}
+} */
 
 
 /* 출력 코멘트 */
 .comments-out {
   display: flex;
   margin: 30px 0 30px;
-  width: 90%;
+  width: var(--form-width);
   padding: 0 10px;
   justify-content: space-between;
 }
 
 .comment-field {
   min-width: 20px;
-  text-align: left;
 }
 
-.inner2 .item1 {
+.inner2 {
   flex: 1;
 }
 
+/* .inner2 .item1 {
+  flex: 1;
+  text-align: center;
+}
 .inner2 .item2 {
   flex: 3;
-  text-align: left;
+  text-align: center;
 }
 
 .inner2 .item3 {
   flex: 1;
-  text-align: right;
+  text-align: center; 
 }
+  */

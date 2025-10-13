@@ -52,11 +52,11 @@
 .new-assignee-btn,
 .new-tag-btn {
   cursor: pointer;
-  background: #d3c0a6;
+  background: var(--side);
   align-items: center;
   justify-content: center;
-  color: #fff;
-  padding: 7px 10px;
+  color: var(--header);
+  padding: 8px 12px;
   font-size: 12px;
   width: auto;
   height: auto;
@@ -75,11 +75,11 @@
 .close-btn {
   cursor: pointer;
   display: inline-block;
-  background: #d3c0a6;
+  background: var(--side);
   align-items: center;
   justify-content: center;
-  color: #fff;
-  padding: 4px 8px;
+  color: var(--header);
+  padding: 8px 10px;
   font-size: 16px;
   width: auto;
   height: auto;
@@ -142,8 +142,8 @@
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  min-width: 500px;
-  max-width: 500px;
+  min-width: var(--form-width);
+  max-width: var(--form-width);
   gap: 40px;
 }
 .form-group.top-align {
@@ -180,3 +180,5 @@
   border-radius: var(--radius);
   font-size: 14px;
 }
+
+/* 태그 모음 */
