@@ -75,23 +75,6 @@
   color: #fff;
 }
 
-.task-list {
-  list-style: none;
-  padding: 0;
-}
-
-.task-list li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.task-list li:last-child {
-  border-bottom: none;
-}
-
 .back-btn {
   font-size: 13px;
   display: flex;
@@ -157,25 +140,14 @@
   margin: 3px 0;
 }
 
-.task-footer {
-  margin-top: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.task-footer label {
-  cursor: pointer;
-  font-weight: 500;
-  color: #333;
-}
-
 .priority {
   padding: 4px 10px;
   border-radius: 20px;
   color: #fff;
   font-size: 0.85rem;
   font-weight: 500;
+  min-width: 40px;
+  max-height: 25px;
 }
 
 .priority.high {
