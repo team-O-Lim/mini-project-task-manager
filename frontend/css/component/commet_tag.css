@@ -3,7 +3,7 @@
   display: flex;
   gap: 10px;
   align-items: top;
-  padding:5px 3px;
+  padding: 5px 3px;
 }
 
 .tag-message {
@@ -51,7 +51,7 @@
 .tagToggleWrapper {
   display: flex;
   padding-left: 20px;
-  
+
 }
 
 .tagToggle {
@@ -112,7 +112,8 @@
   margin-bottom: 15px;
 }
 
-.tag-top-input:focus, .tag-top-input:hover {
+.tag-top-input:focus,
+.tag-top-input:hover {
   outline: none;
   border: 2px solid rgb(238, 164, 138);
 }
@@ -168,41 +169,12 @@
 
 /* 코멘트 작성 */
 
-.comment-header {
-  margin: 2px;
-  padding: 5px 0;
-} 
-
-.comments {
-  display: flex;
-  margin: 10px 0;
-  /* padding: 10px; */
-  width: 80%;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: 20px;
+.comment {
+  width: 50px;
 }
 
-.comment{
-  min-width: 50px;
-  text-align: center;
-}
 
-.inner1 {
-  flex: 1;
-  width: var(--form-width);
-}
-/* .inner1 .item1 {
-  flex: 3;
-}
-*/
-
-/* .inner1 .item2 {
-  flex: 1;
-  justify-content: right;
-} */
-
-.comment-text {
+/* .comment-text {
   width: var(--form-width);
   height: 40px;
   font-size: 18px;
@@ -211,7 +183,8 @@
   padding-left: 20px;
 }
 
-.comment-text:focus, .comment-text:hover {
+.comment-text:focus,
+.comment-text:hover {
   outline: none;
   border: 2px solid rgb(238, 164, 138);
 }
@@ -229,7 +202,7 @@
 .comment-btn:hover {
   background-color: var(--accent);
   color: var(--header);
-}
+} */
 
 
 /* 출력 코멘트 */
@@ -257,6 +230,7 @@
   flex: 3;
   text-align: center;
 }
+
 .inner2 .item3 {
   flex: 1;
   text-align: center; 
