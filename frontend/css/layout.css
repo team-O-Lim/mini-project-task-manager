@@ -12,10 +12,9 @@ p {
 
 .container {
   width: 100%;
-  height: calc(100vh - 50px);
   background-color: var(--bg);
   display: flex;
-  min-height: 800px;
+  min-height: calc(100vh - 50px);
 }
 
 .header {
@@ -43,9 +42,7 @@ p {
 
 .side-nav {
   width: 20%;
-  height: 100%;
   min-width: 250px;
-  min-height: 800px;
   background-color: var(--side);
   color: var(--text);
   position: relative;
