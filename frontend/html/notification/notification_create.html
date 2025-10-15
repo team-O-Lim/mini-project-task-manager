@@ -1,13 +1,16 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>notificationDetail</title>
-  <link rel="stylesheet" href="../css/layout.css">
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/notification.css">
-  <link rel="stylesheet" href="../css/notificationDetail.css">
+  <title>notificationCreate</title>
+  <link rel="stylesheet" href="../../css/layout.css">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/notification/notification.css">
+  <link rel="stylesheet" href="../../css/notificaiton/notification_detail.css">
+  <link rel="stylesheet" href="../../css/notification/notification_updated.css">
+  <link rel="stylesheet" href="../../css/notification/notification_create.css">
+  
 </head>
 <body>
   <header class="header">
@@ -23,22 +26,21 @@
     <aside class="side-nav">
       <div class="side-wrap">
         <div class="home-wrap">
-          <img src="../img/icons8-집-50.png" alt="홈 아이콘">
+          <img src="../../img/icons8-집-50.png" alt="홈 아이콘">
           <a href="#">HOME</a>
         </div>
 
         <div class="search-wrap">
-          <img class="search-img" src="../img/icons8-수색-50.png" alt="검색이미지">
+          <img class="search-img" src="../../img/icons8-수색-50.png" alt="검색이미지">
           <p>Search</p>
           <input class="search-bar" type="search" placeholder="프로젝트명을 입력해주세요.">
         </div>
     
         <ul class="side-project-list">
           <li class="side-project project-wrap">
-            <img src="../img/icons8-중간-아이콘-24.png" alt="프로젝트아이콘">
+            <img src="../../img/icons8-중간-아이콘-24.png" alt="프로젝트아이콘">
             <p>Project</p>
           </li>
-          <!-- 동적 렌더링 -->
           <li class="side-project">
             <a href="#">최근 생성/수정된 프로젝트</a>
           </li>
@@ -58,37 +60,33 @@
       </div>
       
       <button type="button">
-        <img class="setting-icon" src="../img/icons8-설정-50.png" alt="설정 아이콘" title="다크모드">
+        <img class="setting-icon" src="../../img/icons8-설정-50.png" alt="설정 아이콘" title="다크모드">
       </button>
       
     </aside>
 
     <div class="main">
       <h1>Project title</h1>
+  <h2 class="page-title">공지사항 작성</h2>
 
-      <hr class="title-line">
-      <h2 class="notice-title">Notice title: 국비 교육 안내</h2>
-
-     <div class="detail-meta">
-      <div>
-        <span class="meta-label">작성자</span>
-        <span class="meta-content">홍기수</span>
-      </div>
-      <div>
-        <span class="meta-label">작성일자</span>
-        <span class="meta-content">2025-10-03</span>
-      </div>
-
-     </div>
-     <hr class="detail-line">
-
-     <div class="detail-content">
-      국비 교육 관련 공지사항입니다. 세부 일정은 추후 안내드리겠습니다.
-     </div>
-  </div>
-</div>
+  <form class="notice-form" >
+    <div class="form-group">
+      <label for="title">제목</label>
+      <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required>
     </div>
+
+    <div class="form-group">
+      <label for="content">내용</label>
+      <textarea id="content" name="content" rows="10" placeholder="내용을 입력하세요"></textarea>
+    </div>
+
+    <div class="form-buttons">
+      <button type="submit">저장</button>
+      <button type="reset">취소</button>
+    </div>
+  </form>
+</div>
   </div>
-  
 </body>
 </html>
+  
