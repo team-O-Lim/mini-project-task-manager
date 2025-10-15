@@ -1,11 +1,11 @@
 .main h1 {
-  margin: 1;
+  margin: 0;
   font-size: 2rem;
   font-weight: bold;
 }
 
 .main h2 {
-  margin: 5px 0 12px;
+  margin: 15px 0 20px;
   font-size: 1rem;
   color: #666;
 }
@@ -20,13 +20,13 @@
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   max-width: 300px;
 }
 
 .add-project:hover {
   background-color: #f9f8f7;
-  transform: scale(1.05)
+  transform: scale(1.03);
 }
 
 .add-project span {
@@ -76,7 +76,7 @@
 
 .project-card:hover {
   background-color: #f9f8f7;
-  transform: scale(1.05)
+  transform: scale(1.03);
 }
 
 .project-info {
@@ -161,7 +161,7 @@
 }
 
 .btn:hover {
-  background: #bbb;
+  background: #caa985;
 }
 
 .btn-primary {

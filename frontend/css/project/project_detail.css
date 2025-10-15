@@ -1,14 +1,33 @@
+body {
+  /* overflow-x: hidden;  */
+  background-color: var(--form);
+
+}
+
 .container{
+  /* display: flex; */
+  max-width: 100%;
   background-color: var(--form);
 }
 
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
 .detail-container {
-  max-width: 1100px;
+  width: 100%;
+  max-width: 1000px;
   margin: 80px auto;
   display: flex;
   flex-direction: column;
   gap: 35px;
   padding: 0 40px;
+  justify-content: center;
 }
 
 .detail-section {
@@ -21,7 +40,7 @@
 
 .detail-section:hover {
   background-color: #f9f8f7;
-  transform: scale(1.05)
+  transform: scale(1.03);
 }
 
 .section-title {
@@ -75,23 +94,6 @@
   color: #fff;
 }
 
-.task-list {
-  list-style: none;
-  padding: 0;
-}
-
-.task-list li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.task-list li:last-child {
-  border-bottom: none;
-}
-
 .back-btn {
   font-size: 13px;
   display: flex;
@@ -114,11 +116,18 @@
   background: var(--accent);
 }
 
+.task-box {
+  position: relative;
+}
+
 .task-list {
   display: flex;
   flex-direction: row;
   gap: 1rem;
   margin-top: 1rem;
+  overflow: auto;
+  white-space: nowrap;
+  /* min-width: 100%; */
 }
 
 .task-card {
@@ -128,6 +137,7 @@
   padding: 1rem 1.5rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease-in-out;
+  box-sizing: border-box;
 }
 
 .task-card:hover {
@@ -157,36 +167,48 @@
   margin: 3px 0;
 }
 
-.task-footer {
-  margin-top: 0.8rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.task-footer label {
-  cursor: pointer;
-  font-weight: 500;
-  color: #333;
-}
-
 .priority {
   padding: 4px 10px;
   border-radius: 20px;
   color: #fff;
   font-size: 0.85rem;
   font-weight: 500;
+  min-width: 40px;
+  max-height: 25px;
 }
 
 .priority.high {
-  background-color: #e74c3c; /* 빨강 */
+  background-color: #e74c3c;
 }
 
 .priority.medium {
-  background-color: #f39c12; /* 주황 */
+  background-color: #f39c12;
 }
 
 .priority.low {
-  background-color: #2ecc71; /* 초록 */
+  background-color: #2ecc71;
+}
+
+.task-btn {
+  position: absolute;
+  top: 15px;       
+  right: 20px;     
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333;
+  background-color: #f3f3f3;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.task-btn:hover {
+  background-color: #6B5E56;
+  color: #fff;
 }
 
