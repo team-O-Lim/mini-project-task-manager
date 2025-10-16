@@ -30,6 +30,7 @@ p {
 .header-button {
   width: 100px;
   height: 40px;
+  margin: 10px 0;
   background-color: var(--side);
   color: var(--header);
   border-radius: var(--radius);

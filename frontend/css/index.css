@@ -1,11 +1,11 @@
 .main h1 {
-  margin: 1;
+  margin: 0;
   font-size: 2rem;
   font-weight: bold;
 }
 
 .main h2 {
-  margin: 5px 0 12px;
+  margin: 15px 0 20px;
   font-size: 1rem;
   color: #666;
 }
@@ -20,12 +20,13 @@
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   max-width: 300px;
 }
 
 .add-project:hover {
-  background: #f0f7ff;
+  background-color: #f9f8f7;
+  transform: scale(1.03);
 }
 
 .add-project span {
@@ -74,8 +75,8 @@
 }
 
 .project-card:hover {
-  background-color: #f0f7ff;
-  transform: scale(1.05)
+  background-color: #f9f8f7;
+  transform: scale(1.03);
 }
 
 .project-info {
@@ -99,15 +100,99 @@
   line-height: 1.4;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal:target {
+  display: flex;
+}
+
+.modal-content {
+  background: var(--form);
+  gap: 15px;
+  padding: 36px;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 80%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  text-align: center;
+  }
+
+.modal-content h2 {
+  margin-bottom: 16px;
+}
+
+.modal-input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #649770;
+  border-radius: 12px;
+}
+
+.modal input:focus,
+.modal textarea:focus {
+  border-color: #b86e61;
+  outline: none;
+}
+
+.modal-btns {
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.btn {
+  padding: 8px 16px;
+  text-decoration: none;
+  background: #ccc;
+  color: #fff;
+  border-radius: 6px;
+}
+
+.btn:hover {
+  background: #caa985;
+}
+
+.btn-primary {
+  background: #CBBBAA;
+  color: #fff;
+}
+
+.btn-danger {
+  background: #CBBBAA;
+  color: #fff;
+}
+
+.open-modal {
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+}
+
 .edit-delete-btn {
   display: flex;
   flex-direction: row;
   gap: 8px;
 }
 
+.edit-delete-btn a,
 .edit-delete-btn button {
   border: none;
-  padding: 6px 10px;
+  padding: 6px 6px;
   font-size: 0.9rem;
   border-radius: 6px;
   cursor: pointer;

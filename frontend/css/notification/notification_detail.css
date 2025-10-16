@@ -33,3 +33,33 @@
   line-height: 1.8;
   margin-top: 10px;
 }
+
+.main {
+  position: relative; 
+}
+
+.update-btn-wrap {
+  position: absolute;
+  bottom: 20px;   
+  right: 20px;    
+}
+
+.update-btn {
+  background-color: #c5a68a;
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+  background-color: #a88267;
+}
+
+.main h1 {
+  margin-bottom: 50px;  
+}
