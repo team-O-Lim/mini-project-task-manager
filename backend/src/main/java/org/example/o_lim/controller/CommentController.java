@@ -63,7 +63,7 @@ public class CommentController {
             @PathVariable Long taskId,
             @PageableDefault(
                     page = 0,
-                    size = 5,
+                    size = 7,
                     sort = "createdAt",
                     direction = Sort.Direction.DESC
             ) Pageable pageable
